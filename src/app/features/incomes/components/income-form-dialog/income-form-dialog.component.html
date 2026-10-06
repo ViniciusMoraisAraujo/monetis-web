@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Receita' : 'Nova Receita' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="income-form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <input
+        matInput
+        formControlName="description"
+        placeholder="Ex.: Salário, Freelance, Dividendos"
+        required
+      />
+      @if (form.controls.description.hasError('required')) {
+        <mat-error>A descrição é obrigatória</mat-error>
+      }
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>Máximo de 150 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Valor (R$)</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.01"
+          formControlName="amount"
+          placeholder="0,00"
+          required
+        />
+        @if (form.controls.amount.hasError('required')) {
+          <mat-error>O valor é obrigatório</mat-error>
+        }
+        @if (form.controls.amount.hasError('min')) {
+          <mat-error>O valor deve ser maior que zero</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Data Prevista / Recebida</mat-label>
+        <input matInput type="date" formControlName="date" required />
+        @if (form.controls.date.hasError('required')) {
+          <mat-error>A data é obrigatória</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoria</mat-label>
+      <mat-select formControlName="categoryId" required>
+        @for (category of categoriesState.categories(); track category.id) {
+          <mat-option [value]="category.id">
+            <span>{{ category.icon }} {{ category.name }}</span>
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.controls.categoryId.hasError('required')) {
+        <mat-error>Selecione uma categoria</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Conta de Depósito</mat-label>
+      <mat-select formControlName="accountId" required>
+        @for (acc of accountsState.accounts(); track acc.id) {
+          <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.accountId.hasError('required')) {
+        <mat-error>Selecione a conta para depósito</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Salvar' : 'Cadastrar Receita' }}
+  </button>
+</mat-dialog-actions>

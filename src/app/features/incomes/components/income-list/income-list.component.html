@@ -1,0 +1,158 @@
+<div class="incomes-container">
+  <div class="header">
+    <div class="title-group">
+      <h1>Receitas</h1>
+      <p class="subtitle">Acompanhe suas entradas de dinheiro, salários e rendimentos</p>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      class="add-button"
+      (click)="openCreateDialog()"
+      aria-label="Cadastrar nova receita"
+    >
+      <mat-icon aria-hidden="true">add</mat-icon>
+      <span>Nova Receita</span>
+    </button>
+  </div>
+
+  <!-- Resumo Financeiro de Receitas -->
+  <div class="summary-grid">
+    <mat-card class="summary-card total" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Total Previsto</div>
+        <div class="summary-value income-text">
+          + {{ state.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card received" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Total Recebido</div>
+        <div class="summary-value income-received-text">
+          + {{ state.receivedAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card pending" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">A Receber</div>
+        <div class="summary-value pending-text">
+          {{ state.pendingAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Barra de Filtros -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="filterStatus" (selectionChange)="applyFilters()">
+        <mat-option value="all">Todas as Receitas</mat-option>
+        <mat-option value="received">Recebidas</mat-option>
+        <mat-option value="pending">A Receber</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Categoria</mat-label>
+      <mat-select [formControl]="filterCategory" (selectionChange)="applyFilters()">
+        <mat-option value="">Todas as Categorias</mat-option>
+        @for (cat of categoriesState.categories(); track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (state.loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando receitas"></mat-progress-bar>
+  }
+
+  @if (state.error()) {
+    <div class="error-banner" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ state.error() }}</span>
+    </div>
+  }
+
+  @if (!state.loading() && state.incomes().length === 0) {
+    <mat-card class="empty-card" appearance="outlined">
+      <mat-card-content class="empty-content">
+        <mat-icon class="empty-icon" aria-hidden="true">savings</mat-icon>
+        <p class="empty-title">Nenhuma receita encontrada</p>
+        <p class="empty-text">Cadastre uma nova receita ou ajuste os filtros acima.</p>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openCreateDialog()"
+          aria-label="Cadastrar sua primeira receita"
+        >
+          <mat-icon aria-hidden="true">add</mat-icon>
+          Cadastrar Receita
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Lista de Receitas (Cards Mobile-First) -->
+  <div class="incomes-list">
+    @for (income of state.incomes(); track income.id) {
+      <mat-card class="income-card" [class.received-card]="income.isReceived" appearance="outlined">
+        <div class="income-header">
+          <div class="income-title-section">
+            <span class="category-tag">{{ income.categoryName }}</span>
+            <div class="income-description">{{ income.description }}</div>
+            <div class="income-meta">
+              <span>{{ income.date | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+              <span class="bullet">•</span>
+              <span>Conta: {{ income.accountName }}</span>
+            </div>
+          </div>
+
+          <div class="income-amount-section">
+            <div class="income-amount">
+              + {{ income.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </div>
+            <div class="status-badge" [class.status-received]="income.isReceived" [class.status-pending]="!income.isReceived">
+              <mat-icon aria-hidden="true">{{ income.isReceived ? 'check_circle' : 'schedule' }}</mat-icon>
+              <span>{{ income.isReceived ? 'Recebida' : 'A Receber' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-card-actions class="income-actions" align="end">
+          @if (!income.isReceived) {
+            <button
+              mat-button
+              color="primary"
+              (click)="onReceive(income)"
+              aria-label="Confirmar recebimento de {{ income.description }}"
+            >
+              <mat-icon aria-hidden="true">check</mat-icon>
+              Confirmar Recebimento
+            </button>
+          }
+          <button
+            mat-icon-button
+            (click)="openEditDialog(income)"
+            aria-label="Editar receita {{ income.description }}"
+          >
+            <mat-icon aria-hidden="true">edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onDelete(income)"
+            aria-label="Excluir receita {{ income.description }}"
+          >
+            <mat-icon aria-hidden="true">delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</div>

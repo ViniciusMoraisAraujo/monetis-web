@@ -1,0 +1,258 @@
+.incomes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.title-group {
+  h1 {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+  }
+
+  .subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--mat-sys-on-surface-variant);
+    font-size: 0.875rem;
+  }
+}
+
+.add-button {
+  min-height: 48px;
+  align-self: flex-start;
+
+  @media (min-width: 600px) {
+    align-self: auto;
+  }
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.summary-card {
+  border-radius: 16px;
+  background-color: var(--mat-sys-surface-container);
+
+  .summary-label {
+    font-size: 0.875rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .summary-value {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+
+  .income-text {
+    color: var(--app-income);
+  }
+
+  .income-received-text {
+    color: var(--mat-sys-primary);
+  }
+
+  .pending-text {
+    color: var(--mat-sys-tertiary);
+  }
+}
+
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+
+    .filter-item {
+      flex: 1;
+    }
+  }
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
+
+.empty-card {
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+
+  .empty-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: var(--mat-sys-outline);
+  }
+
+  .empty-title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+
+  .empty-text {
+    margin: 0;
+    color: var(--mat-sys-on-surface-variant);
+    max-width: 25rem;
+    font-size: 0.875rem;
+  }
+}
+
+.incomes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.income-card {
+  border-radius: 16px;
+  padding: 1rem;
+  background-color: var(--mat-sys-surface-container);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  &.received-card {
+    border-left: 4px solid var(--app-income);
+  }
+}
+
+.income-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.income-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.category-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.income-description {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.income-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--mat-sys-on-surface-variant);
+
+  .bullet {
+    opacity: 0.6;
+  }
+}
+
+.income-amount-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @media (min-width: 600px) {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+}
+
+.income-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--app-income);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+
+  mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &.status-received {
+    background-color: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+  }
+
+  &.status-pending {
+    background-color: var(--mat-sys-surface-variant);
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.income-actions {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  button {
+    min-height: 48px;
+  }
+}

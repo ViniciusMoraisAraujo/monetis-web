@@ -1,284 +1,124 @@
-AGENTS.md — Monetis Web (Angular)
+# AGENTS.md — Monetis Web (Angular)
 
-Frontend do Monetis, plataforma de finanças pessoais. Consome a API REST em .NET do repositório monetis.
-É um projeto de estudos: ao propor ou realizar qualquer alteração, explique em 1–2 frases o porquê da decisão.
+Frontend do Monetis, plataforma de finanças pessoais. Consome a API .NET do repositório irmão `../monetis`. É um projeto de estudos: ao propor ou realizar qualquer alteração, explique em 1–2 frases o porquê da decisão.
 
-Regra geral: na dúvida, siga a documentação oficial (angular.dev, material.angular.dev, WCAG 2.2 AA) e não invente padrão próprio. Sempre consulte e aplique as skills do projeto em `.agents/skills/` (`angular-developer` e `angular-new-app`).
+Fontes de verdade neste repo:
 
-1. Metodologia de Desenvolvimento: TDD (Test-Driven Development)
+- Contrato da API: `API-backend.md` na raiz (DTOs TypeScript de todos os endpoints, validações e erros).
+- Skills Angular: `.skills/angular-developer` e `.skills/angular-new-app`, registradas no `opencode.json`. Use-as ao criar código Angular.
 
-Obrigatório seguir o ciclo Red-Green-Refactor rigorosamente:
+## 1. Comandos
 
-Red: Escreva primeiro o teste unitário/integração descrevendo o comportamento esperado. O teste deve falhar (ou nem compilar).
+- `ng serve` — dev server (porta 4200).
+- `ng build` — build de produção AOT.
+- `ng test` — testes unitários via **Vitest + jsdom** (builder `@angular/build:unit-test`, não Karma).
+  - `ng test --watch=false` — execução única.
+  - `ng test --filter="NomeDoSuite"` — roda só os testes cujo nome casa com o regex (verificado).
+  - `ng test --include="src/app/features/categories"` — roda os specs de uma pasta.
+- `npx prettier --write .` — formatação (`.prettierrc`: printWidth 100, singleQuote, parser `angular` em HTML).
 
-Green: Escreva a quantidade mínima de código necessária para fazer o teste passar.
+Gotchas:
 
-Refactor: Limpe duplicações, melhore nomes e garanta conformidade com as regras sem alterar o comportamento garantido pelo teste.
+- **Nunca rode `npx vitest` diretamente** — falha com `JIT compilation failed for injectable [PlatformLocation]`. Use sempre `ng test`.
+- **Não existe linter**: `ng lint` e `npm run lint` não existem no repo. Não os invoque nem coloque no DoD.
+- Orçamentos de build que quebram `ng build`: SCSS de componente > 8kB erro (> 4kB warning), bundle inicial > 1MB erro.
+- Ambientes em `src/environments/environment*.ts`: dev e prod apontam para `http://localhost:5074`.
+- O working tree pode conter features não commitadas de outras sessões em paralelo (fase Red do TDD). Se `ng test` falhar em arquivo que você não tocou, rode `git status` antes de investigar.
 
-Por quê: O TDD força o design desacoplado desde o início, evita código não testável ou morto e impede regressões contratuais com a API .NET.
+Ordem de verificação para concluir tarefa: `ng test --watch=false` → `ng build` → `npx prettier --check .`.
 
-2. Stack
+## 2. Metodologia: TDD obrigatório
 
-Angular: Versão especificada no package.json (proibido fazer upgrade de major/minor sem solicitação explícita).
+Ciclo Red-Green-Refactor por tarefa:
 
-TypeScript: Modo strict habilitado (noImplicitAny, strictNullChecks, etc.).
+1. **Red**: escreva primeiro o `*.spec.ts` cobrindo caso feliz e bordas (erro 400 da API, saldo negativo). Confirme que falha pela razão certa.
+2. **Green**: código mínimo para passar.
+3. **Refactor**: limpe duplicações mantendo os testes verdes.
 
-UI: Angular Material (Material Design 3) + SCSS moderno (mixins e @use).
+Foco dos testes de UI: comportamento observável no DOM (botão habilitado/desabilitado, mensagem de erro), não detalhes internos.
 
-Estado & Reatividade:
+## 3. Regras Angular (não negociáveis)
 
-Estado local e de tela: Signals (signal, computed).
+- Somente standalone; `changeDetection: ChangeDetectionStrategy.OnPush` em todo componente; injeção via `inject()` no corpo da classe (sem construtor).
+- Só sintaxe nativa de controle de fluxo: `@if`, `@for` (sempre com `track`), `@switch`. Proibido `*ngIf`, `*ngFor`, `*ngSwitch`.
+- Reatividade: `input()`, `output()`, `computed()`, `signal()`; `effect()` apenas para side-effects externos (nunca para alterar estado). Proibido `@Input`, `@Output` e getters como reatividade.
+- `.subscribe()` manual proibido em componentes. Ponte HTTP → Signals nos state services com `firstValueFrom()` (padrão do repo) ou `toSignal()`.
+- Formulários: Reactive Forms tipados estritamente, `FormControl` com `{ nonNullable: true }`.
+- Lazy loading obrigatório em todas as rotas (`loadComponent`/`loadChildren`).
+- Sem `any` (dado desconhecido: `unknown` + narrowing explícito); sem NgModule.
+- Host bindings só pelo bloco `host: { }` do `@Component`.
+- Prefera `[class.nome]="condicao"` a `ngClass`/`ngStyle`.
+- Código, nomes de arquivos e commits em inglês; textos de UI em pt-BR.
+- Nomenclatura no padrão do `ng generate` da versão instalada (`feature-name.component.ts`).
 
-Integração HTTP/RxJS: use toSignal() (ou httpResource/rxResource caso a versão do Angular seja 19+) em serviços de estado.
+## 4. Estrutura e dependências
 
-Proibido: .subscribe() manual em componentes para popular signals ou variáveis. Se inevitável em casos isolados, use takeUntilDestroyed(inject(DestroyRef)).
-
-PWA: Instalável via @angular/pwa (sem cache de requisições autenticadas por enquanto).
-
-Por quê: Versões e bibliotecas fixas evitam que o agente quebre o build com modernizações acidentais. A ponte declarativa entre HTTP e Signals impede vazamentos de memória e inconsistências de ciclo de vida.
-
-3. Comandos de Validação
-
-Confira os scripts em package.json. O fluxo padrão de trabalho:
-
-ng test — Executa a suíte de testes (TDD: deve rodar antes e depois de cada alteração).
-
-ng build — Build de produção com AOT (service worker do PWA só atua em prod).
-
-ng lint / npm run lint — Validação estática de tipagem e estilo.
-
-ng serve — Servidor de desenvolvimento local.
-
-Critério de Conclusão: Nenhuma tarefa é dada como finalizada sem que ng test, ng lint e ng build passem sem erros nem warnings.
-
-4. Regras de Código Angular
-
-Componentes: Apenas standalone. Proibido criar NgModule.
-
-Change Detection: changeDetection: ChangeDetectionStrategy.OnPush obrigatório em todo componente.
-
-Control Flow: Nova sintaxe nativa @if, @for (sempre com expressão no track), @switch. Proibido *ngIf, *ngFor e *ngSwitch.
-
-Injeção de Dependência: Utilize exclusivamente inject() no corpo da classe (evite construtores com injeção).
-
-Entrada/Saída reativa: Use input(), output(), computed() e effect() (use effect apenas para logging/sincronização externa, nunca para alterar estado). Proibido @Input, @Output e getters como reatividade.
-
-Formulários: Reactive Forms estritamente tipados (FormGroup, FormControl com { nonNullable: true }).
-
-Roteamento: Lazy loading obrigatório em todas as rotas (loadComponent ou loadChildren).
-
-Tipagem Estrita: Sem any. Se o dado for desconhecido, use unknown e faça narrowing explícito.
-
-Host bindings: Use o bloco host: { ... } do decorator @Component. Proibido @HostBinding e @HostListener.
-
-Classes/Estilos: Prefira [class.nome-classe]="condicao" a ngClass/ngStyle.
-
-Convenção de Idioma: Código (nomes de variáveis, funções, classes, arquivos, commits) em inglês. Textos da interface do usuário em português (pt-BR).
-
-Nomenclatura: Siga o padrão do ng generate da versão instalada (ex.: feature-name.component.ts).
-
-Por quê: O conjunto de Signals + OnPush garante renderizações cirúrgicas e previsíveis em dispositivos móveis, eliminando o overhead de change detection global da Zone.js.
-
-5. Estrutura de Pastas e Dependências
-
+```
 src/app/
-  core/        # Singletons da app: auth, guards, interceptors funcionais, theme, API base config
-  shared/      # Utilitários sem regra de negócio: pipes, UI components puros, diretivas, enums/formatters comuns
-  features/
-    auth/
-    accounts/
-    cards/
-    categories/
-    expenses/
-    incomes/
-    subscriptions/
-    transfers/
-    dashboard/
-
-
-Regras de Dependência:
-
-features/* podem importar de core/ e shared/.
-
-features/* não podem importar diretamente de outra feature. Se duas features precisam compartilhar dados ou lógica de estado, promova o contrato ou serviço para core/ (se for estado global de sessão/saldo) ou shared/ (se for UI/modelo).
-
-shared/ não importa de core/ nem de features/.
-
-Cada feature deve conter suas próprias pastas: /models, /services (*-api.service.ts e *-state.service.ts), /components e routes.ts.
-
-Por quê: Aplica a regra de dependência unidirecional da Clean Architecture, evitando acoplamento cíclico e garantindo que cada feature possa ser deletada ou refatorada de forma isolada.
-
-6. Mobile First e Acessibilidade (WCAG 2.2 AA)
-
-Mobile First: Escreva o SCSS base para telas móveis (~360px) e aplique @media (min-width: ...) para expandir. Nunca use max-width.
-
-Breakpoints do Material: Use o BreakpointObserver do CDK no TS quando a hierarquia do DOM precisar mudar entre mobile e desktop.
-
-Navegação Adaptativa: Bottom navigation bar em mobile; gaveta lateral (mat-sidenav) em tablet e desktop.
-
-Touch Targets: Alvos clicáveis com dimensão mínima de 48×48px (recomendação Material 3; o mínimo do WCAG 2.2 AA é 24×24px).
-
-Unidades: Layout fluido (rem, %, clamp()). Proibido larguras fixas em px para contêineres e páginas.
-
-Safe Area: Respeite env(safe-area-inset-*) em barras de navegação fixas (top/bottom).
-
-Tabelas de Dados: Em telas < 768px, transforme mat-table em lista de cartões empilhados (cards). Evite rolagem horizontal como padrão.
-
-Acessibilidade:
-
-Imagens e ícones decorativos: aria-hidden="true".
-
-Botões que contêm apenas ícone: obrigatório aria-label descritivo em pt-BR.
-
-Contraste mínimo de 4.5:1 para texto e 3:1 para controles interativos.
-
-Nunca retire :focus-visible ou outline de foco. Respeite prefers-reduced-motion.
-
-Por quê: Aplicativos financeiros são consumidos majoritariamente no celular. O design mobile-first garante priorização visual e usabilidade tátil.
-
-7. Design System, Cores e Tema (Material 3)
-
-Semente da Marca: Violeta escuro (estilo Nubank, aprox. #820AD1). Use o schematic @angular/material:theme-color para gerar paletas Material 3 consistentes.
-
-Cores Semânticas de Domínio: Definidas globalmente em styles.scss (nunca duplicadas em componentes):
-
-:root {
-  --app-income: light-dark(#1b6e3c, #7ddb9a);  /* Receita */
-  --app-expense: light-dark(#ba1a1a, #ffb4ab); /* Despesa */
-}
-
-
-Alternância de Tema Claro/Escuro:
-
-Controlada exclusivamente por um ThemeService em core/services/theme.service.ts.
-
-Sincronize tanto a classe .dark / .light no elemento raiz quanto document.documentElement.style.colorScheme.
-
-Inicialização: leia o valor salvo no localStorage; se ausente, adote window.matchMedia('(prefers-color-scheme: dark)').matches.
-
-Regras de Estilização:
-
-Proibido cores fixas (#hex, rgb) nos arquivos SCSS de componentes. Utilize variáveis de sistema var(--mat-sys-*) ou var(--app-*).
-
-Proibido !important ou ::ng-deep para sobrescrever componentes do Angular Material. Use os design tokens e mixins da biblioteca.
-
-WCAG 1.4.1: Nunca diferencie receita e despesa apenas por cor. Sempre inclua o sinal visual (+ ou −), rótulo de texto ou ícone semântico.
-
-Por quê: O desacoplamento por design tokens previne telas quebradas no dark mode e centraliza mudanças visuais de marca em um único ponto.
-
-8. Integração com a API (.NET)
-
-Configuração de Ambiente: A URL base da API vem de environment.ts (apiUrl: 'http://localhost:5074'), nunca hardcoded.
-
-Divisão de Responsabilidades:
-
-*-api.service.ts: Fino, executa apenas requisições HTTP via HttpClient e tipagem de entrada/saída (DTOs).
-
-*-state.service.ts: Gerencia signals, conversão de DTOs para modelos de tela e orquestração de chamadas.
-
-Mapeamento de DTOs e Tipagem:
-
-DTOs vs. View Models: Mantenha os DTOs crus da API (ex.: AccountResponseDto, CreateExpenseRequestDto) separados das entidades de exibição da UI se houver transformação necessária.
-
-Enums Numéricos: A API .NET retorna enums como inteiros (0, 1, 2). Declare dicionários constantes ou TypeScript enums espelhados em shared/models/ com os respectivos labels em pt-BR para exibição.
-
-Tratamento de Moeda: Valores decimais chegam como number. O front-end apenas exibe formatado com CurrencyPipe (locale: 'pt-BR', moeda 'BRL'). Não realize cálculos financeiros no cliente (soma de saldos, estornos); a fonte da verdade é a API.
-
-Tratamento de Datas: A API trafega datas em ISO 8601 UTC. Converta para fuso horário local exclusivamente no momento da exibição (ex.: DatePipe).
-
-Normalização de Erros: O interceptor HTTP funcional deve capturar erros de validação (tanto strings de BadRequest("msg") quanto objetos { statusCode, message, errorCode }) e normalizá-los em uma interface única ApiError.
-
-Por quê: Cálculos em ponto flutuante no JavaScript geram dízimas e inconsistências com o tipo decimal do C#. Separar a camada de API do estado viabiliza mock e testes unitários independentes.
-
-9. Autenticação e Segurança
-
-Autenticação: Baseada em JWT via header Authorization: Bearer <token> através de um HttpInterceptorFn em core/interceptors/auth.interceptor.ts.
-
-AuthService: Singleton em core/services/auth.service.ts expondo signals (ex.: isAuthenticated = computed(...), currentUser = signal(...)).
-
-Armazenamento: O token fica encapsulado no AuthService. Componentes nunca acessam localStorage diretamente.
-
-Guards e Redirecionamento: Use CanActivateFn. Respostas HTTP 401 Unauthorized tratadas no interceptor disparam o logout e navegam para /auth/login.
-
-Higienização: Proibido uso de [innerHTML] com dados originados da API. Se for estritamente necessário, passe pelo DomSanitizer do Angular sem chamadas a métodos bypassSecurityTrust*.
-
-Logs: Proibido usar console.log para imprimir tokens, senhas, CPF ou dados bancários do usuário.
-
-Por quê: O isolamento do armazenamento no AuthService prepara a aplicação para futura substituição por cookies HttpOnly sem impacto nos componentes.
-
-10. Diretrizes de Testes e TDD
-
-Ordem de Execução: Para qualquer nova funcionalidade, bugfix ou alteração de contrato:
-
-Criar o arquivo *.spec.ts com o cenário de teste cobrindo o caso feliz e casos de borda (ex.: erro 400 da API, saldo negativo).
-
-Rodar ng test e verificar que o teste falhou pelo motivo correto.
-
-Implementar o código mínimo no serviço ou componente.
-
-Garantir que os testes passaram.
-
-Refatorar se necessário.
-
-Foco dos Testes de UI: Valide a interação do usuário e saídas observáveis no DOM (botão habilitado/desabilitado, mensagem de erro exibida), não os detalhes internos de implementação privada do componente.
-
-Mocks: Testes de serviços de API devem usar HttpTestingController (ou provideHttpClientTesting()). Serviços de tela devem receber mocks dos serviços de API via TestBed.overrideProvider.
-
-Por quê: Testes focados em comportamento resistem a refatorações estruturais e protegem o usuário final contra regressões visíveis.
-
-11. Padrão de Commits (Conventional Commits)
-
-Todo commit deve seguir rigorosamente a especificação Conventional Commits com mensagens exclusivamente em inglês:
-
-Formato:
-`<tipo>(<escopo opcional>): <descrição curta no imperativo>`
-
-Tipos permitidos:
-- `feat`: Nova funcionalidade para o usuário.
-- `fix`: Correção de bug.
-- `test`: Adição, ajuste ou refatoração de testes (etapa Red/Green do ciclo TDD).
-- `refactor`: Refatoração de código sem alteração de comportamento externo (etapa Refactor do TDD).
-- `style`: Formatação, linting ou ajustes visuais de CSS sem impacto na lógica.
-- `docs`: Alterações puramente em documentação (ex.: README.md, AGENTS.md).
-- `chore`: Atualizações de build, tarefas de configuração de ferramentas ou repositório.
-- `perf`: Melhoria mensurável de desempenho.
-
-Regras e Boas Práticas:
-- Mensagem exclusivamente em inglês e no imperativo (ex.: `feat(auth): implement jwt interceptor`, não `feat(auth): adicionado interceptor`).
-- Início em letra minúscula e sem ponto final na linha de cabeçalho.
-- Escopos recomendados mapeiam as camadas ou features do projeto: `auth`, `accounts`, `cards`, `categories`, `expenses`, `incomes`, `dashboard`, `core`, `shared`.
-- No fluxo TDD, encoraja-se isolar commits de testes e implementação quando aplicável (ex.: `test(accounts): add balance calculation spec` seguido de `feat(accounts): implement balance calculation`).
-
-Por quê: Conventional Commits estruturam semanticamente o histórico do projeto, facilitam a revisão de código durante o TDD, viabilizam geração automatizada de changelogs e garantem conformidade com padrões globais de engenharia de software.
-
-12. Definição de Pronto (Definition of Done)
-
-Uma tarefa só pode ser considerada pronta se todos os itens abaixo forem atendidos:
-
-[ ] Ciclo TDD seguido (testes criados antes da implementação).
-
-[ ] ng test passando 100% dos testes sem falhas.
-
-[ ] ng lint e ng build sem erros ou alertas de tipagem.
-
-[ ] Sem any, sem NgModule, sem diretivas legadas (*ngIf, *ngFor).
-
-[ ] Nenhum .subscribe() manual em componentes ou sem cleanup configurado.
-
-[ ] Nenhuma cor fixa ou ::ng-deep nos arquivos SCSS.
-
-[ ] Validado visualmente e funcionalmente em resoluções mobile (360px) e desktop (1280px).
-
-[ ] Validado nos temas Claro e Escuro.
-
-[ ] Navegabilidade total por teclado e labels de acessibilidade conferidos.
-
-[ ] Commits seguindo estritamente a especificação Conventional Commits em inglês.
-
-13. O que Nunca Fazer Sem Pedir
-
-Atualizar dependências: Não altere versões no package.json nem adicione bibliotecas externas sem autorização expressa.
-
-Alterar configurações do projeto: Não edite angular.json, tsconfig*.json ou configurações de build sem justificar previamente a necessidade técnica.
-
-Contornar o Backend: Nunca tente replicar no cliente regras de negócio pertencentes à API .NET. Se faltar um endpoint ou campo, registre como impedimento e descreva o ajuste necessário no contrato.
+  core/                  # singletons: auth, theme, guards, interceptors, shell, i18n
+  shared/                # sem regra de negócio: enums/labels, pipes, UI genérica
+  features/<feature>/    # models/, services/, components/, routes.ts
+```
+
+- `features/*` → `core/` e `shared/`; `features/*` não importam de outra `feature`; `shared/` não importa `core/` nem `features/`.
+- Dentro de cada feature: `*-api.service.ts` (HTTP fino + DTOs) e `*-state.service.ts` (signals e orquestração).
+- **Ao criar uma feature, registre a rota manualmente em `src/app/app.routes.ts`** como filho do shell. É fácil esquecer e não há teste que falhe por isso.
+- Shell responsivo em `core/components/shell` (sidenav desktop, bottom-nav mobile).
+
+## 5. Integração com a API (.NET)
+
+- URL base sempre via `environment.apiUrl`, nunca hardcoded.
+- Enums chegam como inteiros: espelhe em `shared/models/enums.ts` com labels pt-BR (`*_LABELS`); exiba sempre pelo dicionário.
+- Sem cálculos financeiros no cliente (soma de saldos, estornos): a fonte da verdade é a API. Exibição com `CurrencyPipe` (pt-BR/BRL).
+- Datas ISO 8601 UTC → converter para fuso local só na exibição (`DatePipe`).
+- Erros normalizados no `core/interceptors/auth.interceptor.ts` em `ApiError` (aceita string de `BadRequest("msg")` ou objeto `{ statusCode, message, errorCode, details }`).
+- Locale `pt-BR` vem de `app.config.ts` (`LOCALE_ID`) + `core/i18n.ts` (`registerLocaleData`); componentes que usam pipes de data/moeda importam `core/i18n`.
+
+## 6. Autenticação e segurança
+
+- JWT via `core/interceptors/auth.interceptor.ts` (header Bearer). Token encapsulado no `AuthService` (signals); componentes nunca acessam `localStorage`.
+- Resposta 401 → logout + navegação para `/auth/login` (já tratado no interceptor).
+- Guards `authGuard` e `guestGuard` em `core/guards`.
+- Proibido `console.log` de token, senha, CPF ou dados bancários. Proibido `[innerHTML]` com dados da API.
+
+## 7. Tema, mobile e acessibilidade
+
+- Material 3, violeta da marca ≈ `#820AD1`. Cores semânticas globais em `styles.scss`: `--app-income` e `--app-expense` (via `light-dark()`).
+- Cores fixas (`#hex`, `rgb`), `!important` e `::ng-deep` proibidos em SCSS de componente — use tokens `var(--mat-sys-*)` e `var(--app-*)`.
+- Tema claro/escuro exclusivamente via `ThemeService` em `core/services`: classe `.dark`/`.light` + `colorScheme` no `<html>`, persistido em localStorage (fallback `prefers-color-scheme`).
+- Mobile-first: base ~360px e expansão só com `@media (min-width: ...)` — nunca `max-width`. Alvos de toque ≥ 48×48px. Respeitar `env(safe-area-inset-*)` nas barras fixas.
+- `mat-table` vira lista de cards abaixo de 768px; evitar scroll horizontal como padrão.
+- Acessibilidade WCAG 2.2 AA: `aria-hidden` em ícones decorativos, `aria-label` pt-BR em botões só de ícone, nunca remover `:focus-visible`, respeitar `prefers-reduced-motion`, contraste 4.5:1 (texto) e 3:1 (controles). Receita vs despesa nunca diferenciadas apenas por cor (sempre sinal `+`/`−` ou rótulo).
+
+## 8. Testes (Vitest)
+
+- Runner é Vitest, não Jasmine: use `vi.fn()`, `vi.spyOn()`. Asserções booleanas são `toBe(true)` / `toBe(false)` — **`toBeTrue()`/`toBeFalse()` não existem** e quebram o build do teste.
+- Mock de state service: objeto comum com `signal(...)` nos getters e `vi.fn()` nos métodos, via `{ provide: X, useValue: mock }`.
+- Services de API: `HttpTestingController` com `provideHttpClientTesting()` — assertar URL exata (`environment.apiUrl` + path), método e body; `httpMock.verify()` no `afterEach`.
+- Specs ao lado da implementação (`*.spec.ts`).
+- `ng test` roda a suíte inteira: qualquer spec quebrado (inclusive de outra feature) derruba a execução.
+
+## 9. Commits (Conventional Commits)
+
+Formato: `<tipo>(<escopo>): <descrição curta em inglês, imperativo, minúscula, sem ponto>`.
+
+- Tipos: `feat`, `fix`, `test`, `refactor`, `style`, `docs`, `chore`, `perf`.
+- Mensagem **exclusivamente em inglês** (ex.: `feat(auth): implement jwt interceptor`).
+- Escopos úteis: `auth`, `accounts`, `cards`, `categories`, `expenses`, `incomes`, `subscriptions`, `transfers`, `dashboard`, `core`, `shared`.
+
+## 10. Definition of Done
+
+- [ ] TDD seguido (spec antes da implementação).
+- [ ] `ng test --watch=false` 100% verde.
+- [ ] `ng build` sem erros e sem estourar budgets.
+- [ ] `npx prettier --check .` limpo.
+- [ ] Sem `any`, NgModule, diretivas legadas, `.subscribe()` manual em componentes.
+- [ ] Sem cores fixas nem `::ng-deep`; validado em 360px e 1280px, nos dois temas.
+- [ ] Navegabilidade por teclado e labels de acessibilidade conferidos.
+- [ ] Commit Conventional Commits em inglês.
+
+## 11. Nunca fazer sem pedir
+
+- Atualizar dependências ou adicionar bibliotecas (nenhuma alteração em `package.json` sem autorização).
+- Editar `angular.json`, `tsconfig*.json` ou configs de build sem justificativa técnica.
+- Contornar o backend: se faltar endpoint/campo, registre como impedimento em vez de replicar regra de negócio no cliente.

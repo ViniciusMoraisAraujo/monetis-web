@@ -1,0 +1,115 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="auth-title">Criar Conta no Monetis</h1>
+      </mat-card-title>
+      <mat-card-subtitle>
+        Comece a controlar seus gastos, receitas e investimentos
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (authState.errorMessage(); as errorMsg) {
+        <div class="error-banner" role="alert" aria-live="polite">
+          <mat-icon aria-hidden="true">error</mat-icon>
+          <span>{{ errorMsg }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="auth-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Nome</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="firstName"
+              autocomplete="given-name"
+              placeholder="Seu nome"
+            />
+            @if (form.controls.firstName.hasError('required')) {
+              <mat-error>O nome é obrigatório.</mat-error>
+            }
+            @if (form.controls.firstName.hasError('pattern')) {
+              <mat-error>Apenas letras, espaços ou hífens.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Sobrenome</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="lastName"
+              autocomplete="family-name"
+              placeholder="Seu sobrenome"
+            />
+            @if (form.controls.lastName.hasError('required')) {
+              <mat-error>O sobrenome é obrigatório.</mat-error>
+            }
+            @if (form.controls.lastName.hasError('pattern')) {
+              <mat-error>Apenas letras, espaços ou hífens.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>E-mail</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="seu@email.com"
+          />
+          @if (form.controls.email.hasError('required')) {
+            <mat-error>O e-mail é obrigatório.</mat-error>
+          }
+          @if (form.controls.email.hasError('email')) {
+            <mat-error>Informe um e-mail válido.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Senha</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            placeholder="Mínimo 8 caracteres"
+          />
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>A senha é obrigatória.</mat-error>
+          }
+          @if (form.controls.password.hasError('minlength') || form.controls.password.hasError('pattern')) {
+            <mat-error>Deve conter: maiúscula, minúscula, número e caractere especial (@$!%*?&).</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="submit-button"
+          [disabled]="authState.isLoading()"
+        >
+          @if (authState.isLoading()) {
+            <mat-spinner diameter="24" class="inline-spinner"></mat-spinner>
+            <span>Cadastrando...</span>
+          } @else {
+            <span>Criar Conta</span>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="auth-actions">
+      <span class="login-text">Já possui uma conta?</span>
+      <a mat-button routerLink="/auth/login" class="login-link">
+        Entrar
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" id="category-form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome da Categoria</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="name"
+        placeholder="Ex.: Alimentação, Saúde"
+        autocomplete="off"
+      />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>O nome é obrigatório.</mat-error>
+      }
+      @if (form.controls.name.hasError('pattern')) {
+        <mat-error>Apenas letras e espaços são permitidos.</mat-error>
+      }
+      @if (form.controls.name.hasError('maxlength')) {
+        <mat-error>Máximo de 50 caracteres.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ícone / Emoji</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="icon"
+        placeholder="Ex.: 🍔, 🚗, 💊"
+        autocomplete="off"
+      />
+      @if (form.controls.icon.hasError('required')) {
+        <mat-error>O ícone é obrigatório.</mat-error>
+      }
+      @if (form.controls.icon.hasError('maxlength')) {
+        <mat-error>Máximo de 15 caracteres.</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="emoji-suggestions" aria-label="Sugestões de emojis">
+      <span class="suggestion-label">Sugestões rápidas:</span>
+      <div class="emoji-list">
+        @for (emoji of ['🍔', '🚗', '💊', '🛒', '🏠', '📚', '✈️', '🎮', '💡', '👔']; track emoji) {
+          <button
+            type="button"
+            class="emoji-btn"
+            (click)="form.controls.icon.setValue(emoji)"
+            [attr.aria-label]="'Selecionar emoji ' + emoji"
+          >
+            {{ emoji }}
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button type="button" (click)="onCancel()" class="dialog-btn">
+    Cancelar
+  </button>
+  <button mat-flat-button color="primary" type="submit" form="category-form" class="dialog-btn">
+    Salvar
+  </button>
+</mat-dialog-actions>

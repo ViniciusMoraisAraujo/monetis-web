@@ -1,60 +1,45 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import '../../../../core/i18n';
+import { AccountsStateService } from '../../../accounts/services/accounts-state.service';
+import { ExpensesStateService } from '../../../expenses/services/expenses-state.service';
+import { IncomesStateService } from '../../../incomes/services/incomes-state.service';
 
 @Component({
   selector: 'app-dashboard-home',
   standalone: true,
-  imports: [MatCardModule, MatIconModule],
-  template: `
-    <div class="dashboard-container">
-      <header class="dashboard-header">
-        <h1>Visão Geral</h1>
-        <p>Bem-vindo ao Monetis! Seu controle financeiro pessoal simplificado.</p>
-      </header>
-
-      <section class="welcome-card" aria-label="Introdução ao painel">
-        <mat-card>
-          <mat-card-header>
-            <mat-icon mat-card-avatar aria-hidden="true" class="welcome-icon">savings</mat-icon>
-            <mat-card-title>Primeiros Passos</mat-card-title>
-            <mat-card-subtitle>Configure suas contas e cartões para começar</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Utilize o menu para cadastrar suas contas bancárias, cartões de crédito e começar a registrar despesas e receitas.</p>
-          </mat-card-content>
-        </mat-card>
-      </section>
-    </div>
-  `,
-  styles: [`
-    .dashboard-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .dashboard-header h1 {
-      margin: 0;
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 700;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .dashboard-header p {
-      margin-top: 0.25rem;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .welcome-card mat-card {
-      border-radius: 1rem;
-      background-color: var(--mat-sys-surface-container);
-    }
-
-    .welcome-icon {
-      color: var(--mat-sys-primary);
-    }
-  `],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [
+    RouterLink,
+    CurrencyPipe,
+    DatePipe,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
+  templateUrl: './dashboard-home.component.html',
+  styleUrl: './dashboard-home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardHomeComponent {}
+export class DashboardHomeComponent implements OnInit {
+  readonly accountsState = inject(AccountsStateService);
+  readonly expensesState = inject(ExpensesStateService);
+  readonly incomesState = inject(IncomesStateService);
+
+  readonly netBalance = computed(() => {
+    return this.incomesState.totalAmount() - this.expensesState.totalAmount();
+  });
+
+  readonly recentExpenses = computed(() => {
+    return this.expensesState.expenses().slice(0, 5);
+  });
+
+  ngOnInit(): void {
+    this.accountsState.loadAccounts();
+    this.expensesState.loadExpenses();
+    this.incomesState.loadIncomes();
+  }
+}

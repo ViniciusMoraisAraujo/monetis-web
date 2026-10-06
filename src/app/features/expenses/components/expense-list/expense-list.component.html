@@ -1,0 +1,169 @@
+<div class="expenses-container">
+  <div class="header">
+    <div class="title-group">
+      <h1>Despesas</h1>
+      <p class="subtitle">Controle suas despesas fixas, variáveis e compras parceladas</p>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      class="add-button"
+      (click)="openCreateDialog()"
+      aria-label="Cadastrar nova despesa"
+    >
+      <mat-icon aria-hidden="true">add</mat-icon>
+      <span>Nova Despesa</span>
+    </button>
+  </div>
+
+  <!-- Resumo Financeiro de Despesas -->
+  <div class="summary-grid">
+    <mat-card class="summary-card total" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Total do Período</div>
+        <div class="summary-value expense-text">
+          - {{ state.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card paid" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Total Pago</div>
+        <div class="summary-value">
+          {{ state.paidAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card unpaid" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Pendente de Pagamento</div>
+        <div class="summary-value pending-text">
+          {{ state.unpaidAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Barra de Filtros -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="filterStatus" (selectionChange)="applyFilters()">
+        <mat-option value="all">Todas as Despesas</mat-option>
+        <mat-option value="paid">Pagas</mat-option>
+        <mat-option value="unpaid">Pendentes</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-item">
+      <mat-label>Categoria</mat-label>
+      <mat-select [formControl]="filterCategory" (selectionChange)="applyFilters()">
+        <mat-option value="">Todas as Categorias</mat-option>
+        @for (cat of categoriesState.categories(); track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (state.loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando despesas"></mat-progress-bar>
+  }
+
+  @if (state.error()) {
+    <div class="error-banner" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ state.error() }}</span>
+    </div>
+  }
+
+  @if (!state.loading() && state.expenses().length === 0) {
+    <mat-card class="empty-card" appearance="outlined">
+      <mat-card-content class="empty-content">
+        <mat-icon class="empty-icon" aria-hidden="true">receipt_long</mat-icon>
+        <p class="empty-title">Nenhuma despesa encontrada</p>
+        <p class="empty-text">Cadastre uma nova despesa ou ajuste os filtros acima.</p>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openCreateDialog()"
+          aria-label="Cadastrar sua primeira despesa"
+        >
+          <mat-icon aria-hidden="true">add</mat-icon>
+          Cadastrar Despesa
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Lista de Despesas (Cards Mobile-First) -->
+  <div class="expenses-list">
+    @for (expense of state.expenses(); track expense.id) {
+      <mat-card class="expense-card" [class.paid-card]="expense.isPaid" appearance="outlined">
+        <div class="expense-header">
+          <div class="expense-title-section">
+            <span class="category-tag">{{ expense.categoryName }}</span>
+            @if (expense.isInstallment) {
+              <span class="installment-tag">
+                Parcela {{ expense.installmentNumber }}/{{ expense.totalInstallments }}
+              </span>
+            }
+            <div class="expense-description">{{ expense.description }}</div>
+            <div class="expense-meta">
+              <span>{{ expense.date | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+              <span class="bullet">•</span>
+              <span>{{ paymentMethodLabels[expense.paymentMethod] }}</span>
+              @if (expense.creditCardName) {
+                <span>({{ expense.creditCardName }})</span>
+              }
+              @if (expense.accountName) {
+                <span>({{ expense.accountName }})</span>
+              }
+            </div>
+          </div>
+
+          <div class="expense-amount-section">
+            <div class="expense-amount">
+              - {{ expense.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </div>
+            <div class="status-badge" [class.status-paid]="expense.isPaid" [class.status-unpaid]="!expense.isPaid">
+              <mat-icon aria-hidden="true">{{ expense.isPaid ? 'check_circle' : 'schedule' }}</mat-icon>
+              <span>{{ expense.isPaid ? 'Paga' : 'Pendente' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <mat-card-actions class="expense-actions" align="end">
+          @if (!expense.isPaid) {
+            <button
+              mat-button
+              color="primary"
+              (click)="openPayDialog(expense)"
+              aria-label="Registrar pagamento de {{ expense.description }}"
+            >
+              <mat-icon aria-hidden="true">done</mat-icon>
+              Pagar
+            </button>
+          }
+          <button
+            mat-icon-button
+            (click)="openEditDialog(expense)"
+            aria-label="Editar despesa {{ expense.description }}"
+          >
+            <mat-icon aria-hidden="true">edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onDelete(expense)"
+            aria-label="Excluir despesa {{ expense.description }}"
+          >
+            <mat-icon aria-hidden="true">delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</div>

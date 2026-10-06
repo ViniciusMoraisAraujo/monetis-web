@@ -1,0 +1,137 @@
+<h2 mat-dialog-title>
+  {{ isEdit ? 'Editar Despesa' : isInstallment.value ? 'Nova Despesa Parcelada' : 'Nova Despesa' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="expense-form" (ngSubmit)="onSubmit()">
+    @if (!isEdit) {
+      <div class="installment-toggle">
+        <mat-checkbox [formControl]="isInstallment">
+          Compra parcelada
+        </mat-checkbox>
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <input
+        matInput
+        formControlName="description"
+        placeholder="Ex.: Supermercado, Cinema, Aluguel"
+        required
+      />
+      @if (form.controls.description.hasError('required')) {
+        <mat-error>A descrição é obrigatória</mat-error>
+      }
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>Máximo de 150 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>{{ isInstallment.value ? 'Valor Total (R$)' : 'Valor (R$)' }}</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.01"
+          formControlName="amount"
+          placeholder="0,00"
+          required
+        />
+        @if (form.controls.amount.hasError('required')) {
+          <mat-error>O valor é obrigatório</mat-error>
+        }
+        @if (form.controls.amount.hasError('min')) {
+          <mat-error>O valor deve ser maior que zero</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>{{ isInstallment.value ? '1ª Data de Vencimento' : 'Data da Despesa' }}</mat-label>
+        <input matInput type="date" formControlName="date" required />
+        @if (form.controls.date.hasError('required')) {
+          <mat-error>A data é obrigatória</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    @if (!isEdit && isInstallment.value) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Número de Parcelas (2 a 24)</mat-label>
+        <input
+          matInput
+          type="number"
+          min="2"
+          max="24"
+          formControlName="totalInstallments"
+          placeholder="Ex.: 10"
+          required
+        />
+        @if (form.controls.totalInstallments.hasError('min') || form.controls.totalInstallments.hasError('max')) {
+          <mat-error>Deve ser entre 2 e 24 parcelas</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoria</mat-label>
+      <mat-select formControlName="categoryId" required>
+        @for (category of categoriesState.categories(); track category.id) {
+          <mat-option [value]="category.id">
+            <span>{{ category.icon }} {{ category.name }}</span>
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.controls.categoryId.hasError('required')) {
+        <mat-error>Selecione uma categoria</mat-error>
+      }
+    </mat-form-field>
+
+    @if (!isEdit) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Método de Pagamento</mat-label>
+        <mat-select
+          formControlName="paymentMethod"
+          (selectionChange)="onPaymentMethodChange()"
+          required
+        >
+          @for (option of paymentMethodOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (isCreditCardSelected) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cartão de Crédito</mat-label>
+          <mat-select formControlName="creditCardId" required>
+            @for (card of cardsState.cards(); track card.id) {
+              <mat-option [value]="card.id">{{ card.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.creditCardId.hasError('required')) {
+            <mat-error>Selecione o cartão de crédito</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Conta Bancária (Opcional)</mat-label>
+        <mat-select formControlName="accountId">
+          <mat-option [value]="null">Nenhuma conta vinculada</mat-option>
+          @for (acc of accountsState.accounts(); track acc.id) {
+            <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Salvar' : 'Cadastrar Despesa' }}
+  </button>
+</mat-dialog-actions>

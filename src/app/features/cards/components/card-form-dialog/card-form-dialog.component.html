@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Cartão' : 'Novo Cartão de Crédito' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="card-form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome do Cartão</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        placeholder="Ex.: Nubank Ultravioleta, Inter Black"
+        required
+      />
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>O nome do cartão é obrigatório</mat-error>
+      }
+      @if (form.controls.name.hasError('maxlength')) {
+        <mat-error>Máximo de 100 caracteres</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Salvar' : 'Cadastrar' }}
+  </button>
+</mat-dialog-actions>

@@ -36,9 +36,9 @@ export const routes: Routes = [
           import('./features/categories/routes').then((m) => m.CATEGORIES_ROUTES)
       },
       {
-        path: 'categories',
+        path: 'cards',
         loadChildren: () =>
-          import('./features/categories/routes').then((m) => m.CATEGORIES_ROUTES)
+          import('./features/cards/routes').then((m) => m.CARDS_ROUTES)
       }
     ]
   },

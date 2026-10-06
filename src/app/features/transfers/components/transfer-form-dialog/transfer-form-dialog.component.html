@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>Nova Transferência entre Contas</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="transfer-form" (ngSubmit)="onSubmit()">
+    @if (form.hasError('sameAccount')) {
+      <div class="validation-warning" role="alert">
+        A conta de origem e a conta de destino não podem ser iguais.
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Conta de Origem (Sai dinheiro)</mat-label>
+      <mat-select formControlName="fromAccountId" required>
+        @for (acc of accountsState.accounts(); track acc.id) {
+          <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.fromAccountId.hasError('required')) {
+        <mat-error>Selecione a conta de origem</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Conta de Destino (Entra dinheiro)</mat-label>
+      <mat-select formControlName="toAccountId" required>
+        @for (acc of accountsState.accounts(); track acc.id) {
+          <mat-option [value]="acc.id">{{ acc.name }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.toAccountId.hasError('required')) {
+        <mat-error>Selecione a conta de destino</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Valor (R$)</mat-label>
+        <input
+          matInput
+          type="number"
+          step="0.01"
+          formControlName="amount"
+          placeholder="0,00"
+          required
+        />
+        @if (form.controls.amount.hasError('required')) {
+          <mat-error>O valor é obrigatório</mat-error>
+        }
+        @if (form.controls.amount.hasError('min')) {
+          <mat-error>O valor deve ser maior que zero</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Data</mat-label>
+        <input matInput type="date" formControlName="date" required />
+        @if (form.controls.date.hasError('required')) {
+          <mat-error>A data é obrigatória</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição / Motivo (Opcional)</mat-label>
+      <input
+        matInput
+        formControlName="description"
+        placeholder="Ex.: Aplicação na Poupança, Reserva"
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+  <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="form.invalid">
+    Transferir
+  </button>
+</mat-dialog-actions>

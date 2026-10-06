@@ -226,7 +226,32 @@ Mocks: Testes de serviços de API devem usar HttpTestingController (ou provideHt
 
 Por quê: Testes focados em comportamento resistem a refatorações estruturais e protegem o usuário final contra regressões visíveis.
 
-11. Definição de Pronto (Definition of Done)
+11. Padrão de Commits (Conventional Commits)
+
+Todo commit deve seguir rigorosamente a especificação Conventional Commits com mensagens exclusivamente em inglês:
+
+Formato:
+`<tipo>(<escopo opcional>): <descrição curta no imperativo>`
+
+Tipos permitidos:
+- `feat`: Nova funcionalidade para o usuário.
+- `fix`: Correção de bug.
+- `test`: Adição, ajuste ou refatoração de testes (etapa Red/Green do ciclo TDD).
+- `refactor`: Refatoração de código sem alteração de comportamento externo (etapa Refactor do TDD).
+- `style`: Formatação, linting ou ajustes visuais de CSS sem impacto na lógica.
+- `docs`: Alterações puramente em documentação (ex.: README.md, AGENTS.md).
+- `chore`: Atualizações de build, tarefas de configuração de ferramentas ou repositório.
+- `perf`: Melhoria mensurável de desempenho.
+
+Regras e Boas Práticas:
+- Mensagem exclusivamente em inglês e no imperativo (ex.: `feat(auth): implement jwt interceptor`, não `feat(auth): adicionado interceptor`).
+- Início em letra minúscula e sem ponto final na linha de cabeçalho.
+- Escopos recomendados mapeiam as camadas ou features do projeto: `auth`, `accounts`, `cards`, `categories`, `expenses`, `incomes`, `dashboard`, `core`, `shared`.
+- No fluxo TDD, encoraja-se isolar commits de testes e implementação quando aplicável (ex.: `test(accounts): add balance calculation spec` seguido de `feat(accounts): implement balance calculation`).
+
+Por quê: Conventional Commits estruturam semanticamente o histórico do projeto, facilitam a revisão de código durante o TDD, viabilizam geração automatizada de changelogs e garantem conformidade com padrões globais de engenharia de software.
+
+12. Definição de Pronto (Definition of Done)
 
 Uma tarefa só pode ser considerada pronta se todos os itens abaixo forem atendidos:
 
@@ -248,7 +273,9 @@ Uma tarefa só pode ser considerada pronta se todos os itens abaixo forem atendi
 
 [ ] Navegabilidade total por teclado e labels de acessibilidade conferidos.
 
-12. O que Nunca Fazer Sem Pedir
+[ ] Commits seguindo estritamente a especificação Conventional Commits em inglês.
+
+13. O que Nunca Fazer Sem Pedir
 
 Atualizar dependências: Não altere versões no package.json nem adicione bibliotecas externas sem autorização expressa.
 

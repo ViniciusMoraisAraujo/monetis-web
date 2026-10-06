@@ -1,0 +1,116 @@
+<div class="subscriptions-container">
+  <div class="header">
+    <div class="title-group">
+      <h1>Assinaturas e Recorrências</h1>
+      <p class="subtitle">Acompanhe planos e pagamentos automáticos periódicos</p>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      class="add-button"
+      (click)="openCreateDialog()"
+      aria-label="Cadastrar nova assinatura"
+    >
+      <mat-icon aria-hidden="true">add</mat-icon>
+      <span>Nova Assinatura</span>
+    </button>
+  </div>
+
+  <!-- Resumo de Assinaturas -->
+  <div class="summary-grid">
+    <mat-card class="summary-card" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Assinaturas Ativas</div>
+        <div class="summary-value count">
+          {{ state.activeSubscriptionsCount() }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card" appearance="outlined">
+      <mat-card-content>
+        <div class="summary-label">Custo Recorrente Ativo</div>
+        <div class="summary-value amount">
+          {{ state.totalActiveAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  @if (state.loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Carregando assinaturas"></mat-progress-bar>
+  }
+
+  @if (state.error()) {
+    <div class="error-banner" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ state.error() }}</span>
+    </div>
+  }
+
+  @if (!state.loading() && state.subscriptions().length === 0) {
+    <mat-card class="empty-card" appearance="outlined">
+      <mat-card-content class="empty-content">
+        <mat-icon class="empty-icon" aria-hidden="true">auto_mode</mat-icon>
+        <p class="empty-title">Nenhuma assinatura cadastrada</p>
+        <p class="empty-text">Cadastre seus serviços recorrentes (streaming, academias, planos) para ter previsibilidade financeira.</p>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="openCreateDialog()"
+          aria-label="Cadastrar sua primeira assinatura"
+        >
+          <mat-icon aria-hidden="true">add</mat-icon>
+          Cadastrar Assinatura
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Lista de Assinaturas (Cards Mobile-First) -->
+  <div class="subscriptions-list">
+    @for (sub of state.subscriptions(); track sub.id) {
+      <mat-card class="subscription-card" [class.inactive]="!sub.isActive" appearance="outlined">
+        <div class="subscription-header">
+          <div class="subscription-title-section">
+            <div class="tags-group">
+              <span class="freq-tag">{{ frequencyLabels[sub.frequency] }}</span>
+              <span class="status-badge" [class.active]="sub.isActive" [class.inactive-badge]="!sub.isActive">
+                <mat-icon aria-hidden="true">{{ sub.isActive ? 'check_circle' : 'pause_circle' }}</mat-icon>
+                <span>{{ sub.isActive ? 'Ativa' : 'Inativa' }}</span>
+              </span>
+            </div>
+            <div class="subscription-description">{{ sub.description }}</div>
+            <div class="subscription-due">
+              Próximo vencimento: {{ sub.nextDueDate | date: 'dd/MM/yyyy' : 'UTC' }}
+            </div>
+          </div>
+
+          <div class="subscription-amount-section">
+            <div class="subscription-amount">
+              {{ sub.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </div>
+          </div>
+        </div>
+
+        <mat-card-actions class="subscription-actions" align="end">
+          <button
+            mat-icon-button
+            (click)="openEditDialog(sub)"
+            aria-label="Editar assinatura {{ sub.description }}"
+          >
+            <mat-icon aria-hidden="true">edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onDelete(sub)"
+            aria-label="Excluir assinatura {{ sub.description }}"
+          >
+            <mat-icon aria-hidden="true">delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</div>

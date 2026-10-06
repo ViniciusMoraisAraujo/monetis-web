@@ -54,6 +54,11 @@ export const routes: Routes = [
         path: 'transfers',
         loadChildren: () =>
           import('./features/transfers/routes').then((m) => m.TRANSFERS_ROUTES)
+      },
+      {
+        path: 'subscriptions',
+        loadChildren: () =>
+          import('./features/subscriptions/routes').then((m) => m.SUBSCRIPTIONS_ROUTES)
       }
     ]
   },

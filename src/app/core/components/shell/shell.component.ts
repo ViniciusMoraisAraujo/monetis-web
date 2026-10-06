@@ -56,6 +56,7 @@ export class ShellComponent {
     { path: '/expenses', label: 'Despesas', icon: 'trending_down' },
     { path: '/incomes', label: 'Receitas', icon: 'trending_up' },
     { path: '/transfers', label: 'Transferências', icon: 'swap_horiz' },
+    { path: '/subscriptions', label: 'Assinaturas', icon: 'auto_mode' },
     { path: '/categories', label: 'Categorias', icon: 'category' }
   ];
 

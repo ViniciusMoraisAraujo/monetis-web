@@ -24,6 +24,11 @@ export const routes: Routes = [
           import('./features/dashboard/components/dashboard-home/dashboard-home.component').then(
             (m) => m.DashboardHomeComponent
           )
+      },
+      {
+        path: 'accounts',
+        loadChildren: () =>
+          import('./features/accounts/routes').then((m) => m.ACCOUNTS_ROUTES)
       }
     ]
   },

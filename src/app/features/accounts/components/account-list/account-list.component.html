@@ -1,0 +1,116 @@
+<div class="accounts-page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Minhas Contas</h1>
+      <p class="page-subtitle">Gerencie suas contas correntes, poupanças e cartões</p>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="openCreateDialog()"
+      class="add-button"
+      aria-label="Adicionar nova conta"
+    >
+      <mat-icon aria-hidden="true">add</mat-icon>
+      <span>Nova Conta</span>
+    </button>
+  </header>
+
+  <!-- Card de Saldo Total Consolidado -->
+  <mat-card class="total-balance-card">
+    <mat-card-content class="total-balance-content">
+      <div class="balance-info">
+        <span class="balance-label">Saldo Total em Contas</span>
+        <span
+          class="balance-value"
+          [class.negative]="accountsState.totalBalance() < 0"
+          [class.positive]="accountsState.totalBalance() >= 0"
+        >
+          @if (accountsState.totalBalance() < 0) {
+            <span class="sign-indicator" aria-label="Negativo">− </span>
+          } @else {
+            <span class="sign-indicator" aria-label="Positivo">+ </span>
+          }
+          {{ accountsState.totalBalance() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </span>
+      </div>
+      <mat-icon class="total-icon" aria-hidden="true">account_balance_wallet</mat-icon>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Feedback de Carregamento e Erro -->
+  @if (accountsState.isLoading() && accountsState.accounts().length === 0) {
+    <div class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Carregando suas contas...</span>
+    </div>
+  }
+
+  @if (accountsState.errorMessage(); as errorMsg) {
+    <div class="error-banner" role="alert" aria-live="polite">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ errorMsg }}</span>
+    </div>
+  }
+
+  <!-- Lista de Contas (Cartões empilhados Mobile-First) -->
+  @if (accountsState.accounts().length > 0) {
+    <div class="accounts-grid">
+      @for (account of accountsState.accounts(); track account.id) {
+        <mat-card class="account-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar class="account-avatar-icon" aria-hidden="true">
+              {{ getAccountTypeIcon(account.type) }}
+            </mat-icon>
+            <mat-card-title class="account-name">{{ account.name }}</mat-card-title>
+            <mat-card-subtitle>{{ accountTypeLabels[account.type] }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="account-body">
+            <span class="body-label">Saldo Disponível</span>
+            <span
+              class="account-balance"
+              [class.negative]="account.balance < 0"
+              [class.positive]="account.balance >= 0"
+            >
+              @if (account.balance < 0) {
+                <span class="sign-indicator" aria-label="Negativo">− </span>
+              } @else {
+                <span class="sign-indicator" aria-label="Positivo">+ </span>
+              }
+              {{ account.balance | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            </span>
+          </mat-card-content>
+
+          <mat-card-actions align="end" class="account-actions">
+            <button
+              mat-icon-button
+              (click)="openEditDialog(account)"
+              [attr.aria-label]="'Editar conta ' + account.name"
+            >
+              <mat-icon aria-hidden="true">edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="onDelete(account)"
+              [attr.aria-label]="'Excluir conta ' + account.name"
+            >
+              <mat-icon aria-hidden="true">delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  } @else if (!accountsState.isLoading()) {
+    <div class="empty-state">
+      <mat-icon class="empty-icon" aria-hidden="true">account_balance</mat-icon>
+      <h2>Nenhuma conta cadastrada</h2>
+      <p>Cadastre sua primeira conta bancária para começar a registrar transações.</p>
+      <button mat-stroked-button color="primary" (click)="openCreateDialog()" class="empty-action-btn">
+        Cadastrar Conta
+      </button>
+    </div>
+  }
+</div>

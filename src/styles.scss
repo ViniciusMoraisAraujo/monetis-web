@@ -653,14 +653,6 @@ textarea,
   border-radius: var(--nu-radius-card);
   background-color: var(--nu-surface-card);
   border: 1px solid var(--nu-border);
-  transition: transform var(--nu-duration-fast) var(--nu-ease);
-
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover {
-      transform: translateY(-2px);
-      border-color: var(--nu-border-focus);
-    }
-  }
 
   h3 {
     margin: 0;

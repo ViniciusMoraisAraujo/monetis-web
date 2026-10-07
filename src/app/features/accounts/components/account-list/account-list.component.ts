@@ -7,23 +7,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AccountType, ACCOUNT_TYPE_LABELS } from '../../../../shared/models/enums';
-import { AccountResponse, CreateAccountRequest, UpdateAccountRequest } from '../../models/account.model';
+import {
+  AccountResponse,
+  CreateAccountRequest,
+  UpdateAccountRequest,
+} from '../../models/account.model';
 import { AccountsStateService } from '../../services/accounts-state.service';
 import { AccountFormDialogComponent } from '../account-form-dialog/account-form-dialog.component';
 
 @Component({
   selector: 'app-account-list',
   standalone: true,
-  imports: [
-    CurrencyPipe,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressSpinnerModule
-  ],
+  imports: [CurrencyPipe, MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountListComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
@@ -48,14 +46,13 @@ export class AccountListComponent implements OnInit {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open<
+    const dialogRef = this.dialog.open<AccountFormDialogComponent, unknown, CreateAccountRequest>(
       AccountFormDialogComponent,
-      unknown,
-      CreateAccountRequest
-    >(AccountFormDialogComponent, {
-      width: '420px',
-      maxWidth: '90vw'
-    });
+      {
+        width: '420px',
+        maxWidth: '90vw',
+      },
+    );
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -72,7 +69,7 @@ export class AccountListComponent implements OnInit {
     >(AccountFormDialogComponent, {
       width: '420px',
       maxWidth: '90vw',
-      data: { account }
+      data: { account },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

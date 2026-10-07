@@ -1,7 +1,4 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "skills": [
-    ".skills/angular-developer",
-    ".skills/angular-new-app"
-  ]
+  "skills": [".skills/angular-developer", ".skills/angular-new-app"]
 }

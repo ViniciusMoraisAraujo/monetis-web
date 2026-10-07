@@ -12,11 +12,7 @@ describe('CardsApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CardsApiService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [CardsApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(CardsApiService);

@@ -17,7 +17,7 @@ describe('AccountsStateService', () => {
 
   const mockAccounts: AccountResponse[] = [
     { id: '1', name: 'Nubank', userId: 'u1', type: AccountType.Checking, balance: 1000 },
-    { id: '2', name: 'Inter', userId: 'u1', type: AccountType.Saving, balance: 500 }
+    { id: '2', name: 'Inter', userId: 'u1', type: AccountType.Saving, balance: 500 },
   ];
 
   beforeEach(() => {
@@ -25,14 +25,11 @@ describe('AccountsStateService', () => {
       getAll: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
-      delete: vi.fn()
+      delete: vi.fn(),
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        AccountsStateService,
-        { provide: AccountsApiService, useValue: apiMock }
-      ]
+      providers: [AccountsStateService, { provide: AccountsApiService, useValue: apiMock }],
     });
 
     state = TestBed.inject(AccountsStateService);
@@ -72,7 +69,7 @@ describe('AccountsStateService', () => {
       name: 'Itaú',
       userId: 'u1',
       type: AccountType.Checking,
-      balance: 200
+      balance: 200,
     };
     apiMock.getAll.mockReturnValue(of(mockAccounts));
     apiMock.create.mockReturnValue(of(newAcc));

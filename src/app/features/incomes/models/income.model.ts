@@ -2,32 +2,34 @@ export interface IncomeResponse {
   id: string;
   description: string;
   amount: number;
-  date: string;
+  receivedAt: string;
+  date?: string;
   categoryId: string;
-  categoryName: string;
+  categoryName?: string;
   accountId: string;
-  accountName: string;
-  isReceived: boolean;
-  receivedAt?: string | null;
-  isSubscription: boolean;
+  accountName?: string;
+  isReceived?: boolean;
+  isSubscription?: boolean;
   subscriptionId?: string | null;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface CreateIncomeRequest {
-  description: string;
-  amount: number;
-  date: string;
-  categoryId: string;
   accountId: string;
+  categoryId: string;
+  amount: number;
+  description: string;
+  receivedAt: string;
+  date?: string;
 }
 
 export interface UpdateIncomeRequest {
-  description: string;
-  amount: number;
-  date: string;
   categoryId: string;
-  accountId: string;
+  amount: number;
+  description: string;
+  receivedAt: string;
+  accountId?: string;
+  date?: string;
 }
 
 export interface ReceiveIncomeRequest {

@@ -9,21 +9,23 @@ import { Frequency } from '../../../../shared/models/enums';
 
 describe('SubscriptionFormDialogComponent', () => {
   let dialogRefMock: { close: ReturnType<typeof vi.fn> };
-  let categoriesStateMock: { categories: ReturnType<typeof signal<any[]>>; loadCategories: ReturnType<typeof vi.fn> };
-  let accountsStateMock: { accounts: ReturnType<typeof signal<any[]>>; loadAccounts: ReturnType<typeof vi.fn> };
+  let categoriesStateMock: {
+    categories: ReturnType<typeof signal<any[]>>;
+    loadCategories: ReturnType<typeof vi.fn>;
+  };
+  let accountsStateMock: {
+    accounts: ReturnType<typeof signal<any[]>>;
+    loadAccounts: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     dialogRefMock = { close: vi.fn() };
     categoriesStateMock = {
-      categories: signal([
-        { id: 'cat-1', name: 'Serviços', isDefault: true },
-      ]),
+      categories: signal([{ id: 'cat-1', name: 'Serviços', isDefault: true }]),
       loadCategories: vi.fn(),
     };
     accountsStateMock = {
-      accounts: signal([
-        { id: 'acc-1', name: 'Nubank', balance: 1000 },
-      ]),
+      accounts: signal([{ id: 'acc-1', name: 'Nubank', balance: 1000 }]),
       loadAccounts: vi.fn(),
     };
   });

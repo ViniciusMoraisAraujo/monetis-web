@@ -3,12 +3,13 @@ import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  const validToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20ifQ.signature';
+  const validToken =
+    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMTExMS0xMTExLTExMTEtMTExMS0xMTExMTExMTExMTEiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20ifQ.signature';
 
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({
-      providers: [AuthService]
+      providers: [AuthService],
     });
   });
 
@@ -31,7 +32,7 @@ describe('AuthService', () => {
     expect(service.isAuthenticated()).toBe(true);
     expect(service.currentUser()).toEqual({
       id: '11111111-1111-1111-1111-111111111111',
-      email: 'test@example.com'
+      email: 'test@example.com',
     });
   });
 

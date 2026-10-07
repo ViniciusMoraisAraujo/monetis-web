@@ -7,7 +7,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { AuthApiService } from './auth-api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthStateService {
   private readonly authApi = inject(AuthApiService);
@@ -43,7 +43,7 @@ export class AuthStateService {
       await firstValueFrom(this.authApi.register(request));
       // Após o cadastro com sucesso, efetua login com as credenciais criadas
       const loginResponse = await firstValueFrom(
-        this.authApi.login({ email: request.email, password: request.password })
+        this.authApi.login({ email: request.email, password: request.password }),
       );
       this.authService.setToken(loginResponse.token);
       this.router.navigate(['/']);

@@ -1,203 +1,260 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--nu-space-6);
 }
 
 .dashboard-header {
-  .title-group {
-    h1 {
-      margin: 0;
-      font-size: clamp(1.5rem, 4vw, 2.25rem);
-      font-weight: 700;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .subtitle {
-      margin: 0.25rem 0 0;
-      color: var(--mat-sys-on-surface-variant);
-      font-size: 0.875rem;
-    }
-  }
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.metric-card {
-  border-radius: 16px;
-  background-color: var(--mat-sys-surface-container);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .metric-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .metric-title {
-      font-size: 0.875rem;
-      color: var(--mat-sys-on-surface-variant);
-      font-weight: 500;
-    }
-
-    mat-icon {
-      font-size: 1.25rem;
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-
-    .icon-balance {
-      color: var(--mat-sys-primary);
-    }
-
-    .icon-income {
-      color: var(--app-income);
-    }
-
-    .icon-expense {
-      color: var(--app-expense);
-    }
-  }
-
-  .metric-value {
-    font-size: clamp(1.25rem, 3vw, 1.625rem);
-    font-weight: 700;
-    margin-top: 0.5rem;
-  }
-
-  .metric-caption {
-    font-size: 0.75rem;
-    color: var(--mat-sys-on-surface-variant);
-    margin-top: 0.25rem;
-  }
-}
-
-.income-color {
-  color: var(--app-income);
-}
-
-.expense-color {
-  color: var(--app-expense);
-}
-
-.quick-actions {
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1rem;
-  }
-
-  .actions-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-
-    a {
-      min-height: 48px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-  }
-}
-
-.recent-section {
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin: 0;
-    }
-  }
-}
-
-.empty-recent {
-  border-radius: 12px;
-  text-align: center;
-  color: var(--mat-sys-on-surface-variant);
-  padding: 1rem;
-}
-
-.recent-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--nu-space-1);
 }
 
-.recent-item {
-  border-radius: 12px;
-  padding: 0.875rem 1rem;
+.nu-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--nu-primary);
+}
+
+.header-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: var(--nu-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.header-subtitle {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--nu-text-secondary);
+}
+
+// 1. Card de Saldo
+.hero-balance-card {
+  padding: var(--nu-space-5);
+  border-radius: var(--nu-radius-card);
+  background: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
+  box-shadow: var(--nu-glow-primary);
+
+  @media (min-width: 768px) {
+    padding: var(--nu-space-6);
+  }
+}
+
+.account-card-header,
+.card-inner-header,
+.feed-header,
+.flow-row,
+.limit-labels,
+.flow-bar-legend {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: var(--mat-sys-surface-container);
+  justify-content: space-between;
+}
 
-  .item-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+.account-title-group,
+.card-icon-title,
+.card-header-actions,
+.flow-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--nu-space-3);
+}
 
-    .item-category {
-      font-size: 0.6875rem;
-      font-weight: 600;
-      color: var(--mat-sys-on-surface-variant);
-    }
+.account-badge-icon,
+.mini-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--nu-radius-control);
+  background: var(--nu-surface-subtle);
+  color: var(--nu-primary);
+}
 
-    .item-title {
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--mat-sys-on-surface);
-    }
+.account-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--nu-text-secondary);
+}
 
-    .item-date {
-      font-size: 0.75rem;
-      color: var(--mat-sys-outline);
-    }
+.desktop-eye-button {
+  display: none;
+  color: var(--nu-text-secondary);
+
+  @media (min-width: 768px) {
+    display: inline-flex;
   }
+}
 
-  .item-amount-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
+.account-meta,
+.invoice-status-label,
+.feed-subtitle,
+.limit-labels {
+  color: var(--nu-text-secondary);
+  font-size: 0.75rem;
+}
 
-    .item-amount {
-      font-size: 1rem;
-      font-weight: 700;
-    }
+.view-accounts-link,
+.card-link,
+.see-all-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nu-space-1);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--nu-primary);
+  text-decoration: none;
+}
 
-    .item-status {
-      font-size: 0.6875rem;
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      background-color: var(--mat-sys-error-container);
-      color: var(--mat-sys-on-error-container);
+.account-balance-display {
+  margin: var(--nu-space-4) 0 var(--nu-space-3);
+}
 
-      &.paid {
-        background-color: var(--mat-sys-primary-container);
-        color: var(--mat-sys-on-primary-container);
-      }
-    }
+.balance-value {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 700;
+  color: var(--nu-text-primary);
+  line-height: 1.1;
+}
+
+.balance-skeleton {
+  width: 14rem;
+  height: 2.75rem;
+}
+
+.stat-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nu-space-1);
+  font-size: 0.8125rem;
+  color: var(--nu-text-secondary);
+
+  &.positive mat-icon {
+    color: var(--app-income);
   }
+  &.negative mat-icon {
+    color: var(--app-expense);
+  }
+}
+
+// 3. Overview Grid
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nu-space-4);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card-icon-title h3,
+.feed-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--nu-text-primary);
+}
+
+.card-content-body {
+  margin: var(--nu-space-4) 0;
+}
+
+.invoice-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--nu-text-primary);
+  margin-top: var(--nu-space-1);
+
+  &.has-debt {
+    color: var(--app-expense);
+  }
+}
+
+.limit-progress-section {
+  margin-top: var(--nu-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-2);
+}
+
+.action-button-outlined {
+  width: 100%;
+  border-radius: var(--nu-radius-pill);
+  border: 1px solid var(--nu-border-strong);
+  color: var(--nu-text-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nu-space-2);
+
+  &:hover {
+    background-color: var(--nu-surface-card-hover);
+    border-color: var(--nu-primary);
+  }
+}
+
+.flow-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-2);
+}
+
+.flow-row {
+  font-size: 0.8125rem;
+  &.summary {
+    font-weight: 600;
+    color: var(--nu-text-primary);
+  }
+}
+
+.flow-val {
+  font-weight: 600;
+  &.income {
+    color: var(--app-income);
+  }
+  &.expense {
+    color: var(--app-expense);
+  }
+}
+
+.flow-divider {
+  height: 1px;
+  background: var(--nu-border);
+}
+
+// 4. Feed de Histórico
+.recent-feed-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-3);
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-2);
+}
+
+.skeleton-line {
+  width: 8rem;
+  height: 1.5rem;
+}
+
+.skeleton-sm {
+  width: 5rem;
+  height: 1rem;
+}
+
+.feed-skeleton {
+  width: 100%;
+  height: 3.5rem;
+  border-radius: var(--nu-radius-control);
 }

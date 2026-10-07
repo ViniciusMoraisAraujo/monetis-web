@@ -73,15 +73,17 @@ describe('SubscriptionsStateService', () => {
     apiServiceMock.create.mockReturnValue(of(created));
 
     service.loadSubscriptions();
-    service.createSubscription({
-      accountId: 'acc-1',
-      categoryId: 'cat-1',
-      amount: 25,
-      description: 'Spotify',
-      frequency: Frequency.Monthly,
-      nextDueDate: '2026-11-15T00:00:00Z',
-      paymentMethod: 2,
-    }).subscribe();
+    service
+      .createSubscription({
+        accountId: 'acc-1',
+        categoryId: 'cat-1',
+        amount: 25,
+        description: 'Spotify',
+        frequency: Frequency.Monthly,
+        nextDueDate: '2026-11-15T00:00:00Z',
+        paymentMethod: 2,
+      })
+      .subscribe();
 
     expect(service.subscriptions().length).toBe(3);
     expect(service.activeSubscriptionsCount()).toBe(2);
@@ -92,13 +94,15 @@ describe('SubscriptionsStateService', () => {
     apiServiceMock.update.mockReturnValue(of(undefined));
 
     service.loadSubscriptions();
-    service.updateSubscription('sub-1', {
-      description: 'Netflix 4K',
-      amount: 60,
-      frequency: Frequency.Monthly,
-      nextDueDate: '2026-11-01T00:00:00Z',
-      isActive: true,
-    }).subscribe();
+    service
+      .updateSubscription('sub-1', {
+        description: 'Netflix 4K',
+        amount: 60,
+        frequency: Frequency.Monthly,
+        nextDueDate: '2026-11-01T00:00:00Z',
+        isActive: true,
+      })
+      .subscribe();
 
     const updated = service.subscriptions().find((s) => s.id === 'sub-1');
     expect(updated?.description).toBe('Netflix 4K');
@@ -116,7 +120,9 @@ describe('SubscriptionsStateService', () => {
   });
 
   it('should handle error when loadSubscriptions fails', () => {
-    apiServiceMock.getAll.mockReturnValue(throwError(() => ({ message: 'Erro ao carregar assinaturas' })));
+    apiServiceMock.getAll.mockReturnValue(
+      throwError(() => ({ message: 'Erro ao carregar assinaturas' })),
+    );
 
     service.loadSubscriptions();
 

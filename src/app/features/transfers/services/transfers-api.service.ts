@@ -2,7 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CreateTransferRequest, TransferFilterParams, TransferResponse } from '../models/transfer.model';
+import {
+  CreateTransferRequest,
+  TransferFilterParams,
+  TransferResponse,
+} from '../models/transfer.model';
 
 @Injectable({
   providedIn: 'root',

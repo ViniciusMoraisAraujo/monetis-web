@@ -63,7 +63,11 @@ export class TransferListComponent implements OnInit {
   }
 
   onDelete(transfer: TransferResponse): void {
-    if (confirm(`Deseja estornar a transferência de ${transfer.amount} entre "${transfer.fromAccountName}" e "${transfer.toAccountName}"?`)) {
+    if (
+      confirm(
+        `Deseja estornar a transferência de ${transfer.amount} entre "${transfer.fromAccountName}" e "${transfer.toAccountName}"?`,
+      )
+    ) {
       this.state.deleteTransfer(transfer.id).subscribe();
     }
   }

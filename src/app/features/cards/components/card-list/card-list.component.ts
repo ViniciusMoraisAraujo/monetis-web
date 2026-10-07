@@ -11,12 +11,7 @@ import { CardFormDialogComponent } from '../card-form-dialog/card-form-dialog.co
 @Component({
   selector: 'app-card-list',
   standalone: true,
-  imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatProgressBarModule,
-  ],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatProgressBarModule],
   templateUrl: './card-list.component.html',
   styleUrl: './card-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

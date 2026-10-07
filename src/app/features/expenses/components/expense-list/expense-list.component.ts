@@ -18,7 +18,10 @@ import {
   PayExpenseRequest,
 } from '../../models/expense.model';
 import { PAYMENT_METHOD_LABELS } from '../../../../shared/models/enums';
-import { ExpenseFormDialogComponent, ExpenseDialogResult } from '../expense-form-dialog/expense-form-dialog.component';
+import {
+  ExpenseFormDialogComponent,
+  ExpenseDialogResult,
+} from '../expense-form-dialog/expense-form-dialog.component';
 import { ExpensePayDialogComponent } from '../expense-pay-dialog/expense-pay-dialog.component';
 
 @Component({

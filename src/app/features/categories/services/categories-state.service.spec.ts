@@ -2,7 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ApiError } from '../../../core/models/api-error.model';
-import { CategoryResponse, CreateCategoryRequest, UpdateCategoryRequest } from '../models/category.model';
+import {
+  CategoryResponse,
+  CreateCategoryRequest,
+  UpdateCategoryRequest,
+} from '../models/category.model';
 import { CategoriesApiService } from './categories-api.service';
 import { CategoriesStateService } from './categories-state.service';
 
@@ -18,7 +22,7 @@ describe('CategoriesStateService', () => {
 
   const mockCategories: CategoryResponse[] = [
     { id: '1', name: 'Alimentação', userId: '', icon: '🍔' },
-    { id: '2', name: 'Transporte', userId: 'user-1', icon: '🚗' }
+    { id: '2', name: 'Transporte', userId: 'user-1', icon: '🚗' },
   ];
 
   beforeEach(() => {
@@ -27,15 +31,15 @@ describe('CategoriesStateService', () => {
       getById: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
-      delete: vi.fn()
+      delete: vi.fn(),
     };
 
     TestBed.configureTestingModule({
       providers: [
         CategoriesStateService,
         provideRouter([]),
-        { provide: CategoriesApiService, useValue: apiMock }
-      ]
+        { provide: CategoriesApiService, useValue: apiMock },
+      ],
     });
 
     service = TestBed.inject(CategoriesStateService);
@@ -70,7 +74,12 @@ describe('CategoriesStateService', () => {
 
   it('should create category successfully', async () => {
     const newCategory: CreateCategoryRequest = { name: 'Saúde', icon: '💊' };
-    const created: CategoryResponse = { id: 'cat-new', name: 'Saúde', userId: 'user-1', icon: '💊' };
+    const created: CategoryResponse = {
+      id: 'cat-new',
+      name: 'Saúde',
+      userId: 'user-1',
+      icon: '💊',
+    };
     apiMock.create.mockReturnValue(of(created));
 
     const result = await service.createCategory(newCategory);
@@ -93,7 +102,12 @@ describe('CategoriesStateService', () => {
 
   it('should update category successfully', async () => {
     const updateDto: UpdateCategoryRequest = { name: 'Saúde e Bem-estar', icon: '💊' };
-    const updated: CategoryResponse = { id: '1', name: 'Saúde e Bem-estar', userId: 'user-1', icon: '💊' };
+    const updated: CategoryResponse = {
+      id: '1',
+      name: 'Saúde e Bem-estar',
+      userId: 'user-1',
+      icon: '💊',
+    };
     apiMock.getAll.mockReturnValue(of(mockCategories));
     apiMock.update.mockReturnValue(of(undefined));
     apiMock.getById.mockReturnValue(of(updated));

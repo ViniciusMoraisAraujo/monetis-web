@@ -16,8 +16,8 @@ describe('AccountFormDialogComponent', () => {
         imports: [AccountFormDialogComponent],
         providers: [
           { provide: MatDialogRef, useValue: dialogRefMock },
-          { provide: MAT_DIALOG_DATA, useValue: null }
-        ]
+          { provide: MAT_DIALOG_DATA, useValue: null },
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(AccountFormDialogComponent);
@@ -50,14 +50,14 @@ describe('AccountFormDialogComponent', () => {
     it('should close dialog with form data on valid submit', () => {
       component.form.setValue({
         name: 'Nubank',
-        type: AccountType.Checking
+        type: AccountType.Checking,
       });
 
       component.onSubmit();
 
       expect(dialogRefMock.close).toHaveBeenCalledWith({
         name: 'Nubank',
-        type: AccountType.Checking
+        type: AccountType.Checking,
       });
     });
 
@@ -82,11 +82,11 @@ describe('AccountFormDialogComponent', () => {
                 id: 'acc-1',
                 name: 'Banco do Brasil',
                 type: AccountType.Checking,
-                balance: 100
-              }
-            }
-          }
-        ]
+                balance: 100,
+              },
+            },
+          },
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(AccountFormDialogComponent);

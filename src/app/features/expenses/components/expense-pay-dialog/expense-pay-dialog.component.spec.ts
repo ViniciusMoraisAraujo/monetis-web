@@ -8,7 +8,10 @@ import { PaymentMethod } from '../../../../shared/models/enums';
 
 describe('ExpensePayDialogComponent', () => {
   let dialogRefMock: { close: ReturnType<typeof vi.fn> };
-  let accountsStateMock: { accounts: ReturnType<typeof signal<any[]>>; loadAccounts: ReturnType<typeof vi.fn> };
+  let accountsStateMock: {
+    accounts: ReturnType<typeof signal<any[]>>;
+    loadAccounts: ReturnType<typeof vi.fn>;
+  };
 
   const mockExpense: ExpenseResponse = {
     id: 'e-1',
@@ -28,9 +31,7 @@ describe('ExpensePayDialogComponent', () => {
   beforeEach(() => {
     dialogRefMock = { close: vi.fn() };
     accountsStateMock = {
-      accounts: signal([
-        { id: 'acc-1', name: 'Nubank', balance: 500, type: 0 },
-      ]),
+      accounts: signal([{ id: 'acc-1', name: 'Nubank', balance: 500, type: 0 }]),
       loadAccounts: vi.fn(),
     };
   });

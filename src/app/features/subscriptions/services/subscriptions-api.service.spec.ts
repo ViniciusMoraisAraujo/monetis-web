@@ -17,11 +17,7 @@ describe('SubscriptionsApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        SubscriptionsApiService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [SubscriptionsApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(SubscriptionsApiService);

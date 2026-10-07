@@ -23,11 +23,11 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
   readonly authState = inject(AuthStateService);
@@ -35,27 +35,15 @@ export class RegisterComponent {
   readonly form = new FormGroup({
     firstName: new FormControl('', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(50),
-        Validators.pattern(NAME_PATTERN)
-      ]
+      validators: [Validators.required, Validators.maxLength(50), Validators.pattern(NAME_PATTERN)],
     }),
     lastName: new FormControl('', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(50),
-        Validators.pattern(NAME_PATTERN)
-      ]
+      validators: [Validators.required, Validators.maxLength(50), Validators.pattern(NAME_PATTERN)],
     }),
     email: new FormControl('', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.email,
-        Validators.maxLength(100)
-      ]
+      validators: [Validators.required, Validators.email, Validators.maxLength(100)],
     }),
     password: new FormControl('', {
       nonNullable: true,
@@ -63,9 +51,9 @@ export class RegisterComponent {
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(128),
-        Validators.pattern(PASSWORD_PATTERN)
-      ]
-    })
+        Validators.pattern(PASSWORD_PATTERN),
+      ],
+    }),
   });
 
   async onSubmit(): Promise<void> {

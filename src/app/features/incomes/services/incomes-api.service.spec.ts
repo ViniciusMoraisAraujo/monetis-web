@@ -17,11 +17,7 @@ describe('IncomesApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        IncomesApiService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [IncomesApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(IncomesApiService);
@@ -38,6 +34,7 @@ describe('IncomesApiService', () => {
         id: 'inc-1',
         description: 'Salário',
         amount: 5000,
+        receivedAt: '2026-10-05T00:00:00Z',
         date: '2026-10-05T00:00:00Z',
         categoryId: 'cat-salario',
         categoryName: 'Salário',
@@ -65,21 +62,22 @@ describe('IncomesApiService', () => {
 
   it('should create income via POST /api/Incomes', () => {
     const request: CreateIncomeRequest = {
-      description: 'Freelance',
-      amount: 1200,
-      date: '2026-10-10T00:00:00Z',
-      categoryId: 'cat-extra',
       accountId: 'acc-1',
+      categoryId: 'cat-extra',
+      amount: 1200,
+      description: 'Freelance',
+      receivedAt: '2026-10-10T00:00:00Z',
     };
     const mockResponse: IncomeResponse = {
       id: 'inc-2',
-      description: 'Freelance',
-      amount: 1200,
-      date: '2026-10-10T00:00:00Z',
+      accountId: 'acc-1',
       categoryId: 'cat-extra',
       categoryName: 'Extras',
-      accountId: 'acc-1',
       accountName: 'Nubank',
+      amount: 1200,
+      description: 'Freelance',
+      receivedAt: '2026-10-10T00:00:00Z',
+      date: '2026-10-10T00:00:00Z',
       isReceived: false,
       isSubscription: false,
       createdAt: '2026-10-06T00:00:00Z',
@@ -97,10 +95,10 @@ describe('IncomesApiService', () => {
 
   it('should update income via PUT /api/Incomes/{id}', () => {
     const request: UpdateIncomeRequest = {
-      description: 'Freelance Final',
-      amount: 1500,
-      date: '2026-10-10T00:00:00Z',
       categoryId: 'cat-extra',
+      amount: 1500,
+      description: 'Freelance Final',
+      receivedAt: '2026-10-10T00:00:00Z',
       accountId: 'acc-1',
     };
 

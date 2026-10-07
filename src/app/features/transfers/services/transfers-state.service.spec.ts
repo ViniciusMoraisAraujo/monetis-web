@@ -75,12 +75,14 @@ describe('TransfersStateService', () => {
     apiServiceMock.create.mockReturnValue(of(created));
 
     service.loadTransfers();
-    service.createTransfer({
-      fromAccountId: 'acc-1',
-      toAccountId: 'acc-3',
-      amount: 300,
-      date: '2026-10-07T10:00:00Z',
-    }).subscribe();
+    service
+      .createTransfer({
+        fromAccountId: 'acc-1',
+        toAccountId: 'acc-3',
+        amount: 300,
+        date: '2026-10-07T10:00:00Z',
+      })
+      .subscribe();
 
     expect(service.transfers().length).toBe(3);
     expect(service.totalTransferred()).toBe(850);

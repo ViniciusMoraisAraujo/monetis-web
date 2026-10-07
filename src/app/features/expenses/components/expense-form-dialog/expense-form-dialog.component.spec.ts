@@ -10,9 +10,18 @@ import { PaymentMethod } from '../../../../shared/models/enums';
 
 describe('ExpenseFormDialogComponent', () => {
   let dialogRefMock: { close: ReturnType<typeof vi.fn> };
-  let categoriesStateMock: { categories: ReturnType<typeof signal<any[]>>; loadCategories: ReturnType<typeof vi.fn> };
-  let accountsStateMock: { accounts: ReturnType<typeof signal<any[]>>; loadAccounts: ReturnType<typeof vi.fn> };
-  let cardsStateMock: { cards: ReturnType<typeof signal<any[]>>; loadCards: ReturnType<typeof vi.fn> };
+  let categoriesStateMock: {
+    categories: ReturnType<typeof signal<any[]>>;
+    loadCategories: ReturnType<typeof vi.fn>;
+  };
+  let accountsStateMock: {
+    accounts: ReturnType<typeof signal<any[]>>;
+    loadAccounts: ReturnType<typeof vi.fn>;
+  };
+  let cardsStateMock: {
+    cards: ReturnType<typeof signal<any[]>>;
+    loadCards: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     dialogRefMock = { close: vi.fn() };
@@ -23,15 +32,11 @@ describe('ExpenseFormDialogComponent', () => {
       loadCategories: vi.fn(),
     };
     accountsStateMock = {
-      accounts: signal([
-        { id: 'acc-1', name: 'Nubank Conta', balance: 1000, type: 0 },
-      ]),
+      accounts: signal([{ id: 'acc-1', name: 'Nubank Conta', balance: 1000, type: 0 }]),
       loadAccounts: vi.fn(),
     };
     cardsStateMock = {
-      cards: signal([
-        { id: 'card-1', name: 'Nubank Ultravioleta', userId: 'u-1' },
-      ]),
+      cards: signal([{ id: 'card-1', name: 'Nubank Ultravioleta', userId: 'u-1' }]),
       loadCards: vi.fn(),
     };
   });

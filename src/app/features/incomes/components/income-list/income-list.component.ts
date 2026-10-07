@@ -44,7 +44,9 @@ export class IncomeListComponent implements OnInit {
   readonly categoriesState = inject(CategoriesStateService);
   private readonly dialog = inject(MatDialog);
 
-  readonly filterStatus = new FormControl<'all' | 'received' | 'pending'>('all', { nonNullable: true });
+  readonly filterStatus = new FormControl<'all' | 'received' | 'pending'>('all', {
+    nonNullable: true,
+  });
   readonly filterCategory = new FormControl<string>('', { nonNullable: true });
 
   ngOnInit(): void {

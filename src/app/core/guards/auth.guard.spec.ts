@@ -11,14 +11,11 @@ describe('Auth Guards', () => {
 
   beforeEach(() => {
     const routerMock = {
-      navigate: vi.fn()
+      navigate: vi.fn(),
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        AuthService,
-        { provide: Router, useValue: routerMock }
-      ]
+      providers: [AuthService, { provide: Router, useValue: routerMock }],
     });
 
     authService = TestBed.inject(AuthService);

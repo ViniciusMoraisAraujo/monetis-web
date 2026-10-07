@@ -19,15 +19,12 @@ describe('RegisterComponent', () => {
       isLoading: signal(false),
       errorMessage: signal(null),
       register: vi.fn(),
-      clearError: vi.fn()
+      clearError: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
       imports: [RegisterComponent],
-      providers: [
-        provideRouter([]),
-        { provide: AuthStateService, useValue: authStateMock }
-      ]
+      providers: [provideRouter([]), { provide: AuthStateService, useValue: authStateMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterComponent);
@@ -75,7 +72,7 @@ describe('RegisterComponent', () => {
       firstName: 'João',
       lastName: 'Silva',
       email: 'joao@example.com',
-      password: 'Strong@Pass1'
+      password: 'Strong@Pass1',
     });
 
     await component.onSubmit();
@@ -84,7 +81,7 @@ describe('RegisterComponent', () => {
       firstName: 'João',
       lastName: 'Silva',
       email: 'joao@example.com',
-      password: 'Strong@Pass1'
+      password: 'Strong@Pass1',
     });
   });
 

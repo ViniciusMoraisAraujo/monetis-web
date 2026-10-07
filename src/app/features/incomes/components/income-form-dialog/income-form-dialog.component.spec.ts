@@ -8,21 +8,23 @@ import { IncomeResponse } from '../../models/income.model';
 
 describe('IncomeFormDialogComponent', () => {
   let dialogRefMock: { close: ReturnType<typeof vi.fn> };
-  let categoriesStateMock: { categories: ReturnType<typeof signal<any[]>>; loadCategories: ReturnType<typeof vi.fn> };
-  let accountsStateMock: { accounts: ReturnType<typeof signal<any[]>>; loadAccounts: ReturnType<typeof vi.fn> };
+  let categoriesStateMock: {
+    categories: ReturnType<typeof signal<any[]>>;
+    loadCategories: ReturnType<typeof vi.fn>;
+  };
+  let accountsStateMock: {
+    accounts: ReturnType<typeof signal<any[]>>;
+    loadAccounts: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     dialogRefMock = { close: vi.fn() };
     categoriesStateMock = {
-      categories: signal([
-        { id: 'cat-inc', name: 'Salário', isDefault: true },
-      ]),
+      categories: signal([{ id: 'cat-inc', name: 'Salário', isDefault: true }]),
       loadCategories: vi.fn(),
     };
     accountsStateMock = {
-      accounts: signal([
-        { id: 'acc-1', name: 'Banco Itaú', balance: 3500 },
-      ]),
+      accounts: signal([{ id: 'acc-1', name: 'Banco Itaú', balance: 3500 }]),
       loadAccounts: vi.fn(),
     };
   });
@@ -55,6 +57,7 @@ describe('IncomeFormDialogComponent', () => {
       id: 'inc-1',
       description: 'Salário CLT',
       amount: 4500,
+      receivedAt: '2026-10-05T00:00:00Z',
       date: '2026-10-05T00:00:00Z',
       categoryId: 'cat-inc',
       categoryName: 'Salário',
@@ -69,6 +72,7 @@ describe('IncomeFormDialogComponent', () => {
     expect(component.isEdit).toBe(true);
     expect(component.form.controls.description.value).toBe('Salário CLT');
     expect(component.form.controls.amount.value).toBe(4500);
+    expect(component.form.controls.receivedAt.value).toBe('2026-10-05');
     expect(component.form.valid).toBe(true);
   });
 
@@ -77,7 +81,7 @@ describe('IncomeFormDialogComponent', () => {
     component.form.patchValue({
       description: 'Rendimento CDI',
       amount: 150.25,
-      date: '2026-10-06',
+      receivedAt: '2026-10-06',
       categoryId: 'cat-inc',
       accountId: 'acc-1',
     });
@@ -88,6 +92,7 @@ describe('IncomeFormDialogComponent', () => {
       expect.objectContaining({
         description: 'Rendimento CDI',
         amount: 150.25,
+        receivedAt: expect.stringContaining('2026-10-06'),
         categoryId: 'cat-inc',
         accountId: 'acc-1',
       }),

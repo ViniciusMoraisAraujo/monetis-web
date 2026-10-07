@@ -19,15 +19,12 @@ describe('LoginComponent', () => {
       isLoading: signal(false),
       errorMessage: signal(null),
       login: vi.fn(),
-      clearError: vi.fn()
+      clearError: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
-      providers: [
-        provideRouter([]),
-        { provide: AuthStateService, useValue: authStateMock }
-      ]
+      providers: [provideRouter([]), { provide: AuthStateService, useValue: authStateMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -64,21 +61,21 @@ describe('LoginComponent', () => {
   it('should call authState.login when form is submitted with valid data', async () => {
     component.form.setValue({
       email: 'valid@example.com',
-      password: 'Password@123'
+      password: 'Password@123',
     });
 
     await component.onSubmit();
 
     expect(authStateMock.login).toHaveBeenCalledWith({
       email: 'valid@example.com',
-      password: 'Password@123'
+      password: 'Password@123',
     });
   });
 
   it('should not call authState.login when form is invalid', async () => {
     component.form.setValue({
       email: '',
-      password: ''
+      password: '',
     });
 
     await component.onSubmit();

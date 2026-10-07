@@ -19,9 +19,7 @@ export class IncomesStateService {
   readonly loading = signal<boolean>(false);
   readonly error = signal<string | null>(null);
 
-  readonly totalAmount = computed(() =>
-    this.incomes().reduce((sum, item) => sum + item.amount, 0),
-  );
+  readonly totalAmount = computed(() => this.incomes().reduce((sum, item) => sum + item.amount, 0));
 
   readonly receivedAmount = computed(() =>
     this.incomes()
@@ -81,9 +79,10 @@ export class IncomesStateService {
                   ...i,
                   description: request.description,
                   amount: request.amount,
-                  date: request.date,
+                  receivedAt: request.receivedAt,
+                  date: request.receivedAt ?? request.date,
                   categoryId: request.categoryId,
-                  accountId: request.accountId,
+                  accountId: request.accountId ?? i.accountId,
                 }
               : i,
           ),

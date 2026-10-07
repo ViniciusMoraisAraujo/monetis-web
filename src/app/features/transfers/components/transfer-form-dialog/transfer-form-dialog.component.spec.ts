@@ -6,7 +6,10 @@ import { AccountsStateService } from '../../../accounts/services/accounts-state.
 
 describe('TransferFormDialogComponent', () => {
   let dialogRefMock: { close: ReturnType<typeof vi.fn> };
-  let accountsStateMock: { accounts: ReturnType<typeof signal<any[]>>; loadAccounts: ReturnType<typeof vi.fn> };
+  let accountsStateMock: {
+    accounts: ReturnType<typeof signal<any[]>>;
+    loadAccounts: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
     dialogRefMock = { close: vi.fn() };

@@ -21,17 +21,22 @@
     margin: 0;
     font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 700;
+    color: var(--nu-text-primary);
   }
 
   .subtitle {
     margin: 0.25rem 0 0;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--nu-text-secondary);
     font-size: 0.875rem;
   }
 }
 
 .add-button {
   min-height: 48px;
+  border-radius: 9999px;
+  background-color: var(--nu-primary);
+  color: #fff;
+  font-weight: 600;
   align-self: flex-start;
 
   @media (min-width: 600px) {
@@ -50,19 +55,21 @@
 }
 
 .summary-card {
-  border-radius: 16px;
-  background-color: var(--mat-sys-surface-container);
+  border-radius: 1.25rem;
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
 
   .summary-label {
     font-size: 0.875rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--nu-text-secondary);
   }
 
   .summary-value {
     font-size: clamp(1.25rem, 3vw, 1.75rem);
     font-weight: 700;
     margin-top: 0.25rem;
-    color: var(--mat-sys-primary);
+    color: var(--nu-primary);
+    font-variant-numeric: tabular-nums;
   }
 }
 
@@ -85,7 +92,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 0.75rem;
   background-color: var(--mat-sys-error-container);
   color: var(--mat-sys-on-error-container);
 }
@@ -93,6 +100,9 @@
 .empty-card {
   padding: 2.5rem 1rem;
   text-align: center;
+  border-radius: 1.25rem;
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
 }
 
 .empty-content {
@@ -105,18 +115,19 @@
     font-size: 3rem;
     width: 3rem;
     height: 3rem;
-    color: var(--mat-sys-outline);
+    color: var(--nu-text-muted);
   }
 
   .empty-title {
     margin: 0;
     font-weight: 600;
     font-size: 1.125rem;
+    color: var(--nu-text-primary);
   }
 
   .empty-text {
     margin: 0;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--nu-text-secondary);
     max-width: 25rem;
     font-size: 0.875rem;
   }
@@ -125,18 +136,21 @@
 .transfers-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.875rem;
 }
 
 .transfer-card {
-  border-radius: 16px;
-  padding: 1rem;
-  background-color: var(--mat-sys-surface-container);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
+    border-color: var(--nu-primary-glow);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -167,26 +181,26 @@
   font-size: 1rem;
 
   .arrow-icon {
-    color: var(--mat-sys-primary);
+    color: var(--nu-primary);
   }
 
   .origin {
-    color: var(--mat-sys-on-surface);
+    color: var(--nu-text-primary);
   }
 
   .dest {
-    color: var(--mat-sys-primary);
+    color: var(--nu-primary);
   }
 }
 
 .transfer-description {
   font-size: 0.875rem;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--nu-text-secondary);
 }
 
 .transfer-date {
   font-size: 0.8125rem;
-  color: var(--mat-sys-outline);
+  color: var(--nu-text-muted);
 }
 
 .transfer-amount-section {
@@ -197,14 +211,19 @@
 .transfer-amount {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--mat-sys-primary);
+  color: var(--nu-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .transfer-actions {
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--mat-sys-outline-variant);
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--nu-border);
 
   button {
     min-height: 48px;
+    color: var(--nu-text-secondary);
+    &:hover {
+      color: var(--nu-text-primary);
+    }
   }
 }

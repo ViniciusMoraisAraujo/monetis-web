@@ -49,6 +49,7 @@ describe('IncomeListComponent', () => {
       id: 'i-2',
       description: 'Consultoria Web',
       amount: 2500.0,
+      receivedAt: '2026-10-25T00:00:00Z',
       date: '2026-10-25T00:00:00Z',
       categoryId: 'cat-2',
       categoryName: 'Freelance',

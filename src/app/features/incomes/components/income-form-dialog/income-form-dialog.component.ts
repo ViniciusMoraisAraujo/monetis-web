@@ -5,7 +5,11 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { CreateIncomeRequest, IncomeResponse, UpdateIncomeRequest } from '../../models/income.model';
+import {
+  CreateIncomeRequest,
+  IncomeResponse,
+  UpdateIncomeRequest,
+} from '../../models/income.model';
 import { CategoriesStateService } from '../../../categories/services/categories-state.service';
 import { AccountsStateService } from '../../../accounts/services/accounts-state.service';
 
@@ -29,7 +33,9 @@ export interface IncomeDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IncomeFormDialogComponent implements OnInit {
-  private readonly dialogRef = inject(MatDialogRef<IncomeFormDialogComponent, CreateIncomeRequest | UpdateIncomeRequest>);
+  private readonly dialogRef = inject(
+    MatDialogRef<IncomeFormDialogComponent, CreateIncomeRequest | UpdateIncomeRequest>,
+  );
   readonly data = inject<IncomeDialogData>(MAT_DIALOG_DATA, { optional: true });
 
   readonly categoriesState = inject(CategoriesStateService);
@@ -45,8 +51,12 @@ export class IncomeFormDialogComponent implements OnInit {
     amount: new FormControl<number | null>(this.data?.income?.amount ?? null, {
       validators: [Validators.required, Validators.min(0.01)],
     }),
-    date: new FormControl<string>(
-      this.data?.income?.date ? this.data.income.date.substring(0, 10) : new Date().toISOString().substring(0, 10),
+    receivedAt: new FormControl<string>(
+      this.data?.income?.receivedAt
+        ? this.data.income.receivedAt.substring(0, 10)
+        : this.data?.income?.date
+          ? this.data.income.date.substring(0, 10)
+          : new Date().toISOString().substring(0, 10),
       {
         nonNullable: true,
         validators: [Validators.required],
@@ -74,14 +84,14 @@ export class IncomeFormDialogComponent implements OnInit {
     }
 
     const raw = this.form.getRawValue();
-    const isoDate = new Date(`${raw.date}T12:00:00Z`).toISOString();
+    const isoDate = new Date(`${raw.receivedAt}T12:00:00Z`).toISOString();
 
     const payload: CreateIncomeRequest = {
-      description: raw.description.trim(),
-      amount: Number(raw.amount),
-      date: isoDate,
-      categoryId: raw.categoryId,
       accountId: raw.accountId,
+      categoryId: raw.categoryId,
+      amount: Number(raw.amount),
+      description: raw.description.trim(),
+      receivedAt: isoDate,
     };
 
     this.dialogRef.close(payload);

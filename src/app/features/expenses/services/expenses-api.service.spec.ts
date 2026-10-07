@@ -19,11 +19,7 @@ describe('ExpensesApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        ExpensesApiService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [ExpensesApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(ExpensesApiService);
@@ -57,11 +53,12 @@ describe('ExpensesApiService', () => {
         expect(expenses).toEqual(mockExpenses);
       });
 
-    const req = httpTesting.expectOne((r) =>
-      r.url === baseUrl &&
-      r.params.get('categoryId') === 'cat-1' &&
-      r.params.get('isPaid') === 'true' &&
-      r.params.get('startDate') === '2026-10-01',
+    const req = httpTesting.expectOne(
+      (r) =>
+        r.url === baseUrl &&
+        r.params.get('categoryId') === 'cat-1' &&
+        r.params.get('isPaid') === 'true' &&
+        r.params.get('startDate') === '2026-10-01',
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockExpenses);

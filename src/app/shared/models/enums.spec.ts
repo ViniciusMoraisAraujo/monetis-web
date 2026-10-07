@@ -6,7 +6,7 @@ import {
   PaymentMethod,
   PAYMENT_METHOD_LABELS,
   TransactionStatus,
-  TRANSACTION_STATUS_LABELS
+  TRANSACTION_STATUS_LABELS,
 } from './enums';
 
 describe('Shared Enums and Labels', () => {

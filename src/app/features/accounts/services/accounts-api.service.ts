@@ -5,11 +5,11 @@ import { environment } from '../../../../environments/environment';
 import {
   AccountResponse,
   CreateAccountRequest,
-  UpdateAccountRequest
+  UpdateAccountRequest,
 } from '../models/account.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountsApiService {
   private readonly http = inject(HttpClient);

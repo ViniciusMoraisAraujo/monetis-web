@@ -1,7 +1,11 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { TransfersApiService } from './transfers-api.service';
-import { CreateTransferRequest, TransferFilterParams, TransferResponse } from '../models/transfer.model';
+import {
+  CreateTransferRequest,
+  TransferFilterParams,
+  TransferResponse,
+} from '../models/transfer.model';
 
 @Injectable({
   providedIn: 'root',

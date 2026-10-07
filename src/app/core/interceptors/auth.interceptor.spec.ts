@@ -1,4 +1,9 @@
-import { HttpClient, HttpErrorResponse, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -14,7 +19,7 @@ describe('authInterceptor', () => {
 
   beforeEach(() => {
     const routerMock = {
-      navigate: vi.fn()
+      navigate: vi.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -22,8 +27,8 @@ describe('authInterceptor', () => {
         provideHttpClient(withInterceptors([authInterceptor])),
         provideHttpClientTesting(),
         AuthService,
-        { provide: Router, useValue: routerMock }
-      ]
+        { provide: Router, useValue: routerMock },
+      ],
     });
 
     http = TestBed.inject(HttpClient);
@@ -64,11 +69,14 @@ describe('authInterceptor', () => {
     http.get('/api/Accounts').subscribe({
       error: (err: ApiError) => {
         capturedError = err;
-      }
+      },
     });
 
     const req = httpMock.expectOne('/api/Accounts');
-    req.flush({ message: 'Unauthorized', statusCode: 401 }, { status: 401, statusText: 'Unauthorized' });
+    req.flush(
+      { message: 'Unauthorized', statusCode: 401 },
+      { status: 401, statusText: 'Unauthorized' },
+    );
 
     expect(authService.token()).toBeNull();
     expect(router.navigate).toHaveBeenCalledWith(['/auth/login']);
@@ -76,7 +84,7 @@ describe('authInterceptor', () => {
       statusCode: 401,
       message: 'Unauthorized',
       errorCode: undefined,
-      details: null
+      details: null,
     });
   });
 
@@ -86,20 +94,20 @@ describe('authInterceptor', () => {
     http.get('/api/Accounts').subscribe({
       error: (err: ApiError) => {
         capturedError = err;
-      }
+      },
     });
 
     const req = httpMock.expectOne('/api/Accounts');
     req.flush(
       { statusCode: 400, message: 'Invalid data', errorCode: '04X0' },
-      { status: 400, statusText: 'Bad Request' }
+      { status: 400, statusText: 'Bad Request' },
     );
 
     expect(capturedError).toEqual({
       statusCode: 400,
       message: 'Invalid data',
       errorCode: '04X0',
-      details: null
+      details: null,
     });
   });
 
@@ -109,7 +117,7 @@ describe('authInterceptor', () => {
     http.get('/api/Accounts').subscribe({
       error: (err: ApiError) => {
         capturedError = err;
-      }
+      },
     });
 
     const req = httpMock.expectOne('/api/Accounts');
@@ -119,7 +127,7 @@ describe('authInterceptor', () => {
       statusCode: 400,
       message: 'Simple error string',
       errorCode: undefined,
-      details: null
+      details: null,
     });
   });
 });

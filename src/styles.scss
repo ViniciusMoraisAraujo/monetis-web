@@ -1,60 +1,171 @@
 @use '@angular/material' as mat;
 
-// Definindo temas Material Design 3 com a cor de semente Violeta (estilo Nubank)
-$light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$violet-palette,
-    tertiary: mat.$chartreuse-palette,
-  ),
-  typography: (
-    brand-family: 'Roboto, system-ui, -apple-system, sans-serif',
-    plain-family: 'Roboto, system-ui, -apple-system, sans-serif',
-  ),
-  density: (
-    scale: 0
+// Definição dos temas Material Design 3 com a cor violeta Nubank e tipografia Inter
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+      tertiary: mat.$chartreuse-palette,
+    ),
+    typography: (
+      brand-family: 'Inter, Roboto, system-ui, -apple-system, sans-serif',
+      plain-family: 'Inter, Roboto, system-ui, -apple-system, sans-serif',
+    ),
+    density: (
+      scale: 0,
+    ),
   )
-));
+);
 
-$dark-theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$violet-palette,
-    tertiary: mat.$chartreuse-palette,
-  ),
-  typography: (
-    brand-family: 'Roboto, system-ui, -apple-system, sans-serif',
-    plain-family: 'Roboto, system-ui, -apple-system, sans-serif',
-  ),
-  density: (
-    scale: 0
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$violet-palette,
+      tertiary: mat.$chartreuse-palette,
+    ),
+    typography: (
+      brand-family: 'Inter, Roboto, system-ui, -apple-system, sans-serif',
+      plain-family: 'Inter, Roboto, system-ui, -apple-system, sans-serif',
+    ),
+    density: (
+      scale: 0,
+    ),
   )
-));
+);
 
-// Aplica estilos essenciais e tema padrão (light)
+// Aplica estilos essenciais e tema padrão (Dark-First Nubank Ultravioleta)
 :root {
-  @include mat.all-component-themes($light-theme);
+  @include mat.all-component-themes($dark-theme);
 
-  /* Cores semânticas de domínio - WCAG 2.2 AA / Seção 7 AGENTS.md */
-  --app-income: light-dark(#1b6e3c, #7ddb9a);  /* Receita */
-  --app-expense: light-dark(#ba1a1a, #ffb4ab); /* Despesa */
-  --app-pending: light-dark(#8a6800, #fedc46); /* Pendente */
-  --app-overdue: light-dark(#b3261e, #f2b8b5); /* Vencido */
+  // Nubank Ultravioleta Design Tokens (Dark-First padrão)
+  --nu-primary: #a855f7;
+  --nu-primary-rgb: 168, 85, 247;
+  --nu-primary-glow: rgba(168, 85, 247, 0.22);
+  --nu-primary-hover: #b76eff;
+  --nu-primary-container: rgba(168, 85, 247, 0.14);
+  --nu-on-primary: #0b0b0f;
 
-  color-scheme: light;
-}
+  // 3 Níveis de elevação (Fundo #0B0B14 -> Cards #151522 -> Interativos #202034)
+  --nu-bg-canvas: #0b0b14;
+  --nu-surface-sidebar: #10101c;
+  --nu-surface-card: #151522;
+  --nu-surface-card-hover: #1c1c2e;
+  --nu-surface-raised: #1f1f33;
+  --nu-surface-subtle: #202034;
+  --nu-border: rgba(255, 255, 255, 0.06);
+  --nu-border-strong: rgba(255, 255, 255, 0.2);
+  --nu-border-focus: #a855f7;
 
-// Tema escuro quando a classe .dark estiver presente ou por prefers-color-scheme se não houver classe .light
-:root.dark,
-body.dark {
-  @include mat.all-component-colors($dark-theme);
+  --nu-text-primary: #f5f5f7;
+  --nu-text-secondary: #9e9ea8;
+  --nu-text-muted: #636372;
+
+  // Cores semânticas de domínio - WCAG 2.2 AA / Seção 7 AGENTS.md
+  --app-income: #4ade80; /* Receita */
+  --app-expense: #f87171; /* Despesa */
+  --app-pending: #facc15; /* Pendente */
+  --app-overdue: #fca5a5; /* Vencido */
+
+  // Tokens de forma (DESIGN.md 3.1)
+  --nu-radius-control: 12px;
+  --nu-radius-card: 20px;
+  --nu-radius-dialog: 24px;
+  --nu-radius-pill: 9999px;
+
+  // Tokens de espaçamento (DESIGN.md 3.2)
+  --nu-space-1: 4px;
+  --nu-space-2: 8px;
+  --nu-space-3: 12px;
+  --nu-space-4: 16px;
+  --nu-space-5: 20px;
+  --nu-space-6: 24px;
+  --nu-space-8: 32px;
+  --nu-space-10: 40px;
+
+  // Sombra e movimento (DESIGN.md 3.4)
+  --nu-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --nu-glow-primary: 0 0 32px var(--nu-primary-glow);
+  --nu-duration-fast: 150ms;
+  --nu-duration-base: 250ms;
+  --nu-ease: cubic-bezier(0.2, 0, 0, 1);
+
   color-scheme: dark;
 }
 
+// Tema Claro refinado quando a classe .light estiver presente
 :root.light,
+html.light,
 body.light {
   @include mat.all-component-colors($light-theme);
+
+  --nu-primary: #820ad1;
+  --nu-primary-rgb: 130, 10, 209;
+  --nu-primary-glow: rgba(130, 10, 209, 0.15);
+  --nu-primary-hover: #6d08af;
+  --nu-primary-container: #f3e8ff;
+  --nu-on-primary: #ffffff;
+
+  --nu-bg-canvas: #f0f2f7;
+  --nu-surface-sidebar: #f8f9fc;
+  --nu-surface-card: #ffffff;
+  --nu-surface-card-hover: #f3f5f9;
+  --nu-surface-raised: #ffffff;
+  --nu-surface-subtle: #e6e9f0;
+  --nu-border: rgba(0, 0, 0, 0.06);
+  --nu-border-strong: rgba(0, 0, 0, 0.2);
+  --nu-border-focus: #820ad1;
+
+  --nu-text-primary: #111116;
+  --nu-text-secondary: #5a5d6b;
+  --nu-text-muted: #8f92a1;
+
+  --app-income: #107c41;
+  --app-expense: #c5221f;
+  --app-pending: #8c6b00;
+  --app-overdue: #ba1a1a;
+
+  --nu-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+
   color-scheme: light;
+}
+
+// Tema Escuro explícito quando a classe .dark estiver presente
+:root.dark,
+html.dark,
+body.dark {
+  @include mat.all-component-colors($dark-theme);
+
+  --nu-primary: #a855f7;
+  --nu-primary-rgb: 168, 85, 247;
+  --nu-primary-glow: rgba(168, 85, 247, 0.22);
+  --nu-primary-hover: #b76eff;
+  --nu-primary-container: rgba(168, 85, 247, 0.14);
+  --nu-on-primary: #0b0b0f;
+
+  --nu-bg-canvas: #0b0b14;
+  --nu-surface-sidebar: #10101c;
+  --nu-surface-card: #151522;
+  --nu-surface-card-hover: #1c1c2e;
+  --nu-surface-raised: #1f1f33;
+  --nu-surface-subtle: #202034;
+  --nu-border: rgba(255, 255, 255, 0.06);
+  --nu-border-strong: rgba(255, 255, 255, 0.2);
+  --nu-border-focus: #a855f7;
+
+  --nu-text-primary: #f5f5f7;
+  --nu-text-secondary: #9e9ea8;
+  --nu-text-muted: #636372;
+
+  --app-income: #4ade80;
+  --app-expense: #f87171;
+  --app-pending: #facc15;
+  --app-overdue: #fca5a5;
+
+  --nu-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  color-scheme: dark;
 }
 
 // Reset mobile-first e acessibilidade
@@ -69,14 +180,38 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    Roboto,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
+  background-color: var(--nu-bg-canvas);
+  color: var(--nu-text-primary);
 }
 
-// Touch targets mínimos de 48x48px recomendados por Material 3 e WCAG 2.2 AA
+// Estilização consistente de componentes Material para a estética Nubank
+.mat-mdc-card {
+  border-radius: var(--nu-radius-card);
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: var(--nu-radius-dialog);
+  background-color: var(--nu-surface-card);
+}
+
+// Números tabulares para formatação financeira precisa
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+// Touch targets mínimos de 48x48px recomendados por WCAG 2.2 AA
 button,
 a,
 input,
@@ -89,7 +224,7 @@ textarea,
 
 // Manter acessibilidade de foco
 :focus-visible {
-  outline: 2px solid var(--mat-sys-primary);
+  outline: 2px solid var(--nu-border-focus);
   outline-offset: 2px;
 }
 
@@ -102,5 +237,532 @@ textarea,
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+// Componentes e utilitários compartilhados Nubank Ultravioleta
+.nu-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--nu-radius-pill);
+  background: linear-gradient(135deg, var(--nu-primary), var(--nu-primary-hover));
+  color: var(--nu-on-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.nu-tag {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--nu-primary);
+}
+
+.nu-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--nu-radius-pill);
+  background-color: var(--nu-surface-subtle);
+  border: 1px solid var(--nu-border);
+  color: var(--nu-primary);
+  transition:
+    background-color var(--nu-duration-fast) var(--nu-ease),
+    border-color var(--nu-duration-fast) var(--nu-ease);
+}
+
+.nu-pill-badge {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--nu-radius-pill);
+  background-color: var(--nu-surface-subtle);
+  color: var(--nu-text-secondary);
+
+  &.paid,
+  &.active {
+    background-color: var(--nu-primary-container);
+    color: var(--nu-primary);
+  }
+}
+
+// Skeleton loading animado com shimmer sutil
+.nu-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--nu-surface-subtle);
+  border-radius: var(--nu-radius-control);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(var(--nu-primary-rgb), 0.08), transparent);
+    animation: nu-shimmer 1.5s infinite;
+  }
+}
+
+@keyframes nu-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Barra de progresso padronizada Nubank
+.nu-progress-track {
+  width: 100%;
+  height: 0.375rem;
+  border-radius: var(--nu-radius-pill);
+  background-color: var(--nu-surface-subtle);
+  overflow: hidden;
+  position: relative;
+}
+
+.nu-progress-fill {
+  height: 100%;
+  border-radius: var(--nu-radius-pill);
+  background: linear-gradient(90deg, var(--nu-primary), var(--nu-primary-hover));
+  transition: width var(--nu-duration-base) var(--nu-ease);
+}
+
+.nu-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  gap: 0.5rem;
+
+  .nu-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: var(--nu-radius-pill);
+    background-color: var(--nu-surface-subtle);
+    color: var(--nu-text-secondary);
+    margin-bottom: 0.5rem;
+
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  h3,
+  .nu-empty-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--nu-text-primary);
+  }
+
+  p,
+  .nu-empty-desc {
+    margin: 0 0 1rem;
+    font-size: 0.8125rem;
+    color: var(--nu-text-secondary);
+    max-width: 24rem;
+  }
+}
+
+// Card base Nubank com padding responsivo e tokens
+.nu-card {
+  padding: var(--nu-space-5);
+  border-radius: var(--nu-radius-card);
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
+
+  @media (min-width: 768px) {
+    padding: var(--nu-space-6);
+  }
+}
+
+// Banner de erro padronizado para feedback resiliente
+.dashboard-error-state {
+  display: flex;
+  align-items: center;
+  gap: var(--nu-space-4);
+  padding: var(--nu-space-4);
+  border-radius: var(--nu-radius-card);
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--app-expense);
+  flex-wrap: wrap;
+
+  .error-icon-wrap {
+    color: var(--app-expense);
+  }
+
+  .error-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 12rem;
+  }
+
+  .error-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--nu-text-primary);
+  }
+
+  .error-message {
+    font-size: 0.75rem;
+    color: var(--nu-text-secondary);
+  }
+
+  .retry-btn {
+    border-radius: var(--nu-radius-pill);
+    background-color: var(--nu-primary);
+    color: var(--nu-on-primary);
+  }
+}
+
+// Feed de movimentações e extrato padronizado
+.feed-item {
+  display: flex;
+  align-items: center;
+  gap: var(--nu-space-3);
+  padding: var(--nu-space-3) var(--nu-space-4);
+  border-radius: var(--nu-radius-control);
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
+
+  &:hover {
+    background-color: var(--nu-surface-card-hover);
+  }
+}
+
+.feed-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--nu-radius-pill);
+  background-color: var(--nu-surface-subtle);
+  color: var(--nu-text-secondary);
+  flex-shrink: 0;
+
+  &.income-type {
+    color: var(--app-income);
+  }
+  &.expense-type {
+    color: var(--app-expense);
+  }
+}
+
+.feed-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.feed-item-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--nu-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-item-meta {
+  color: var(--nu-text-secondary);
+  font-size: 0.75rem;
+}
+
+.feed-item-amount-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--nu-space-1);
+}
+
+.feed-amount {
+  font-size: 0.9375rem;
+  font-weight: 600;
+
+  &.income {
+    color: var(--app-income);
+  }
+  &.expense {
+    color: var(--app-expense);
+  }
+}
+
+// Quick Actions canônicos Nubank Ultravioleta (DESIGN.md 5.3)
+.actions-carousel {
+  display: flex;
+  gap: var(--nu-space-4);
+  overflow-x: auto;
+  padding: var(--nu-space-1) 0;
+
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nu-space-2);
+  text-decoration: none;
+  min-width: 4.5rem;
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover .action-icon {
+      transform: translateY(-2px);
+      background-color: var(--nu-surface-card-hover);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--nu-border-focus);
+    outline-offset: 2px;
+  }
+}
+
+.action-label {
+  color: var(--nu-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+// Mini gráfico de fluxo proporcional (Receitas vs Despesas)
+.flow-chart-wrap {
+  margin: var(--nu-space-3) 0 var(--nu-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-1);
+}
+
+.flow-bar-track {
+  display: flex;
+  height: 0.5rem;
+  width: 100%;
+  border-radius: var(--nu-radius-pill);
+  overflow: hidden;
+  background-color: var(--nu-surface-subtle);
+}
+
+.flow-bar-segment {
+  height: 100%;
+  transition: width var(--nu-duration-base) var(--nu-ease);
+
+  &.income {
+    background-color: var(--app-income);
+  }
+  &.expense {
+    background-color: var(--app-expense);
+  }
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nu-space-1);
+
+  &.income {
+    color: var(--app-income);
+  }
+  &.expense {
+    color: var(--app-expense);
+  }
+}
+
+.legend-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: var(--nu-radius-pill);
+
+  &.income {
+    background-color: var(--app-income);
+  }
+  &.expense {
+    background-color: var(--app-expense);
+  }
+}
+
+// Estados vazios e botões CTA
+.empty-feed-card {
+  border-style: dashed;
+}
+
+.empty-cta-group {
+  display: flex;
+  gap: var(--nu-space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--nu-space-2);
+
+  a {
+    border-radius: var(--nu-radius-pill);
+    font-size: 0.8125rem;
+  }
+}
+
+.empty-primary-btn {
+  background-color: var(--nu-primary);
+  color: var(--nu-on-primary);
+}
+
+.empty-secondary-btn {
+  border: 1px solid var(--nu-border-strong);
+  color: var(--nu-text-primary);
+}
+
+// Apresentação e Showcase (Landing & Onboarding)
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--nu-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-2);
+  padding: var(--nu-space-5);
+  border-radius: var(--nu-radius-card);
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
+  transition: transform var(--nu-duration-fast) var(--nu-ease);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-2px);
+      border-color: var(--nu-border-focus);
+    }
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--nu-text-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--nu-text-secondary);
+  }
+}
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nu-space-3);
+  padding: var(--nu-space-5);
+  border-radius: var(--nu-radius-card);
+  background-color: var(--nu-surface-subtle);
+  border: 1px solid var(--nu-border);
+  flex: 1;
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--nu-radius-pill);
+  background-color: var(--nu-primary-container);
+  color: var(--nu-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.step-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-1);
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--nu-text-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--nu-text-secondary);
+  }
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--nu-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.preview-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--nu-space-2);
+  padding: var(--nu-space-2) var(--nu-space-3);
+  border-radius: var(--nu-radius-control);
+  background-color: var(--nu-surface-subtle);
+  border: 1px solid var(--nu-border);
+  font-size: 0.8125rem;
+  color: var(--nu-text-secondary);
+
+  mat-icon {
+    font-size: 1.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--nu-primary);
   }
 }

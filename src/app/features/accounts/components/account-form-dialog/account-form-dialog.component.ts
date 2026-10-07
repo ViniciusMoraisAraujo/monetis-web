@@ -23,11 +23,11 @@ export interface AccountDialogData {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './account-form-dialog.component.html',
   styleUrl: './account-form-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountFormDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<AccountFormDialogComponent>);
@@ -39,7 +39,7 @@ export class AccountFormDialogComponent {
   readonly accountTypes = [
     { value: AccountType.Checking, label: ACCOUNT_TYPE_LABELS[AccountType.Checking] },
     { value: AccountType.Saving, label: ACCOUNT_TYPE_LABELS[AccountType.Saving] },
-    { value: AccountType.CreditCard, label: ACCOUNT_TYPE_LABELS[AccountType.CreditCard] }
+    { value: AccountType.CreditCard, label: ACCOUNT_TYPE_LABELS[AccountType.CreditCard] },
   ];
 
   readonly form = new FormGroup({
@@ -48,16 +48,13 @@ export class AccountFormDialogComponent {
       validators: [
         Validators.required,
         Validators.maxLength(100),
-        Validators.pattern(ACCOUNT_NAME_PATTERN)
-      ]
+        Validators.pattern(ACCOUNT_NAME_PATTERN),
+      ],
     }),
-    type: new FormControl<AccountType>(
-      this.data?.account?.type ?? AccountType.Checking,
-      {
-        nonNullable: true,
-        validators: [Validators.required]
-      }
-    )
+    type: new FormControl<AccountType>(this.data?.account?.type ?? AccountType.Checking, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   onSubmit(): void {

@@ -10,11 +10,7 @@ describe('AuthApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        AuthApiService,
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [AuthApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(AuthApiService);
@@ -44,13 +40,13 @@ describe('AuthApiService', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
-      password: 'Password@123'
+      password: 'Password@123',
     };
     const mockResponse = {
       id: 'guid-123',
       firstName: 'John',
       lastName: 'Doe',
-      email: 'john@example.com'
+      email: 'john@example.com',
     };
 
     service.register(mockRequest).subscribe((res) => {

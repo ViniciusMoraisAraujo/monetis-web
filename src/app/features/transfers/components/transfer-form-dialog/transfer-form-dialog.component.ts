@@ -44,7 +44,9 @@ export const differentAccountsValidator: ValidatorFn = (
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransferFormDialogComponent implements OnInit {
-  private readonly dialogRef = inject(MatDialogRef<TransferFormDialogComponent, CreateTransferRequest>);
+  private readonly dialogRef = inject(
+    MatDialogRef<TransferFormDialogComponent, CreateTransferRequest>,
+  );
   readonly accountsState = inject(AccountsStateService);
 
   readonly form = new FormGroup(

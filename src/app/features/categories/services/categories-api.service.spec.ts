@@ -11,11 +11,7 @@ describe('CategoriesApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        CategoriesApiService,
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [CategoriesApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(CategoriesApiService);
@@ -29,7 +25,7 @@ describe('CategoriesApiService', () => {
   it('should get all categories via GET /api/Categories', () => {
     const mockCategories: CategoryResponse[] = [
       { id: '1', name: 'Alimentação', userId: '', icon: '🍔' },
-      { id: '2', name: 'Transporte', userId: 'user-1', icon: '🚗' }
+      { id: '2', name: 'Transporte', userId: 'user-1', icon: '🚗' },
     ];
 
     service.getAll().subscribe((categories) => {
@@ -46,7 +42,7 @@ describe('CategoriesApiService', () => {
       id: 'cat-1',
       name: 'Alimentação',
       userId: '',
-      icon: '🍔'
+      icon: '🍔',
     };
 
     service.getById('cat-1').subscribe((cat) => {
@@ -64,7 +60,7 @@ describe('CategoriesApiService', () => {
       id: 'cat-new',
       name: 'Saúde',
       userId: 'user-1',
-      icon: '💊'
+      icon: '💊',
     };
 
     service.create(newCategory).subscribe((res) => {

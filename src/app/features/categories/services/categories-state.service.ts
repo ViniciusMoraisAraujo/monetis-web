@@ -1,11 +1,15 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiError } from '../../../core/models/api-error.model';
-import { CategoryResponse, CreateCategoryRequest, UpdateCategoryRequest } from '../models/category.model';
+import {
+  CategoryResponse,
+  CreateCategoryRequest,
+  UpdateCategoryRequest,
+} from '../models/category.model';
 import { CategoriesApiService } from './categories-api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoriesStateService {
   private readonly api = inject(CategoriesApiService);
@@ -53,9 +57,7 @@ export class CategoriesStateService {
     try {
       await firstValueFrom(this.api.update(id, request));
       const updated = await firstValueFrom(this.api.getById(id));
-      this.categories.update((cats) =>
-        cats.map((c) => (c.id === id ? updated : c))
-      );
+      this.categories.update((cats) => cats.map((c) => (c.id === id ? updated : c)));
       return true;
     } catch (error) {
       const apiError = error as ApiError;

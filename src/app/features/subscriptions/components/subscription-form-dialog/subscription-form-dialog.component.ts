@@ -11,7 +11,12 @@ import {
   SubscriptionResponse,
   UpdateSubscriptionRequest,
 } from '../../models/subscription.model';
-import { FREQUENCY_LABELS, Frequency, PAYMENT_METHOD_LABELS, PaymentMethod } from '../../../../shared/models/enums';
+import {
+  FREQUENCY_LABELS,
+  Frequency,
+  PAYMENT_METHOD_LABELS,
+  PaymentMethod,
+} from '../../../../shared/models/enums';
 import { CategoriesStateService } from '../../../categories/services/categories-state.service';
 import { AccountsStateService } from '../../../accounts/services/accounts-state.service';
 
@@ -37,7 +42,10 @@ export interface SubscriptionDialogData {
 })
 export class SubscriptionFormDialogComponent implements OnInit {
   private readonly dialogRef = inject(
-    MatDialogRef<SubscriptionFormDialogComponent, CreateSubscriptionRequest | UpdateSubscriptionRequest>,
+    MatDialogRef<
+      SubscriptionFormDialogComponent,
+      CreateSubscriptionRequest | UpdateSubscriptionRequest
+    >,
   );
   readonly data = inject<SubscriptionDialogData>(MAT_DIALOG_DATA, { optional: true });
 
@@ -76,13 +84,10 @@ export class SubscriptionFormDialogComponent implements OnInit {
     amount: new FormControl<number | null>(this.data?.subscription?.amount ?? null, {
       validators: [Validators.required, Validators.min(0.01), Validators.max(9999999999)],
     }),
-    frequency: new FormControl<Frequency>(
-      this.data?.subscription?.frequency ?? Frequency.Monthly,
-      {
-        nonNullable: true,
-        validators: [Validators.required],
-      },
-    ),
+    frequency: new FormControl<Frequency>(this.data?.subscription?.frequency ?? Frequency.Monthly, {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     nextDueDate: new FormControl<string>(
       this.data?.subscription?.nextDueDate
         ? this.data.subscription.nextDueDate.substring(0, 10)

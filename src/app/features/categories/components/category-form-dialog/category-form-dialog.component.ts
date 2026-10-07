@@ -20,11 +20,11 @@ export interface CategoryDialogData {
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './category-form-dialog.component.html',
   styleUrl: './category-form-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryFormDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<CategoryFormDialogComponent>);
@@ -39,16 +39,13 @@ export class CategoryFormDialogComponent {
       validators: [
         Validators.required,
         Validators.maxLength(50),
-        Validators.pattern(CATEGORY_NAME_PATTERN)
-      ]
+        Validators.pattern(CATEGORY_NAME_PATTERN),
+      ],
     }),
     icon: new FormControl(this.data?.category?.icon ?? '', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(15)
-      ]
-    })
+      validators: [Validators.required, Validators.maxLength(15)],
+    }),
   });
 
   onSubmit(): void {

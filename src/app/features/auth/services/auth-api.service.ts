@@ -6,11 +6,11 @@ import {
   CreateUserRequest,
   LoginResponse,
   LoginUserRequest,
-  UserResponse
+  UserResponse,
 } from '../../../core/models/auth.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthApiService {
   private readonly http = inject(HttpClient);

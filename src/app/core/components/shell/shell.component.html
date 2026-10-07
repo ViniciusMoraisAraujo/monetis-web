@@ -2,14 +2,26 @@
   <mat-sidenav-container class="desktop-container">
     <mat-sidenav mode="side" opened="true" class="desktop-sidenav">
       <div class="brand-header">
-        <mat-icon class="brand-icon" aria-hidden="true">account_balance_wallet</mat-icon>
-        <span class="brand-name">Monetis</span>
+        <div class="brand-logo-badge">
+          <mat-icon class="brand-icon" aria-hidden="true">account_balance_wallet</mat-icon>
+        </div>
+        <div class="brand-title-wrap">
+          <span class="brand-name">Monetis</span>
+          <span class="nu-tag">ULTRAVIOLETA</span>
+        </div>
       </div>
 
-      @if (currentUser(); as user) {
-        <div class="user-info">
-          <mat-icon aria-hidden="true">account_circle</mat-icon>
-          <span class="user-email" [title]="user.email">{{ user.email }}</span>
+      @if (currentUser()) {
+        <div class="user-profile-card">
+          <div class="nu-avatar" aria-hidden="true">
+            {{ userInitial() }}
+          </div>
+          <div class="user-details">
+            <span class="user-greeting">Olá, {{ userName() }}</span>
+            <span class="user-email" [title]="currentUser()?.email">{{
+              currentUser()?.email
+            }}</span>
+          </div>
         </div>
       }
 
@@ -32,10 +44,12 @@
           mat-button
           (click)="onToggleTheme()"
           class="footer-button"
-          [attr.aria-label]="isDarkMode() ? 'Alternar para tema claro' : 'Alternar para tema escuro'"
+          [attr.aria-label]="
+            isDarkMode() ? 'Alternar para tema claro' : 'Alternar para tema escuro'
+          "
         >
           <mat-icon aria-hidden="true">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-          <span>{{ isDarkMode() ? 'Tema Claro' : 'Tema Escuro' }}</span>
+          <span>{{ isDarkMode() ? 'Modo Claro' : 'Modo Escuro' }}</span>
         </button>
 
         <button
@@ -45,7 +59,7 @@
           aria-label="Sair da conta"
         >
           <mat-icon aria-hidden="true">logout</mat-icon>
-          <span>Sair</span>
+          <span>Sair da conta</span>
         </button>
       </div>
     </mat-sidenav>
@@ -59,25 +73,39 @@
 } @else {
   <div class="mobile-layout">
     <header class="mobile-header">
-      <div class="mobile-brand">
-        <mat-icon class="brand-icon" aria-hidden="true">account_balance_wallet</mat-icon>
-        <span class="brand-name">Monetis</span>
+      <div class="mobile-profile-info">
+        <div class="nu-avatar" aria-hidden="true">
+          {{ userInitial() }}
+        </div>
+        <div class="mobile-greeting-wrap">
+          <span class="mobile-greeting">Olá, {{ userName() }}</span>
+          <span class="nu-tag">MONETIS</span>
+        </div>
       </div>
 
       <div class="mobile-header-actions">
         <button
           mat-icon-button
-          (click)="onToggleTheme()"
-          [attr.aria-label]="isDarkMode() ? 'Alternar para tema claro' : 'Alternar para tema escuro'"
+          (click)="onTogglePrivacy()"
+          [attr.aria-label]="privacyService.ariaLabel()"
+          [attr.aria-pressed]="privacyService.ariaPressed()"
         >
-          <mat-icon aria-hidden="true">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <mat-icon aria-hidden="true">{{
+            privacyService.isValuesVisible() ? 'visibility' : 'visibility_off'
+          }}</mat-icon>
         </button>
 
         <button
           mat-icon-button
-          (click)="onLogout()"
-          aria-label="Sair da conta"
+          (click)="onToggleTheme()"
+          [attr.aria-label]="
+            isDarkMode() ? 'Alternar para tema claro' : 'Alternar para tema escuro'
+          "
         >
+          <mat-icon aria-hidden="true">{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="onLogout()" aria-label="Sair da conta">
           <mat-icon aria-hidden="true">logout</mat-icon>
         </button>
       </div>
@@ -89,12 +117,10 @@
 
     <nav class="mobile-bottom-nav" aria-label="Navegação móvel principal">
       @for (item of mobileNavItems; track item.path) {
-        <a
-          [routerLink]="item.path"
-          routerLinkActive="active-bottom-item"
-          class="bottom-nav-item"
-        >
-          <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+        <a [routerLink]="item.path" routerLinkActive="active-bottom-item" class="bottom-nav-item">
+          <div class="bottom-icon-indicator">
+            <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+          </div>
           <span class="bottom-nav-label">{{ item.label }}</span>
         </a>
       }

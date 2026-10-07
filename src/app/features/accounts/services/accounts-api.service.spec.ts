@@ -12,11 +12,7 @@ describe('AccountsApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        AccountsApiService,
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [AccountsApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(AccountsApiService);
@@ -29,7 +25,7 @@ describe('AccountsApiService', () => {
 
   it('should get all accounts via GET /api/Accounts', () => {
     const mockAccounts: AccountResponse[] = [
-      { id: '1', name: 'Nubank', userId: 'u1', type: AccountType.Checking, balance: 1500.5 }
+      { id: '1', name: 'Nubank', userId: 'u1', type: AccountType.Checking, balance: 1500.5 },
     ];
 
     service.getAll().subscribe((accounts) => {
@@ -47,7 +43,7 @@ describe('AccountsApiService', () => {
       name: 'Nubank',
       userId: 'u1',
       type: AccountType.Checking,
-      balance: 1500.5
+      balance: 1500.5,
     };
 
     service.getById('acc-1').subscribe((acc) => {
@@ -66,7 +62,7 @@ describe('AccountsApiService', () => {
       name: 'Nubank',
       userId: 'u1',
       type: AccountType.Checking,
-      balance: 0
+      balance: 0,
     };
 
     service.create(newAccount).subscribe((res) => {

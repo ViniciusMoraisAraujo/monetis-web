@@ -17,8 +17,8 @@ export class SubscriptionsStateService {
   readonly loading = signal<boolean>(false);
   readonly error = signal<string | null>(null);
 
-  readonly activeSubscriptionsCount = computed(() =>
-    this.subscriptions().filter((s) => s.isActive).length,
+  readonly activeSubscriptionsCount = computed(
+    () => this.subscriptions().filter((s) => s.isActive).length,
   );
 
   readonly totalActiveAmount = computed(() =>

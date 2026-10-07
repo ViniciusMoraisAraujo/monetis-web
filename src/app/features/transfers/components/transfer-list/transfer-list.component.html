@@ -2,7 +2,9 @@
   <div class="header">
     <div class="title-group">
       <h1>Transferências</h1>
-      <p class="subtitle">Movimente saldo entre suas próprias contas sem alterar seu patrimônio líquido</p>
+      <p class="subtitle">
+        Movimente saldo entre suas próprias contas sem alterar seu patrimônio líquido
+      </p>
     </div>
     <button
       mat-flat-button
@@ -42,7 +44,10 @@
   </div>
 
   @if (state.loading()) {
-    <mat-progress-bar mode="indeterminate" aria-label="Carregando transferências"></mat-progress-bar>
+    <mat-progress-bar
+      mode="indeterminate"
+      aria-label="Carregando transferências"
+    ></mat-progress-bar>
   }
 
   @if (state.error()) {
@@ -57,7 +62,9 @@
       <mat-card-content class="empty-content">
         <mat-icon class="empty-icon" aria-hidden="true">swap_horizontal_circle</mat-icon>
         <p class="empty-title">Nenhuma transferência encontrada</p>
-        <p class="empty-text">Transfira saldo entre suas contas para manter seu fluxo de caixa organizado.</p>
+        <p class="empty-text">
+          Transfira saldo entre suas contas para manter seu fluxo de caixa organizado.
+        </p>
         <button
           mat-stroked-button
           color="primary"
@@ -102,7 +109,9 @@
             mat-button
             color="warn"
             (click)="onDelete(transfer)"
-            aria-label="Estornar transferência de {{ transfer.fromAccountName }} para {{ transfer.toAccountName }}"
+            aria-label="Estornar transferência de {{ transfer.fromAccountName }} para {{
+              transfer.toAccountName
+            }}"
           >
             <mat-icon aria-hidden="true">undo</mat-icon>
             Estornar

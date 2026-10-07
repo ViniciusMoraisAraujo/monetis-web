@@ -5,11 +5,11 @@ import { environment } from '../../../../environments/environment';
 import {
   CategoryResponse,
   CreateCategoryRequest,
-  UpdateCategoryRequest
+  UpdateCategoryRequest,
 } from '../models/category.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoriesApiService {
   private readonly http = inject(HttpClient);

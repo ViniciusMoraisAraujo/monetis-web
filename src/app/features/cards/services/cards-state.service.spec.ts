@@ -27,10 +27,7 @@ describe('CardsStateService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        CardsStateService,
-        { provide: CardsApiService, useValue: apiServiceMock },
-      ],
+      providers: [CardsStateService, { provide: CardsApiService, useValue: apiServiceMock }],
     });
 
     service = TestBed.inject(CardsStateService);

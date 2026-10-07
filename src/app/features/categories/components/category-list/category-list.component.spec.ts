@@ -21,7 +21,7 @@ describe('CategoryListComponent', () => {
 
   const mockCategories: CategoryResponse[] = [
     { id: '1', name: 'Alimentação', userId: '', icon: '🍔' },
-    { id: '2', name: 'Transporte', userId: 'user-1', icon: '🚗' }
+    { id: '2', name: 'Transporte', userId: 'user-1', icon: '🚗' },
   ];
 
   beforeEach(async () => {
@@ -32,19 +32,19 @@ describe('CategoryListComponent', () => {
       loadCategories: vi.fn(),
       createCategory: vi.fn(),
       updateCategory: vi.fn(),
-      deleteCategory: vi.fn()
+      deleteCategory: vi.fn(),
     };
 
     dialogMock = {
-      open: vi.fn()
+      open: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
       imports: [CategoryListComponent],
       providers: [
         { provide: CategoriesStateService, useValue: categoriesStateMock },
-        { provide: MatDialog, useValue: dialogMock }
-      ]
+        { provide: MatDialog, useValue: dialogMock },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CategoryListComponent);
@@ -65,7 +65,7 @@ describe('CategoryListComponent', () => {
 
   it('should show loading spinner when loading', () => {
     TestBed.resetTestingModule();
-    
+
     const loadingStateMock = {
       categories: signal([]),
       isLoading: signal(true),
@@ -73,15 +73,15 @@ describe('CategoryListComponent', () => {
       loadCategories: vi.fn(),
       createCategory: vi.fn(),
       updateCategory: vi.fn(),
-      deleteCategory: vi.fn()
+      deleteCategory: vi.fn(),
     };
 
     TestBed.configureTestingModule({
       imports: [CategoryListComponent],
       providers: [
         { provide: CategoriesStateService, useValue: loadingStateMock },
-        { provide: MatDialog, useValue: dialogMock }
-      ]
+        { provide: MatDialog, useValue: dialogMock },
+      ],
     });
 
     const loadingFixture = TestBed.createComponent(CategoryListComponent);
@@ -93,7 +93,7 @@ describe('CategoryListComponent', () => {
 
   it('should show error message when error occurs', () => {
     TestBed.resetTestingModule();
-    
+
     const errorStateMock = {
       categories: signal([]),
       isLoading: signal(false),
@@ -101,15 +101,15 @@ describe('CategoryListComponent', () => {
       loadCategories: vi.fn(),
       createCategory: vi.fn(),
       updateCategory: vi.fn(),
-      deleteCategory: vi.fn()
+      deleteCategory: vi.fn(),
     };
 
     TestBed.configureTestingModule({
       imports: [CategoryListComponent],
       providers: [
         { provide: CategoriesStateService, useValue: errorStateMock },
-        { provide: MatDialog, useValue: dialogMock }
-      ]
+        { provide: MatDialog, useValue: dialogMock },
+      ],
     });
 
     const errorFixture = TestBed.createComponent(CategoryListComponent);
@@ -121,7 +121,7 @@ describe('CategoryListComponent', () => {
 
   it('should show empty state when no categories', () => {
     TestBed.resetTestingModule();
-    
+
     const emptyStateMock = {
       categories: signal([]),
       isLoading: signal(false),
@@ -129,15 +129,15 @@ describe('CategoryListComponent', () => {
       loadCategories: vi.fn(),
       createCategory: vi.fn(),
       updateCategory: vi.fn(),
-      deleteCategory: vi.fn()
+      deleteCategory: vi.fn(),
     };
 
     TestBed.configureTestingModule({
       imports: [CategoryListComponent],
       providers: [
         { provide: CategoriesStateService, useValue: emptyStateMock },
-        { provide: MatDialog, useValue: dialogMock }
-      ]
+        { provide: MatDialog, useValue: dialogMock },
+      ],
     });
 
     const emptyFixture = TestBed.createComponent(CategoryListComponent);

@@ -1,13 +1,13 @@
 export enum AccountType {
   Checking = 0,
   Saving = 1,
-  CreditCard = 2
+  CreditCard = 2,
 }
 
 export const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
   [AccountType.Checking]: 'Conta Corrente',
   [AccountType.Saving]: 'Poupança',
-  [AccountType.CreditCard]: 'Cartão de Crédito'
+  [AccountType.CreditCard]: 'Cartão de Crédito',
 };
 
 export enum PaymentMethod {
@@ -15,7 +15,7 @@ export enum PaymentMethod {
   Debit = 1,
   CreditCard = 2,
   Pix = 3,
-  Transfer = 4
+  Transfer = 4,
 }
 
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
@@ -23,7 +23,7 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   [PaymentMethod.Debit]: 'Débito',
   [PaymentMethod.CreditCard]: 'Cartão de Crédito',
   [PaymentMethod.Pix]: 'Pix',
-  [PaymentMethod.Transfer]: 'Transferência'
+  [PaymentMethod.Transfer]: 'Transferência',
 };
 
 export enum Frequency {
@@ -33,7 +33,7 @@ export enum Frequency {
   Bimonthly = 3,
   Quarterly = 4,
   Semiannual = 5,
-  Yearly = 6
+  Yearly = 6,
 }
 
 export const FREQUENCY_LABELS: Record<Frequency, string> = {
@@ -43,19 +43,19 @@ export const FREQUENCY_LABELS: Record<Frequency, string> = {
   [Frequency.Bimonthly]: 'Bimestral',
   [Frequency.Quarterly]: 'Trimestral',
   [Frequency.Semiannual]: 'Semestral',
-  [Frequency.Yearly]: 'Anual'
+  [Frequency.Yearly]: 'Anual',
 };
 
 export enum TransactionStatus {
   Pending = 0,
   Paid = 1,
   Cancelled = 2,
-  Overdue = 3
+  Overdue = 3,
 }
 
 export const TRANSACTION_STATUS_LABELS: Record<TransactionStatus, string> = {
   [TransactionStatus.Pending]: 'Pendente',
   [TransactionStatus.Paid]: 'Pago',
   [TransactionStatus.Cancelled]: 'Cancelado',
-  [TransactionStatus.Overdue]: 'Vencido'
+  [TransactionStatus.Overdue]: 'Vencido',
 };

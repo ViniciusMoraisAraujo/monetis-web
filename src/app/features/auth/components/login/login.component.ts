@@ -20,11 +20,11 @@ import { AuthStateService } from '../../services/auth-state.service';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   readonly authState = inject(AuthStateService);
@@ -32,12 +32,12 @@ export class LoginComponent {
   readonly form = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email]
+      validators: [Validators.required, Validators.email],
     }),
     password: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(8)]
-    })
+      validators: [Validators.required, Validators.minLength(8)],
+    }),
   });
 
   async onSubmit(): Promise<void> {

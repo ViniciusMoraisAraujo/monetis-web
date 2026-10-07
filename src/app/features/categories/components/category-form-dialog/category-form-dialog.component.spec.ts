@@ -15,8 +15,8 @@ describe('CategoryFormDialogComponent', () => {
         imports: [CategoryFormDialogComponent],
         providers: [
           { provide: MatDialogRef, useValue: dialogRefMock },
-          { provide: MAT_DIALOG_DATA, useValue: null }
-        ]
+          { provide: MAT_DIALOG_DATA, useValue: null },
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(CategoryFormDialogComponent);
@@ -52,14 +52,14 @@ describe('CategoryFormDialogComponent', () => {
     it('should close dialog with form data on valid submit', () => {
       component.form.setValue({
         name: 'Transporte',
-        icon: '🚗'
+        icon: '🚗',
       });
 
       component.onSubmit();
 
       expect(dialogRefMock.close).toHaveBeenCalledWith({
         name: 'Transporte',
-        icon: '🚗'
+        icon: '🚗',
       });
     });
 
@@ -84,11 +84,11 @@ describe('CategoryFormDialogComponent', () => {
                 id: 'cat-1',
                 name: 'Mercado',
                 userId: 'user-1',
-                icon: '🛒'
-              }
-            }
-          }
-        ]
+                icon: '🛒',
+              },
+            },
+          },
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(CategoryFormDialogComponent);

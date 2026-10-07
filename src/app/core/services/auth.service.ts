@@ -2,7 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import { UserClaims } from '../models/auth.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly storageKey = 'auth_token';
@@ -61,7 +61,7 @@ export class AuthService {
         atob(base64)
           .split('')
           .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
+          .join(''),
       );
 
       const parsed = JSON.parse(jsonPayload);

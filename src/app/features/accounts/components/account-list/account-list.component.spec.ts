@@ -24,7 +24,7 @@ describe('AccountListComponent', () => {
 
   const mockAccounts: AccountResponse[] = [
     { id: '1', name: 'Nubank', userId: 'u1', type: AccountType.Checking, balance: 1500 },
-    { id: '2', name: 'Inter', userId: 'u1', type: AccountType.Saving, balance: -200 }
+    { id: '2', name: 'Inter', userId: 'u1', type: AccountType.Saving, balance: -200 },
   ];
 
   beforeEach(async () => {
@@ -36,19 +36,19 @@ describe('AccountListComponent', () => {
       loadAccounts: vi.fn(),
       createAccount: vi.fn(),
       updateAccount: vi.fn(),
-      deleteAccount: vi.fn()
+      deleteAccount: vi.fn(),
     };
 
     dialogMock = {
-      open: vi.fn()
+      open: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
       imports: [AccountListComponent],
       providers: [
         { provide: AccountsStateService, useValue: accountsStateMock },
-        { provide: MatDialog, useValue: dialogMock }
-      ]
+        { provide: MatDialog, useValue: dialogMock },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AccountListComponent);
@@ -72,7 +72,7 @@ describe('AccountListComponent', () => {
   it('should open dialog and create account when user confirms', async () => {
     const newAccData = { name: 'Itaú', type: AccountType.Checking };
     dialogMock.open.mockReturnValue({
-      afterClosed: () => of(newAccData)
+      afterClosed: () => of(newAccData),
     });
 
     component.openCreateDialog();
@@ -83,13 +83,15 @@ describe('AccountListComponent', () => {
 
   it('should open dialog and update account when user confirms', async () => {
     dialogMock.open.mockReturnValue({
-      afterClosed: () => of({ name: 'Nubank Atualizado' })
+      afterClosed: () => of({ name: 'Nubank Atualizado' }),
     });
 
     component.openEditDialog(mockAccounts[0]);
 
     expect(dialogMock.open).toHaveBeenCalled();
-    expect(accountsStateMock.updateAccount).toHaveBeenCalledWith('1', { name: 'Nubank Atualizado' });
+    expect(accountsStateMock.updateAccount).toHaveBeenCalledWith('1', {
+      name: 'Nubank Atualizado',
+    });
   });
 
   it('should call deleteAccount when user confirms deletion', async () => {

@@ -1,133 +1,378 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
-    <div class="title-group">
-      <h1>Visão Geral</h1>
-      <p class="subtitle">Acompanhe seu fluxo financeiro mensal em um único lugar</p>
+    <div class="header-intro">
+      <span class="nu-eyebrow">RESUMO FINANCEIRO</span>
+      <h1 class="header-title">{{ greeting() }}</h1>
+      <p class="header-subtitle">Acompanhe seu saldo, despesas e faturas em tempo real</p>
     </div>
   </header>
 
-  <!-- Métricas Consolidadas -->
-  <section class="metrics-grid" aria-label="Resumo das Finanças">
-    <mat-card class="metric-card balance" appearance="outlined">
-      <mat-card-content>
-        <div class="metric-header">
-          <span class="metric-title">Saldo Total em Contas</span>
-          <mat-icon aria-hidden="true" class="icon-balance">account_balance_wallet</mat-icon>
-        </div>
-        <div class="metric-value">
-          {{ accountsState.totalBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <!-- Estado de Erro Normativo (DESIGN.md Seção 6) -->
+  @if (errorMessage() && !loading()) {
+    <div class="dashboard-error-state" role="alert">
+      <div class="error-icon-wrap" aria-hidden="true">
+        <mat-icon>error_outline</mat-icon>
+      </div>
+      <div class="error-info">
+        <span class="error-title">Não foi possível carregar os dados financeiros</span>
+        <span class="error-message">{{ errorMessage() }}</span>
+      </div>
+      <button mat-flat-button class="retry-btn" (click)="loadAll()">
+        <mat-icon aria-hidden="true">refresh</mat-icon>
+        <span>Tentar novamente</span>
+      </button>
+    </div>
+  }
 
-    <mat-card class="metric-card income" appearance="outlined">
-      <mat-card-content>
-        <div class="metric-header">
-          <span class="metric-title">Receitas Previstas</span>
-          <mat-icon aria-hidden="true" class="icon-income">trending_up</mat-icon>
+  <!-- 1. Card de Saldo: Destaque com glow primário e botão de privacidade interno -->
+  <section class="hero-account-section" aria-label="Saldo em conta">
+    <mat-card class="hero-balance-card" appearance="outlined">
+      <div class="account-card-header">
+        <div class="account-title-group">
+          <div class="account-badge-icon" aria-hidden="true">
+            <mat-icon>account_balance</mat-icon>
+          </div>
+          <div>
+            <span class="account-label">Saldo em conta</span>
+            <span class="account-meta">Consolidado bancário</span>
+          </div>
         </div>
-        <div class="metric-value income-color">
-          + {{ incomesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-        </div>
-        <div class="metric-caption">
-          Recebido: {{ incomesState.receivedAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-        </div>
-      </mat-card-content>
-    </mat-card>
 
-    <mat-card class="metric-card expense" appearance="outlined">
-      <mat-card-content>
-        <div class="metric-header">
-          <span class="metric-title">Despesas do Mês</span>
-          <mat-icon aria-hidden="true" class="icon-expense">trending_down</mat-icon>
-        </div>
-        <div class="metric-value expense-color">
-          - {{ expensesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-        </div>
-        <div class="metric-caption">
-          Pendente: {{ expensesState.unpaidAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-        </div>
-      </mat-card-content>
-    </mat-card>
+        <div class="card-header-actions">
+          <!-- Botão de privacidade posicionado DENTRO do card de saldo no desktop (DESIGN.md 5.2 / AGENTS.md 7.1) -->
+          <button
+            mat-icon-button
+            (click)="toggleBalanceVisibility()"
+            class="eye-button desktop-eye-button"
+            [attr.aria-label]="privacy.ariaLabel()"
+            [attr.aria-pressed]="privacy.ariaPressed()"
+          >
+            <mat-icon aria-hidden="true">{{
+              isBalanceVisible() ? 'visibility' : 'visibility_off'
+            }}</mat-icon>
+          </button>
 
-    <mat-card class="metric-card net" appearance="outlined">
-      <mat-card-content>
-        <div class="metric-header">
-          <span class="metric-title">Resultado Líquido</span>
-          <mat-icon aria-hidden="true">analytics</mat-icon>
+          <a routerLink="/accounts" class="view-accounts-link" aria-label="Ver todas as contas">
+            <span>Ver contas</span>
+            <mat-icon aria-hidden="true">chevron_right</mat-icon>
+          </a>
         </div>
+      </div>
+
+      <div class="account-balance-display">
+        @if (loading()) {
+          <div class="nu-skeleton balance-skeleton"></div>
+        } @else {
+          <span class="balance-value tabular-nums">
+            @if (isBalanceVisible()) {
+              {{ accountsState.totalBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            } @else {
+              ••••••
+            }
+          </span>
+        }
+      </div>
+
+      <div class="account-footer-stat">
         <div
-          class="metric-value"
-          [class.income-color]="netBalance() >= 0"
-          [class.expense-color]="netBalance() < 0"
+          class="stat-indicator"
+          [class.positive]="netBalance() >= 0"
+          [class.negative]="netBalance() < 0"
         >
-          {{ netBalance() >= 0 ? '+' : '' }} {{ netBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          <mat-icon aria-hidden="true">{{
+            netBalance() >= 0 ? 'arrow_upward' : 'arrow_downward'
+          }}</mat-icon>
+          <span>
+            @if (isBalanceVisible()) {
+              Resultado do mês: {{ netBalance() >= 0 ? '+' : '−' }}
+              <strong class="tabular-nums">{{
+                absNetBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}</strong>
+            } @else {
+              Resultado do mês: ••••••
+            }
+          </span>
         </div>
-        <div class="metric-caption">
-          {{ netBalance() >= 0 ? 'Superávit no período' : 'Déficit no período' }}
-        </div>
-      </mat-card-content>
+      </div>
     </mat-card>
   </section>
 
-  <!-- Ações Rápidas -->
-  <section class="quick-actions" aria-label="Ações Rápidas">
-    <h2>Ações Rápidas</h2>
-    <div class="actions-buttons">
-      <a mat-flat-button color="primary" routerLink="/expenses" aria-label="Ir para despesas">
-        <mat-icon aria-hidden="true">add</mat-icon>
-        Despesas
+  <!-- 2. Quick Actions: Lista Canônica Fixa (Pagar, Transferir, Receber, Cartões) (DESIGN.md 5.2 & 5.6) -->
+  <section class="quick-actions-section" aria-label="Ações rápidas">
+    <div class="actions-carousel">
+      <!-- Pagar -> /expenses -->
+      <a routerLink="/expenses" class="action-item" aria-label="Pagar despesas">
+        <div class="nu-icon-circle action-icon">
+          <mat-icon aria-hidden="true">payments</mat-icon>
+        </div>
+        <span class="action-label">Pagar</span>
       </a>
-      <a mat-stroked-button color="primary" routerLink="/incomes" aria-label="Ir para receitas">
-        <mat-icon aria-hidden="true">add</mat-icon>
-        Receitas
+
+      <!-- Transferir -> /transfers -->
+      <a routerLink="/transfers" class="action-item" aria-label="Transferir valores">
+        <div class="nu-icon-circle action-icon">
+          <mat-icon aria-hidden="true">swap_horiz</mat-icon>
+        </div>
+        <span class="action-label">Transferir</span>
       </a>
-      <a mat-stroked-button routerLink="/transfers" aria-label="Ir para transferências">
-        <mat-icon aria-hidden="true">swap_horiz</mat-icon>
-        Transferir
+
+      <!-- Receber -> /incomes -->
+      <a routerLink="/incomes" class="action-item" aria-label="Receber receitas">
+        <div class="nu-icon-circle action-icon">
+          <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+        </div>
+        <span class="action-label">Receber</span>
       </a>
-      <a mat-stroked-button routerLink="/accounts" aria-label="Ir para contas">
-        <mat-icon aria-hidden="true">account_balance</mat-icon>
-        Contas
-      </a>
-      <a mat-stroked-button routerLink="/cards" aria-label="Ir para cartões de crédito">
-        <mat-icon aria-hidden="true">credit_card</mat-icon>
-        Cartões
+
+      <!-- Cartões -> /cards -->
+      <a routerLink="/cards" class="action-item" aria-label="Cartões de crédito">
+        <div class="nu-icon-circle action-icon">
+          <mat-icon aria-hidden="true">credit_card</mat-icon>
+        </div>
+        <span class="action-label">Cartões</span>
       </a>
     </div>
   </section>
 
-  <!-- Últimas Despesas -->
-  <section class="recent-section" aria-label="Últimas Despesas Registradas">
-    <div class="section-header">
-      <h2>Últimas Despesas</h2>
-      <a mat-button color="primary" routerLink="/expenses">Ver todas</a>
+  <!-- 3. Visão Geral: Cartão de Crédito e Fluxo do Mês (DESIGN.md 5.3) -->
+  <section class="overview-grid" aria-label="Cartão de crédito e fluxo do mês">
+    <!-- Card de Cartão de Crédito -->
+    <mat-card class="nu-card credit-card" appearance="outlined">
+      <div class="card-inner-header">
+        <div class="card-icon-title">
+          <div class="mini-icon-circle" aria-hidden="true">
+            <mat-icon>credit_card</mat-icon>
+          </div>
+          <div>
+            <div class="credit-chip-row">
+              <span class="nu-tag">CRÉDITO</span>
+            </div>
+            <h3>Cartão de Crédito</h3>
+          </div>
+        </div>
+        <a routerLink="/cards" class="card-link" aria-label="Ver detalhes de cartões">
+          <mat-icon aria-hidden="true">chevron_right</mat-icon>
+        </a>
+      </div>
+
+      <div class="card-content-body">
+        <span class="invoice-status-label">Fatura atual</span>
+        <div class="invoice-value tabular-nums" [class.has-debt]="creditCardTotal() > 0">
+          @if (loading()) {
+            <div class="nu-skeleton skeleton-line"></div>
+          } @else if (isBalanceVisible()) {
+            {{ creditCardTotal() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          } @else {
+            ••••••
+          }
+        </div>
+
+        <!-- Barra de Progresso com mat-progress-bar e aria-label pt-BR (DESIGN.md 5.3) -->
+        <div class="limit-progress-section">
+          <div class="limit-labels">
+            <span class="limit-used">Limite usado: {{ creditLimitUsedPercent() }}%</span>
+            <span class="limit-avail tabular-nums">
+              @if (isBalanceVisible()) {
+                Disponível: {{ availableLimit() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+              } @else {
+                Disponível: ••••••
+              }
+            </span>
+          </div>
+
+          <mat-progress-bar
+            mode="determinate"
+            [value]="creditLimitUsedPercent()"
+            aria-label="Uso do limite de crédito"
+            class="credit-limit-progress"
+          ></mat-progress-bar>
+        </div>
+      </div>
+
+      <div class="card-actions-row">
+        <a mat-stroked-button routerLink="/expenses" class="action-button-outlined">
+          <span>Ver faturas e despesas</span>
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+        </a>
+      </div>
+    </mat-card>
+
+    <!-- Card de Fluxo do Mês com mini gráfico proporcional -->
+    <mat-card class="nu-card flow-card" appearance="outlined">
+      <div class="card-inner-header">
+        <div class="card-icon-title">
+          <div class="mini-icon-circle flow-icon" aria-hidden="true">
+            <mat-icon>analytics</mat-icon>
+          </div>
+          <div>
+            <span class="nu-tag">BALANÇO</span>
+            <h3>Fluxo do Mês</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini Gráfico de Barras Proporcionais -->
+      <div class="flow-chart-wrap" aria-hidden="true">
+        <div class="flow-bar-track">
+          <div class="flow-bar-segment income" [style.width.%]="flowIncomePercent()"></div>
+          <div class="flow-bar-segment expense" [style.width.%]="flowExpensePercent()"></div>
+        </div>
+        <div class="flow-bar-legend">
+          <span class="legend-item income">
+            <span class="legend-dot income"></span>
+            Receitas ({{ flowIncomePercent() }}%)
+          </span>
+          <span class="legend-item expense">
+            <span class="legend-dot expense"></span>
+            Despesas ({{ flowExpensePercent() }}%)
+          </span>
+        </div>
+      </div>
+
+      <div class="flow-items">
+        <div class="flow-row">
+          <div class="flow-label-wrap">
+            <span class="dot-income" aria-hidden="true"></span>
+            <span>Receitas do mês</span>
+          </div>
+          <span class="flow-val income tabular-nums">
+            @if (loading()) {
+              <div class="nu-skeleton skeleton-sm"></div>
+            } @else if (isBalanceVisible()) {
+              + {{ incomesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            } @else {
+              ••••••
+            }
+          </span>
+        </div>
+
+        <div class="flow-row">
+          <div class="flow-label-wrap">
+            <span class="dot-expense" aria-hidden="true"></span>
+            <span>Despesas do mês</span>
+          </div>
+          <span class="flow-val expense tabular-nums">
+            @if (loading()) {
+              <div class="nu-skeleton skeleton-sm"></div>
+            } @else if (isBalanceVisible()) {
+              − {{ expensesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            } @else {
+              ••••••
+            }
+          </span>
+        </div>
+
+        <div class="flow-divider"></div>
+
+        <div class="flow-row summary">
+          <span class="summary-label">Resultado líquido</span>
+          <span
+            class="flow-val tabular-nums"
+            [class.income]="netBalance() >= 0"
+            [class.expense]="netBalance() < 0"
+          >
+            @if (isBalanceVisible()) {
+              {{ netBalance() >= 0 ? '+' : '−' }}
+              {{ absNetBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            } @else {
+              ••••••
+            }
+          </span>
+        </div>
+      </div>
+    </mat-card>
+  </section>
+
+  <!-- 4. Histórico Recente (DESIGN.md 5.4) -->
+  <section class="recent-feed-section" aria-label="Histórico recente">
+    <div class="feed-header">
+      <div class="feed-title-wrap">
+        <h2>Histórico recente</h2>
+        <span class="feed-subtitle">Últimas transações registradas no seu painel</span>
+      </div>
+      <a mat-button color="primary" routerLink="/expenses" class="see-all-button">
+        Ver todas
+        <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+      </a>
     </div>
 
-    @if (recentExpenses().length === 0) {
-      <mat-card appearance="outlined" class="empty-recent">
-        <mat-card-content>
-          <p>Nenhuma despesa recente registrada.</p>
+    @if (loading()) {
+      <div class="feed-list">
+        <div class="nu-skeleton feed-skeleton"></div>
+        <div class="nu-skeleton feed-skeleton"></div>
+        <div class="nu-skeleton feed-skeleton"></div>
+      </div>
+    } @else if (recentTransactions().length === 0) {
+      <mat-card appearance="outlined" class="nu-card empty-feed-card">
+        <mat-card-content class="nu-empty-state">
+          <div class="nu-empty-icon" aria-hidden="true">
+            <mat-icon>account_balance_wallet</mat-icon>
+          </div>
+          <h3 class="nu-empty-title">Nenhuma transação registrada</h3>
+          <p class="nu-empty-desc">
+            Cadastre sua primeira receita ou despesa para começar a acompanhar o fluxo do seu
+            dinheiro com gráficos e extrato em tempo real.
+          </p>
+          <div class="empty-cta-group">
+            <a mat-flat-button class="empty-primary-btn" routerLink="/expenses">
+              <mat-icon aria-hidden="true">add</mat-icon>
+              <span>Registrar despesa</span>
+            </a>
+            <a mat-stroked-button class="empty-secondary-btn" routerLink="/incomes">
+              <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+              <span>Registrar receita</span>
+            </a>
+          </div>
         </mat-card-content>
       </mat-card>
     } @else {
-      <div class="recent-list">
-        @for (exp of recentExpenses(); track exp.id) {
-          <mat-card class="recent-item" appearance="outlined">
-            <div class="item-info">
-              <span class="item-category">{{ exp.categoryName }}</span>
-              <div class="item-title">{{ exp.description }}</div>
-              <div class="item-date">{{ exp.date | date: 'dd/MM/yyyy' : 'UTC' }}</div>
+      <div class="feed-list">
+        @for (item of recentTransactions(); track item.id) {
+          <div class="feed-item">
+            <div
+              class="feed-item-icon"
+              [class.income-type]="item.type === 'income'"
+              [class.expense-type]="item.type === 'expense'"
+              aria-hidden="true"
+            >
+              <mat-icon>{{ item.type === 'income' ? 'arrow_upward' : 'shopping_bag' }}</mat-icon>
             </div>
-            <div class="item-amount-box">
-              <span class="item-amount expense-color">
-                - {{ exp.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+
+            <div class="feed-item-info">
+              <div class="feed-item-title">{{ item.description }}</div>
+              <div class="feed-item-meta">
+                <span class="item-cat">{{ item.categoryName || 'Geral' }}</span>
+                <span class="item-dot">•</span>
+                <span class="item-date">{{ item.date | date: 'dd MMM' : 'UTC' }}</span>
+              </div>
+            </div>
+
+            <div class="feed-item-amount-wrap">
+              <span
+                class="feed-amount tabular-nums"
+                [class.income]="item.type === 'income'"
+                [class.expense]="item.type === 'expense'"
+              >
+                @if (isBalanceVisible()) {
+                  {{ item.type === 'income' ? '+' : '−' }}
+                  {{ item.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                } @else {
+                  ••••••
+                }
               </span>
-              <span class="item-status" [class.paid]="exp.isPaid">
-                {{ exp.isPaid ? 'Paga' : 'Pendente' }}
+              <span class="nu-pill-badge" [class.paid]="item.isPaid">
+                {{
+                  item.type === 'income'
+                    ? item.isPaid
+                      ? 'Recebida'
+                      : 'Pendente'
+                    : item.isPaid
+                      ? 'Paga'
+                      : 'Pendente'
+                }}
               </span>
             </div>
-          </mat-card>
+          </div>
         }
       </div>
     }

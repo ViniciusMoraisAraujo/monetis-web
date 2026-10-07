@@ -5,7 +5,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CategoryResponse, CreateCategoryRequest, UpdateCategoryRequest } from '../../models/category.model';
+import {
+  CategoryResponse,
+  CreateCategoryRequest,
+  UpdateCategoryRequest,
+} from '../../models/category.model';
 import { CategoriesStateService } from '../../services/categories-state.service';
 import { CategoryFormDialogComponent } from '../category-form-dialog/category-form-dialog.component';
 
@@ -17,11 +21,11 @@ import { CategoryFormDialogComponent } from '../category-form-dialog/category-fo
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryListComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
@@ -36,14 +40,13 @@ export class CategoryListComponent implements OnInit {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open<
+    const dialogRef = this.dialog.open<CategoryFormDialogComponent, unknown, CreateCategoryRequest>(
       CategoryFormDialogComponent,
-      unknown,
-      CreateCategoryRequest
-    >(CategoryFormDialogComponent, {
-      width: '420px',
-      maxWidth: '90vw'
-    });
+      {
+        width: '420px',
+        maxWidth: '90vw',
+      },
+    );
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -60,7 +63,7 @@ export class CategoryListComponent implements OnInit {
     >(CategoryFormDialogComponent, {
       width: '420px',
       maxWidth: '90vw',
-      data: { category }
+      data: { category },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

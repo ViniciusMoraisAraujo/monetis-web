@@ -1,8 +1,12 @@
 <div class="auth-container">
   <mat-card class="auth-card">
     <mat-card-header>
+      <div class="auth-brand-badge">
+        <mat-icon class="brand-icon" aria-hidden="true">account_balance_wallet</mat-icon>
+        <span class="nu-tag">MONETIS ULTRAVIOLETA</span>
+      </div>
       <mat-card-title>
-        <h1 class="auth-title">Criar Conta no Monetis</h1>
+        <h1 class="auth-title">Crie sua conta</h1>
       </mat-card-title>
       <mat-card-subtitle>
         Comece a controlar seus gastos, receitas e investimentos
@@ -83,8 +87,13 @@
           @if (form.controls.password.hasError('required')) {
             <mat-error>A senha é obrigatória.</mat-error>
           }
-          @if (form.controls.password.hasError('minlength') || form.controls.password.hasError('pattern')) {
-            <mat-error>Deve conter: maiúscula, minúscula, número e caractere especial (@$!%*?&).</mat-error>
+          @if (
+            form.controls.password.hasError('minlength') ||
+            form.controls.password.hasError('pattern')
+          ) {
+            <mat-error
+              >Deve conter: maiúscula, minúscula, número e caractere especial (@$!%*?&).</mat-error
+            >
           }
         </mat-form-field>
 
@@ -107,9 +116,7 @@
 
     <mat-card-actions class="auth-actions">
       <span class="login-text">Já possui uma conta?</span>
-      <a mat-button routerLink="/auth/login" class="login-link">
-        Entrar
-      </a>
+      <a mat-button routerLink="/auth/login" class="login-link"> Entrar </a>
     </mat-card-actions>
   </mat-card>
 </div>

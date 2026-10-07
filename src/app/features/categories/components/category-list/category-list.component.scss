@@ -21,18 +21,20 @@
   margin: 0;
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
-  color: var(--mat-sys-on-surface);
+  color: var(--nu-text-primary);
 }
 
 .page-subtitle {
   margin: 0.25rem 0 0;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--nu-text-secondary);
   font-size: 0.9375rem;
 }
 
 .add-button {
   min-height: 3rem;
-  border-radius: 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--nu-primary);
+  color: #fff;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -64,14 +66,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-radius: 1rem;
-  background-color: var(--mat-sys-surface);
-  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 1.25rem;
+  background-color: var(--nu-surface-card);
+  border: 1px solid var(--nu-border);
   box-shadow: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
-    box-shadow: var(--mat-sys-level1);
+    border-color: var(--nu-primary-glow);
+    transform: translateY(-2px);
   }
 }
 
@@ -87,10 +92,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  background-color: var(--mat-sys-surface-container);
+  min-width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background-color: var(--nu-surface-subtle);
 }
 
 .category-info {
@@ -102,33 +107,41 @@
 .category-name {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--mat-sys-on-surface);
+  color: var(--nu-text-primary);
 }
 
-.system-badge {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.125rem 0.5rem;
-  border-radius: 1rem;
-  background-color: var(--mat-sys-secondary-container);
-  color: var(--mat-sys-on-secondary-container);
-  align-self: flex-start;
+.type-chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  width: fit-content;
+
+  &.type-expense {
+    background-color: rgba(248, 113, 113, 0.12);
+    color: var(--app-expense);
+  }
+
+  &.type-income {
+    background-color: rgba(74, 222, 128, 0.12);
+    color: var(--app-income);
+  }
 }
 
 .category-actions {
   display: flex;
-  align-items: center;
   gap: 0.25rem;
 
   button {
-    min-height: 3rem;
-    min-width: 3rem;
+    min-height: 48px;
+    min-width: 48px;
+    color: var(--nu-text-secondary);
+    &:hover {
+      color: var(--nu-text-primary);
+    }
   }
 }
 
-// Estados de Feedback
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -136,7 +149,7 @@
   justify-content: center;
   padding: 3rem 1rem;
   gap: 1rem;
-  color: var(--mat-sys-on-surface-variant);
+  color: var(--nu-text-secondary);
 }
 
 .error-banner {
@@ -156,32 +169,34 @@
   justify-content: center;
   padding: 3rem 1rem;
   text-align: center;
-  border-radius: 1.5rem;
-  background-color: var(--mat-sys-surface-container-low);
-  border: 1px dashed var(--mat-sys-outline-variant);
+  border-radius: 1.25rem;
+  background-color: var(--nu-surface-card);
+  border: 1px dashed var(--nu-border);
 
   .empty-icon {
     font-size: 3.5rem;
     width: 3.5rem;
     height: 3.5rem;
-    color: var(--mat-sys-on-surface-variant);
-    opacity: 0.6;
+    color: var(--nu-text-muted);
     margin-bottom: 1rem;
   }
 
   h2 {
     margin: 0;
     font-size: 1.25rem;
-    color: var(--mat-sys-on-surface);
+    color: var(--nu-text-primary);
   }
 
   p {
     margin: 0.5rem 0 1.5rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--nu-text-secondary);
     max-width: 24rem;
   }
 
   .empty-action-btn {
     min-height: 3rem;
+    border-radius: 9999px;
+    background-color: var(--nu-primary);
+    color: #fff;
   }
 }

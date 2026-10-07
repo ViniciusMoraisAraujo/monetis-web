@@ -56,10 +56,7 @@ describe('ExpensesStateService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        ExpensesStateService,
-        { provide: ExpensesApiService, useValue: apiServiceMock },
-      ],
+      providers: [ExpensesStateService, { provide: ExpensesApiService, useValue: apiServiceMock }],
     });
 
     service = TestBed.inject(ExpensesStateService);
@@ -92,13 +89,15 @@ describe('ExpensesStateService', () => {
     apiServiceMock.create.mockReturnValue(of(created));
 
     service.loadExpenses();
-    service.createExpense({
-      description: 'Farmácia',
-      amount: 80,
-      date: '2026-10-06T14:00:00Z',
-      paymentMethod: PaymentMethod.Cash,
-      categoryId: 'cat-3',
-    }).subscribe();
+    service
+      .createExpense({
+        description: 'Farmácia',
+        amount: 80,
+        date: '2026-10-06T14:00:00Z',
+        paymentMethod: PaymentMethod.Cash,
+        categoryId: 'cat-3',
+      })
+      .subscribe();
 
     expect(service.expenses().length).toBe(3);
     expect(service.totalAmount()).toBe(530);
@@ -140,14 +139,16 @@ describe('ExpensesStateService', () => {
     apiServiceMock.createInstallments.mockReturnValue(of(installments));
 
     service.loadExpenses();
-    service.createInstallments({
-      description: 'Celular',
-      totalAmount: 1000,
-      totalInstallments: 2,
-      firstDueDate: '2026-10-10T00:00:00Z',
-      paymentMethod: PaymentMethod.CreditCard,
-      categoryId: 'cat-1',
-    }).subscribe();
+    service
+      .createInstallments({
+        description: 'Celular',
+        totalAmount: 1000,
+        totalInstallments: 2,
+        firstDueDate: '2026-10-10T00:00:00Z',
+        paymentMethod: PaymentMethod.CreditCard,
+        categoryId: 'cat-1',
+      })
+      .subscribe();
 
     expect(service.expenses().length).toBe(4);
     expect(service.totalAmount()).toBe(1450);
@@ -157,12 +158,14 @@ describe('ExpensesStateService', () => {
     apiServiceMock.update.mockReturnValue(of(undefined));
 
     service.loadExpenses();
-    service.updateExpense('e-1', {
-      description: 'Supermercado Mensal',
-      amount: 320,
-      date: '2026-10-06T12:00:00Z',
-      categoryId: 'cat-1',
-    }).subscribe();
+    service
+      .updateExpense('e-1', {
+        description: 'Supermercado Mensal',
+        amount: 320,
+        date: '2026-10-06T12:00:00Z',
+        categoryId: 'cat-1',
+      })
+      .subscribe();
 
     const updated = service.expenses().find((e) => e.id === 'e-1');
     expect(updated?.description).toBe('Supermercado Mensal');
@@ -193,7 +196,9 @@ describe('ExpensesStateService', () => {
   });
 
   it('should set error on load failure', () => {
-    apiServiceMock.getAll.mockReturnValue(throwError(() => ({ message: 'Failed to load expenses' })));
+    apiServiceMock.getAll.mockReturnValue(
+      throwError(() => ({ message: 'Failed to load expenses' })),
+    );
 
     service.loadExpenses();
 

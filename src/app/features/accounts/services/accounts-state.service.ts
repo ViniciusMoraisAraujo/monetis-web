@@ -4,12 +4,12 @@ import { ApiError } from '../../../core/models/api-error.model';
 import {
   AccountResponse,
   CreateAccountRequest,
-  UpdateAccountRequest
+  UpdateAccountRequest,
 } from '../models/account.model';
 import { AccountsApiService } from './accounts-api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountsStateService {
   private readonly accountsApi = inject(AccountsApiService);
@@ -19,7 +19,7 @@ export class AccountsStateService {
   readonly errorMessage = signal<string | null>(null);
 
   readonly totalBalance = computed(() =>
-    this.accounts().reduce((sum, account) => sum + account.balance, 0)
+    this.accounts().reduce((sum, account) => sum + account.balance, 0),
   );
 
   async loadAccounts(): Promise<void> {
@@ -61,7 +61,7 @@ export class AccountsStateService {
     try {
       await firstValueFrom(this.accountsApi.update(id, request));
       this.accounts.update((list) =>
-        list.map((item) => (item.id === id ? { ...item, name: request.name } : item))
+        list.map((item) => (item.id === id ? { ...item, name: request.name } : item)),
       );
       return true;
     } catch (error) {

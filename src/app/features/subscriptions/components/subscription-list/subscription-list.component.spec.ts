@@ -120,7 +120,10 @@ describe('SubscriptionListComponent', () => {
     component.openEditDialog(mockSubscriptions[0]);
 
     expect(dialogMock.open).toHaveBeenCalled();
-    expect(subscriptionsStateMock.updateSubscription).toHaveBeenCalledWith('sub-1', expect.anything());
+    expect(subscriptionsStateMock.updateSubscription).toHaveBeenCalledWith(
+      'sub-1',
+      expect.anything(),
+    );
   });
 
   it('should call deleteSubscription on confirmation', () => {

@@ -128,8 +128,14 @@
             <div class="expense-amount">
               - {{ expense.amount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
             </div>
-            <div class="status-badge" [class.status-paid]="expense.isPaid" [class.status-unpaid]="!expense.isPaid">
-              <mat-icon aria-hidden="true">{{ expense.isPaid ? 'check_circle' : 'schedule' }}</mat-icon>
+            <div
+              class="status-badge"
+              [class.status-paid]="expense.isPaid"
+              [class.status-unpaid]="!expense.isPaid"
+            >
+              <mat-icon aria-hidden="true">{{
+                expense.isPaid ? 'check_circle' : 'schedule'
+              }}</mat-icon>
               <span>{{ expense.isPaid ? 'Paga' : 'Pendente' }}</span>
             </div>
           </div>

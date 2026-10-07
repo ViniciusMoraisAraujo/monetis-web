@@ -15,13 +15,13 @@ describe('AuthStateService', () => {
   beforeEach(() => {
     authApiService = {
       login: vi.fn(),
-      register: vi.fn()
+      register: vi.fn(),
     };
     authService = {
-      setToken: vi.fn()
+      setToken: vi.fn(),
     };
     router = {
-      navigate: vi.fn()
+      navigate: vi.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -29,8 +29,8 @@ describe('AuthStateService', () => {
         AuthStateService,
         { provide: AuthApiService, useValue: authApiService },
         { provide: AuthService, useValue: authService },
-        { provide: Router, useValue: router }
-      ]
+        { provide: Router, useValue: router },
+      ],
     });
 
     stateService = TestBed.inject(AuthStateService);
@@ -64,14 +64,16 @@ describe('AuthStateService', () => {
   });
 
   it('should successfully register, log in with new credentials, and navigate to /', async () => {
-    authApiService.register.mockReturnValue(of({ id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com' }));
+    authApiService.register.mockReturnValue(
+      of({ id: '1', firstName: 'John', lastName: 'Doe', email: 'john@example.com' }),
+    );
     authApiService.login.mockReturnValue(of({ token: 'mock-jwt-token' }));
 
     await stateService.register({
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
-      password: 'Password@123'
+      password: 'Password@123',
     });
 
     expect(authService.setToken).toHaveBeenCalledWith('mock-jwt-token');
@@ -88,7 +90,7 @@ describe('AuthStateService', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'existing@example.com',
-      password: 'Password@123'
+      password: 'Password@123',
     });
 
     expect(stateService.isLoading()).toBe(false);

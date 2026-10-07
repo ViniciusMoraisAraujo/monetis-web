@@ -44,7 +44,9 @@ export type ExpenseDialogResult =
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExpenseFormDialogComponent implements OnInit {
-  private readonly dialogRef = inject(MatDialogRef<ExpenseFormDialogComponent, ExpenseDialogResult>);
+  private readonly dialogRef = inject(
+    MatDialogRef<ExpenseFormDialogComponent, ExpenseDialogResult>,
+  );
   private readonly destroyRef = inject(DestroyRef);
   readonly data = inject<ExpenseDialogData>(MAT_DIALOG_DATA, { optional: true });
 
@@ -76,7 +78,9 @@ export class ExpenseFormDialogComponent implements OnInit {
       validators: [Validators.required, Validators.min(0.01)],
     }),
     date: new FormControl<string>(
-      this.data?.expense?.date ? this.data.expense.date.substring(0, 10) : new Date().toISOString().substring(0, 10),
+      this.data?.expense?.date
+        ? this.data.expense.date.substring(0, 10)
+        : new Date().toISOString().substring(0, 10),
       {
         nonNullable: true,
         validators: [Validators.required],

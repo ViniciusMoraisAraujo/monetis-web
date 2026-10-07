@@ -5,6 +5,7 @@ import { provideRouter, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { PrivacyService } from '../../services/privacy.service';
 import { ShellComponent } from './shell.component';
 
 describe('ShellComponent', () => {
@@ -18,23 +19,36 @@ describe('ShellComponent', () => {
     isDarkMode: ReturnType<typeof signal<boolean>>;
     toggleTheme: ReturnType<typeof vi.fn>;
   };
+  let privacyServiceMock: {
+    isValuesVisible: ReturnType<typeof signal<boolean>>;
+    toggleValuesVisibility: ReturnType<typeof vi.fn>;
+    ariaLabel: ReturnType<typeof signal<string>>;
+    ariaPressed: ReturnType<typeof signal<boolean>>;
+  };
   let breakpointSubject: BehaviorSubject<BreakpointState>;
   let router: Router;
 
   beforeEach(async () => {
     breakpointSubject = new BehaviorSubject<BreakpointState>({
       matches: false,
-      breakpoints: {}
+      breakpoints: {},
     });
 
     authServiceMock = {
       logout: vi.fn(),
-      currentUser: signal({ id: 'user-1', email: 'test@example.com' })
+      currentUser: signal({ id: 'user-1', email: 'test@example.com' }),
     };
 
     themeServiceMock = {
       isDarkMode: signal(false),
-      toggleTheme: vi.fn()
+      toggleTheme: vi.fn(),
+    };
+
+    privacyServiceMock = {
+      isValuesVisible: signal(true),
+      toggleValuesVisibility: vi.fn(),
+      ariaLabel: signal('Ocultar valores'),
+      ariaPressed: signal(false),
     };
 
     await TestBed.configureTestingModule({
@@ -43,13 +57,14 @@ describe('ShellComponent', () => {
         provideRouter([]),
         { provide: AuthService, useValue: authServiceMock },
         { provide: ThemeService, useValue: themeServiceMock },
+        { provide: PrivacyService, useValue: privacyServiceMock },
         {
           provide: BreakpointObserver,
           useValue: {
-            observe: () => breakpointSubject.asObservable()
-          }
-        }
-      ]
+            observe: () => breakpointSubject.asObservable(),
+          },
+        },
+      ],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -73,6 +88,11 @@ describe('ShellComponent', () => {
     component.onLogout();
     expect(authServiceMock.logout).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(['/auth/login']);
+  });
+
+  it('should toggle privacy when privacy button is clicked', () => {
+    component.onTogglePrivacy();
+    expect(privacyServiceMock.toggleValuesVisibility).toHaveBeenCalled();
   });
 
   it('should detect desktop mode when breakpoint observer matches', () => {

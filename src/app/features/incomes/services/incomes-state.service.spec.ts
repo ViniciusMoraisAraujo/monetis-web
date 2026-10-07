@@ -19,6 +19,7 @@ describe('IncomesStateService', () => {
       id: 'i-1',
       description: 'Salário CLT',
       amount: 4500,
+      receivedAt: '2026-10-05T00:00:00Z',
       date: '2026-10-05T00:00:00Z',
       categoryId: 'cat-1',
       categoryName: 'Salário',
@@ -32,6 +33,7 @@ describe('IncomesStateService', () => {
       id: 'i-2',
       description: 'Consultoria',
       amount: 1500,
+      receivedAt: '2026-10-15T00:00:00Z',
       date: '2026-10-15T00:00:00Z',
       categoryId: 'cat-2',
       categoryName: 'Extra',
@@ -53,10 +55,7 @@ describe('IncomesStateService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        IncomesStateService,
-        { provide: IncomesApiService, useValue: apiServiceMock },
-      ],
+      providers: [IncomesStateService, { provide: IncomesApiService, useValue: apiServiceMock }],
     });
 
     service = TestBed.inject(IncomesStateService);
@@ -78,6 +77,7 @@ describe('IncomesStateService', () => {
       id: 'i-3',
       description: 'Dividendos',
       amount: 200,
+      receivedAt: '2026-10-20T00:00:00Z',
       date: '2026-10-20T00:00:00Z',
       categoryId: 'cat-3',
       categoryName: 'Investimentos',
@@ -90,13 +90,15 @@ describe('IncomesStateService', () => {
     apiServiceMock.create.mockReturnValue(of(created));
 
     service.loadIncomes();
-    service.createIncome({
-      description: 'Dividendos',
-      amount: 200,
-      date: '2026-10-20T00:00:00Z',
-      categoryId: 'cat-3',
-      accountId: 'acc-1',
-    }).subscribe();
+    service
+      .createIncome({
+        description: 'Dividendos',
+        amount: 200,
+        receivedAt: '2026-10-20T00:00:00Z',
+        categoryId: 'cat-3',
+        accountId: 'acc-1',
+      })
+      .subscribe();
 
     expect(service.incomes().length).toBe(3);
     expect(service.totalAmount()).toBe(6200);
@@ -107,13 +109,15 @@ describe('IncomesStateService', () => {
     apiServiceMock.update.mockReturnValue(of(undefined));
 
     service.loadIncomes();
-    service.updateIncome('i-2', {
-      description: 'Consultoria Premium',
-      amount: 2000,
-      date: '2026-10-15T00:00:00Z',
-      categoryId: 'cat-2',
-      accountId: 'acc-1',
-    }).subscribe();
+    service
+      .updateIncome('i-2', {
+        description: 'Consultoria Premium',
+        amount: 2000,
+        receivedAt: '2026-10-15T00:00:00Z',
+        categoryId: 'cat-2',
+        accountId: 'acc-1',
+      })
+      .subscribe();
 
     const updated = service.incomes().find((i) => i.id === 'i-2');
     expect(updated?.description).toBe('Consultoria Premium');

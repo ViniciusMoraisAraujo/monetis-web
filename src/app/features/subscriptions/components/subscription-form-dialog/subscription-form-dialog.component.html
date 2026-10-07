@@ -92,9 +92,7 @@
 
     @if (isEdit) {
       <div class="active-toggle">
-        <mat-checkbox formControlName="isActive">
-          Assinatura Ativa
-        </mat-checkbox>
+        <mat-checkbox formControlName="isActive"> Assinatura Ativa </mat-checkbox>
       </div>
     }
   </form>
@@ -102,7 +100,13 @@
 
 <mat-dialog-actions align="end">
   <button mat-button type="button" (click)="onCancel()">Cancelar</button>
-  <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="form.invalid">
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="onSubmit()"
+    [disabled]="form.invalid"
+  >
     {{ isEdit ? 'Salvar' : 'Cadastrar Assinatura' }}
   </button>
 </mat-dialog-actions>

@@ -13,8 +13,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authReq = token
     ? req.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
     : req;
 
@@ -32,32 +32,33 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           apiError = {
             statusCode: error.status,
             message: error.error,
-            details: null
+            details: null,
           };
         } else if (error.error && typeof error.error === 'object') {
           const errObj = error.error as Record<string, unknown>;
           apiError = {
-            statusCode: typeof errObj['statusCode'] === 'number' ? errObj['statusCode'] : error.status,
+            statusCode:
+              typeof errObj['statusCode'] === 'number' ? errObj['statusCode'] : error.status,
             message: typeof errObj['message'] === 'string' ? errObj['message'] : error.message,
             errorCode: typeof errObj['errorCode'] === 'string' ? errObj['errorCode'] : undefined,
-            details: errObj['details'] ?? null
+            details: errObj['details'] ?? null,
           };
         } else {
           apiError = {
             statusCode: error.status,
             message: error.message || 'Erro inesperado na comunicação com o servidor',
-            details: null
+            details: null,
           };
         }
       } else {
         apiError = {
           statusCode: 0,
           message: 'Erro desconhecido na requisição',
-          details: error
+          details: error,
         };
       }
 
       return throwError(() => apiError);
-    })
+    }),
   );
 };

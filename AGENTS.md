@@ -6,6 +6,7 @@ Fontes de verdade neste repo:
 
 - Contrato da API: `API-backend.md` na raiz (DTOs TypeScript de todos os endpoints, validações e erros).
 - Skills Angular: `.skills/angular-developer` e `.skills/angular-new-app`, registradas no `opencode.json`. Use-as ao criar código Angular.
+- Design: `DESIGN.md` na raiz (filosofia, tabela componente → tokens, exemplos certo/errado). Os **valores** dos tokens vivem só em `src/styles.scss`; em conflito entre os dois, vale o `styles.scss` e o `DESIGN.md` deve ser corrigido. Leia o `DESIGN.md` antes de criar ou alterar qualquer tela.
 
 ## 1. Comandos
 
@@ -83,12 +84,46 @@ src/app/
 
 ## 7. Tema, mobile e acessibilidade
 
-- Material 3, violeta da marca ≈ `#820AD1`. Cores semânticas globais em `styles.scss`: `--app-income` e `--app-expense` (via `light-dark()`).
-- Cores fixas (`#hex`, `rgb`), `!important` e `::ng-deep` proibidos em SCSS de componente — use tokens `var(--mat-sys-*)` e `var(--app-*)`.
+- Material 3, violeta da marca ≈ `#820AD1`. Tokens globais em `styles.scss`: `--nu-*` (superfícies, marca, texto) e `--app-*` (income, expense, pending, overdue), via `light-dark()`.
+- Cores fixas (`#hex`, `rgb()`, `rgba()`, `hsl()`), `!important` e `::ng-deep` proibidos em SCSS de componente — use `var(--nu-*)` e `var(--app-*)`. `var(--mat-sys-*)` só onde o Material exigir.
 - Tema claro/escuro exclusivamente via `ThemeService` em `core/services`: classe `.dark`/`.light` + `colorScheme` no `<html>`, persistido em localStorage (fallback `prefers-color-scheme`).
 - Mobile-first: base ~360px e expansão só com `@media (min-width: ...)` — nunca `max-width`. Alvos de toque ≥ 48×48px. Respeitar `env(safe-area-inset-*)` nas barras fixas.
 - `mat-table` vira lista de cards abaixo de 768px; evitar scroll horizontal como padrão.
 - Acessibilidade WCAG 2.2 AA: `aria-hidden` em ícones decorativos, `aria-label` pt-BR em botões só de ícone, nunca remover `:focus-visible`, respeitar `prefers-reduced-motion`, contraste 4.5:1 (texto) e 3:1 (controles). Receita vs despesa nunca diferenciadas apenas por cor (sempre sinal `+`/`−` ou rótulo).
+
+### 7.1 Design: regras normativas
+
+Detalhes e exemplos em `DESIGN.md`. Aqui ficam só as regras que o agente não pode errar.
+
+**Obrigatório**
+
+- Espaçamento, raio, sombra e duração de transição via token. Número solto (`border-radius: 20px`, `transition: 0.3s`) é proibido; se o token não existir, crie em `styles.scss` antes de usar.
+- Card: fundo `--nu-surface-card`, borda `1px solid var(--nu-border)`, raio de card, sem sombra pesada. Glow (`--nu-primary-glow`) só no card de saldo; os demais não têm.
+- Hover com `translateY(-2px)` só em card clicável e só dentro de `@media (prefers-reduced-motion: no-preference)`.
+- Texto informativo (rótulos, legendas, "Fatura atual") usa `--nu-text-secondary` ou mais forte. `--nu-text-muted` só em placeholder, item desabilitado e elemento decorativo, porque não atinge 4.5:1.
+- Texto sobre `--nu-primary` usa `--nu-on-primary` (crie em `styles.scss` se faltar), com contraste ≥ 4.5:1 nos dois temas. Não assuma branco.
+- Valores monetários com `font-variant-numeric: tabular-nums`. Movimentações (receita, despesa, transferência) com sinal explícito `+`/`−` e cor semântica; saldos e totais sem sinal; resultado líquido e variações com sinal.
+- Privacidade de saldo: o botão de olho fica dentro do card de saldo no desktop e no header no mobile. Quando oculto, **todos** os valores monetários da tela viram `••••••`, não só o do card.
+- Quick actions: no máximo 4 (Pagar, Transferir, Receber, Cartões), círculo de 56px, fundo `--nu-surface-subtle`, ícone em `--nu-primary`, rótulo em `0.75rem`. Não duplique itens da sidebar.
+- Cartão de crédito: chip "Crédito", fatura atual em destaque e limite disponível com barra de progresso (`mat-progress-bar` com `aria-label` pt-BR).
+- Todo componente que exibe dados da API trata 4 estados, e o spec cobre cada um:
+  - **loading**: skeleton; nunca exiba `R$ 0,00` como placeholder.
+  - **vazio**: ícone + texto curto + CTA no mesmo estilo do feed.
+  - **erro**: mensagem pt-BR vinda do `ApiError` + ação de tentar de novo.
+  - **conteúdo**.
+
+**Proibido**
+
+- Cor fixa, `!important`, `::ng-deep`, media query `max-width`.
+- Comunicar status só por cor (sempre sinal ou rótulo).
+- Usar nome, logo ou assets do Nubank na UI. O Nubank é apenas inspiração visual; a marca na tela é Monetis.
+- Inventar variação visual fora do `DESIGN.md` (novo raio, nova sombra, novo tom). Se precisar, proponha o token em vez de improvisar.
+
+### 7.2 Verificação visual
+
+Não há ferramenta automatizada de lint/a11y/screenshot no repo. Ao concluir mudança de UI, confira manualmente: 360px e 1280px, tema claro e escuro, navegação por teclado (`:focus-visible` visível) e contraste dos textos novos pelo DevTools.
+
+Se achar que Stylelint (`color-no-hex`), axe-core ou Playwright com screenshots valeria a pena, **não instale**: registre a sugestão com justificativa e aguarde autorização (seção 11).
 
 ## 8. Testes (Vitest)
 
@@ -114,6 +149,9 @@ Formato: `<tipo>(<escopo>): <descrição curta em inglês, imperativo, minúscul
 - [ ] `npx prettier --check .` limpo.
 - [ ] Sem `any`, NgModule, diretivas legadas, `.subscribe()` manual em componentes.
 - [ ] Sem cores fixas nem `::ng-deep`; validado em 360px e 1280px, nos dois temas.
+- [ ] Estilos só com tokens (sem números soltos de raio/sombra/transição); estados loading, vazio e erro implementados e testados.
+- [ ] Contraste dos textos novos conferido (≥ 4.5:1 texto, ≥ 3:1 controles), sem `--nu-text-muted` em texto informativo.
+- [ ] Se a mudança exigiu token novo, ele está em `styles.scss` e documentado no `DESIGN.md`.
 - [ ] Navegabilidade por teclado e labels de acessibilidade conferidos.
 - [ ] Commit Conventional Commits em inglês.
 
@@ -122,3 +160,5 @@ Formato: `<tipo>(<escopo>): <descrição curta em inglês, imperativo, minúscul
 - Atualizar dependências ou adicionar bibliotecas (nenhuma alteração em `package.json` sem autorização).
 - Editar `angular.json`, `tsconfig*.json` ou configs de build sem justificativa técnica.
 - Contornar o backend: se faltar endpoint/campo, registre como impedimento em vez de replicar regra de negócio no cliente.
+- Adicionar ferramentas de qualidade visual (Stylelint, axe-core, Playwright ou similares): sugira com justificativa, não instale.
+- Alterar o valor de um token existente em `styles.scss` (cor, raio, espaçamento): isso muda o app inteiro. Criar token novo é permitido; mudar um existente exige aprovação.

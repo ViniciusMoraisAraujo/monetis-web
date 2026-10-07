@@ -12,11 +12,7 @@ describe('TransfersApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        TransfersApiService,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [TransfersApiService, provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(TransfersApiService);
@@ -46,7 +42,9 @@ describe('TransfersApiService', () => {
       expect(res).toEqual(mockTransfers);
     });
 
-    const req = httpTesting.expectOne((r) => r.url === baseUrl && r.params.get('accountId') === 'acc-1');
+    const req = httpTesting.expectOne(
+      (r) => r.url === baseUrl && r.params.get('accountId') === 'acc-1',
+    );
     expect(req.request.method).toBe('GET');
     req.flush(mockTransfers);
   });

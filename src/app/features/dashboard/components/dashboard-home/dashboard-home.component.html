@@ -1,45 +1,21 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <div class="header-intro">
-      <span class="nu-eyebrow">RESUMO FINANCEIRO</span>
+      <span class="m-eyebrow">RESUMO FINANCEIRO</span>
       <h1 class="header-title">{{ greeting() }}</h1>
       <p class="header-subtitle">Acompanhe seu saldo, despesas e faturas em tempo real</p>
     </div>
   </header>
 
-  <!-- Estado de Erro Normativo (DESIGN.md Seção 6) -->
-  @if (errorMessage() && !loading()) {
-    <div class="dashboard-error-state" role="alert">
-      <div class="error-icon-wrap" aria-hidden="true">
-        <mat-icon>error_outline</mat-icon>
-      </div>
-      <div class="error-info">
-        <span class="error-title">Não foi possível carregar os dados financeiros</span>
-        <span class="error-message">{{ errorMessage() }}</span>
-      </div>
-      <button mat-flat-button class="retry-btn" (click)="loadAll()">
-        <mat-icon aria-hidden="true">refresh</mat-icon>
-        <span>Tentar novamente</span>
-      </button>
-    </div>
-  }
-
-  <!-- 1. Card de Saldo: Destaque com glow primário e botão de privacidade interno -->
+  <!-- 1. Card de Saldo: Densidade fintech com link Extrato completo e badge de submétrica -->
   <section class="hero-account-section" aria-label="Saldo em conta">
     <mat-card class="hero-balance-card" appearance="outlined">
       <div class="account-card-header">
         <div class="account-title-group">
-          <div class="account-badge-icon" aria-hidden="true">
-            <mat-icon>account_balance</mat-icon>
-          </div>
-          <div>
-            <span class="account-label">Saldo em conta</span>
-            <span class="account-meta">Consolidado bancário</span>
-          </div>
+          <span class="account-label">Saldo em Conta</span>
         </div>
 
         <div class="card-header-actions">
-          <!-- Botão de privacidade posicionado DENTRO do card de saldo no desktop (DESIGN.md 5.2 / AGENTS.md 7.1) -->
           <button
             mat-icon-button
             (click)="toggleBalanceVisibility()"
@@ -52,16 +28,16 @@
             }}</mat-icon>
           </button>
 
-          <a routerLink="/accounts" class="view-accounts-link" aria-label="Ver todas as contas">
-            <span>Ver contas</span>
-            <mat-icon aria-hidden="true">chevron_right</mat-icon>
+          <a routerLink="/extrato" class="extrato-link" aria-label="Extrato completo">
+            <span>Extrato completo</span>
+            <mat-icon aria-hidden="true">arrow_forward</mat-icon>
           </a>
         </div>
       </div>
 
       <div class="account-balance-display">
         @if (loading()) {
-          <div class="nu-skeleton balance-skeleton"></div>
+          <div class="m-skeleton balance-skeleton"></div>
         } @else {
           <span class="balance-value tabular-nums">
             @if (isBalanceVisible()) {
@@ -74,22 +50,16 @@
       </div>
 
       <div class="account-footer-stat">
-        <div
-          class="stat-indicator"
-          [class.positive]="netBalance() >= 0"
-          [class.negative]="netBalance() < 0"
-        >
+        <div class="balance-badge-pill" [class.negative]="netBalance() < 0">
           <mat-icon aria-hidden="true">{{
-            netBalance() >= 0 ? 'arrow_upward' : 'arrow_downward'
+            netBalance() >= 0 ? 'trending_up' : 'trending_down'
           }}</mat-icon>
           <span>
             @if (isBalanceVisible()) {
-              Resultado do mês: {{ netBalance() >= 0 ? '+' : '−' }}
-              <strong class="tabular-nums">{{
-                absNetBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-              }}</strong>
+              {{ netBalance() >= 0 ? '+' : '−' }}
+              {{ absNetBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }} este mês
             } @else {
-              Resultado do mês: ••••••
+              •••••• este mês
             }
           </span>
         </div>
@@ -97,20 +67,20 @@
     </mat-card>
   </section>
 
-  <!-- 2. Quick Actions: Lista Canônica Fixa (Pagar, Transferir, Receber, Cartões) (DESIGN.md 5.2 & 5.6) -->
+  <!-- 2. Quick Actions: Ações rápidas com ícones minimalistas e hover Stone Green -->
   <section class="quick-actions-section" aria-label="Ações rápidas">
     <div class="actions-carousel">
       <!-- Pagar -> /expenses -->
       <a routerLink="/expenses" class="action-item" aria-label="Pagar despesas">
-        <div class="nu-icon-circle action-icon">
-          <mat-icon aria-hidden="true">payments</mat-icon>
+        <div class="action-icon-wrap">
+          <mat-icon aria-hidden="true">north_east</mat-icon>
         </div>
         <span class="action-label">Pagar</span>
       </a>
 
       <!-- Transferir -> /transfers -->
       <a routerLink="/transfers" class="action-item" aria-label="Transferir valores">
-        <div class="nu-icon-circle action-icon">
+        <div class="action-icon-wrap">
           <mat-icon aria-hidden="true">swap_horiz</mat-icon>
         </div>
         <span class="action-label">Transferir</span>
@@ -118,15 +88,15 @@
 
       <!-- Receber -> /incomes -->
       <a routerLink="/incomes" class="action-item" aria-label="Receber receitas">
-        <div class="nu-icon-circle action-icon">
-          <mat-icon aria-hidden="true">arrow_upward</mat-icon>
+        <div class="action-icon-wrap">
+          <mat-icon aria-hidden="true">south_west</mat-icon>
         </div>
         <span class="action-label">Receber</span>
       </a>
 
       <!-- Cartões -> /cards -->
       <a routerLink="/cards" class="action-item" aria-label="Cartões de crédito">
-        <div class="nu-icon-circle action-icon">
+        <div class="action-icon-wrap">
           <mat-icon aria-hidden="true">credit_card</mat-icon>
         </div>
         <span class="action-label">Cartões</span>
@@ -134,32 +104,27 @@
     </div>
   </section>
 
-  <!-- 3. Visão Geral: Cartão de Crédito e Fluxo do Mês (DESIGN.md 5.3) -->
+  <!-- 3. Visão Geral: Cartão de Crédito e Fluxo do Mês em colunas equilibradas -->
   <section class="overview-grid" aria-label="Cartão de crédito e fluxo do mês">
     <!-- Card de Cartão de Crédito -->
-    <mat-card class="nu-card credit-card" appearance="outlined">
+    <mat-card class="m-card credit-card" appearance="outlined">
       <div class="card-inner-header">
         <div class="card-icon-title">
-          <div class="mini-icon-circle" aria-hidden="true">
-            <mat-icon>credit_card</mat-icon>
-          </div>
-          <div>
-            <div class="credit-chip-row">
-              <span class="nu-tag">CRÉDITO</span>
-            </div>
-            <h3>Cartão de Crédito</h3>
-          </div>
+          <mat-icon class="card-header-icon" aria-hidden="true">credit_card</mat-icon>
+          <h3 class="card-title-lg">Cartão de Crédito</h3>
+          <span class="m-pill-badge active">Crédito</span>
         </div>
-        <a routerLink="/cards" class="card-link" aria-label="Ver detalhes de cartões">
-          <mat-icon aria-hidden="true">chevron_right</mat-icon>
+        <a routerLink="/cards" class="extrato-link" aria-label="Faturas e limites">
+          <span>Faturas e limites</span>
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
         </a>
       </div>
 
       <div class="card-content-body">
         <span class="invoice-status-label">Fatura atual</span>
-        <div class="invoice-value tabular-nums" [class.has-debt]="creditCardTotal() > 0">
+        <div class="invoice-value tabular-nums">
           @if (loading()) {
-            <div class="nu-skeleton skeleton-line"></div>
+            <div class="m-skeleton skeleton-line"></div>
           } @else if (isBalanceVisible()) {
             {{ creditCardTotal() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
           } @else {
@@ -167,10 +132,13 @@
           }
         </div>
 
-        <!-- Barra de Progresso com mat-progress-bar e aria-label pt-BR (DESIGN.md 5.3) -->
+        <!-- Barra de limite ultrafina de 3px -->
         <div class="limit-progress-section">
+          <div class="limit-track-ultra" aria-hidden="true">
+            <div class="limit-fill-ultra" [style.width.%]="creditLimitUsedPercent()"></div>
+          </div>
           <div class="limit-labels">
-            <span class="limit-used">Limite usado: {{ creditLimitUsedPercent() }}%</span>
+            <span class="limit-used">{{ creditLimitUsedPercent() }}% do limite</span>
             <span class="limit-avail tabular-nums">
               @if (isBalanceVisible()) {
                 Disponível: {{ availableLimit() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
@@ -179,105 +147,80 @@
               }
             </span>
           </div>
-
-          <mat-progress-bar
-            mode="determinate"
-            [value]="creditLimitUsedPercent()"
-            aria-label="Uso do limite de crédito"
-            class="credit-limit-progress"
-          ></mat-progress-bar>
         </div>
-      </div>
-
-      <div class="card-actions-row">
-        <a mat-stroked-button routerLink="/expenses" class="action-button-outlined">
-          <span>Ver faturas e despesas</span>
-          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
-        </a>
       </div>
     </mat-card>
 
-    <!-- Card de Fluxo do Mês com mini gráfico proporcional -->
-    <mat-card class="nu-card flow-card" appearance="outlined">
+    <!-- Card de Fluxo do Mês com mesma altura e proporção -->
+    <mat-card class="m-card flow-card" appearance="outlined">
       <div class="card-inner-header">
         <div class="card-icon-title">
-          <div class="mini-icon-circle flow-icon" aria-hidden="true">
-            <mat-icon>analytics</mat-icon>
-          </div>
-          <div>
-            <span class="nu-tag">BALANÇO</span>
-            <h3>Fluxo do Mês</h3>
-          </div>
+          <mat-icon class="card-header-icon" aria-hidden="true">insights</mat-icon>
+          <h3 class="card-title-lg">Fluxo do Mês</h3>
         </div>
       </div>
 
-      <!-- Mini Gráfico de Barras Proporcionais -->
-      <div class="flow-chart-wrap" aria-hidden="true">
-        <div class="flow-bar-track">
-          <div class="flow-bar-segment income" [style.width.%]="flowIncomePercent()"></div>
-          <div class="flow-bar-segment expense" [style.width.%]="flowExpensePercent()"></div>
+      <div class="card-content-body flow-body-grow">
+        <!-- Barra proporcional ultrafina de 3px -->
+        <div class="flow-track-ultra" aria-hidden="true">
+          <div class="flow-segment-ultra income" [style.width.%]="flowIncomePercent()"></div>
+          <div class="flow-segment-ultra expense" [style.width.%]="flowExpensePercent()"></div>
         </div>
-        <div class="flow-bar-legend">
-          <span class="legend-item income">
-            <span class="legend-dot income"></span>
-            Receitas ({{ flowIncomePercent() }}%)
-          </span>
-          <span class="legend-item expense">
-            <span class="legend-dot expense"></span>
-            Despesas ({{ flowExpensePercent() }}%)
-          </span>
-        </div>
-      </div>
 
-      <div class="flow-items">
-        <div class="flow-row">
-          <div class="flow-label-wrap">
-            <span class="dot-income" aria-hidden="true"></span>
-            <span>Receitas do mês</span>
+        <div class="flow-items">
+          <div class="flow-columns-grid">
+            <div class="flow-col">
+              <div class="flow-label-wrap">
+                <span class="dot-income" aria-hidden="true"></span>
+                <span>Receitas</span>
+              </div>
+              <span class="flow-val income tabular-nums">
+                @if (loading()) {
+                  <div class="m-skeleton skeleton-sm"></div>
+                } @else if (isBalanceVisible()) {
+                  +
+                  {{ incomesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                } @else {
+                  ••••••
+                }
+              </span>
+            </div>
+
+            <div class="flow-col">
+              <div class="flow-label-wrap">
+                <span class="dot-expense" aria-hidden="true"></span>
+                <span>Despesas</span>
+              </div>
+              <span class="flow-val expense tabular-nums">
+                @if (loading()) {
+                  <div class="m-skeleton skeleton-sm"></div>
+                } @else if (isBalanceVisible()) {
+                  −
+                  {{ expensesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                } @else {
+                  ••••••
+                }
+              </span>
+            </div>
           </div>
-          <span class="flow-val income tabular-nums">
-            @if (loading()) {
-              <div class="nu-skeleton skeleton-sm"></div>
-            } @else if (isBalanceVisible()) {
-              + {{ incomesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-            } @else {
-              ••••••
-            }
-          </span>
-        </div>
 
-        <div class="flow-row">
-          <div class="flow-label-wrap">
-            <span class="dot-expense" aria-hidden="true"></span>
-            <span>Despesas do mês</span>
+          <div class="flow-divider"></div>
+
+          <div class="flow-row summary">
+            <span class="summary-label">Resultado líquido</span>
+            <span
+              class="flow-val tabular-nums"
+              [class.income]="netBalance() >= 0"
+              [class.expense]="netBalance() < 0"
+            >
+              @if (isBalanceVisible()) {
+                {{ netBalance() >= 0 ? '+' : '−' }}
+                {{ absNetBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+              } @else {
+                ••••••
+              }
+            </span>
           </div>
-          <span class="flow-val expense tabular-nums">
-            @if (loading()) {
-              <div class="nu-skeleton skeleton-sm"></div>
-            } @else if (isBalanceVisible()) {
-              − {{ expensesState.totalAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-            } @else {
-              ••••••
-            }
-          </span>
-        </div>
-
-        <div class="flow-divider"></div>
-
-        <div class="flow-row summary">
-          <span class="summary-label">Resultado líquido</span>
-          <span
-            class="flow-val tabular-nums"
-            [class.income]="netBalance() >= 0"
-            [class.expense]="netBalance() < 0"
-          >
-            @if (isBalanceVisible()) {
-              {{ netBalance() >= 0 ? '+' : '−' }}
-              {{ absNetBalance() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
-            } @else {
-              ••••••
-            }
-          </span>
         </div>
       </div>
     </mat-card>
@@ -298,18 +241,18 @@
 
     @if (loading()) {
       <div class="feed-list">
-        <div class="nu-skeleton feed-skeleton"></div>
-        <div class="nu-skeleton feed-skeleton"></div>
-        <div class="nu-skeleton feed-skeleton"></div>
+        <div class="m-skeleton feed-skeleton"></div>
+        <div class="m-skeleton feed-skeleton"></div>
+        <div class="m-skeleton feed-skeleton"></div>
       </div>
     } @else if (recentTransactions().length === 0) {
-      <mat-card appearance="outlined" class="nu-card empty-feed-card">
-        <mat-card-content class="nu-empty-state">
-          <div class="nu-empty-icon" aria-hidden="true">
+      <mat-card appearance="outlined" class="m-card empty-feed-card">
+        <mat-card-content class="m-empty-state">
+          <div class="m-empty-icon" aria-hidden="true">
             <mat-icon>account_balance_wallet</mat-icon>
           </div>
-          <h3 class="nu-empty-title">Nenhuma transação registrada</h3>
-          <p class="nu-empty-desc">
+          <h3 class="m-empty-title">Nenhuma transação registrada</h3>
+          <p class="m-empty-desc">
             Cadastre sua primeira receita ou despesa para começar a acompanhar o fluxo do seu
             dinheiro com gráficos e extrato em tempo real.
           </p>
@@ -360,7 +303,7 @@
                   ••••••
                 }
               </span>
-              <span class="nu-pill-badge" [class.paid]="item.isPaid">
+              <span class="m-pill-badge" [class.paid]="item.isPaid">
                 {{
                   item.type === 'income'
                     ? item.isPaid

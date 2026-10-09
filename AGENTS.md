@@ -28,6 +28,8 @@ Gotchas:
 
 Ordem de verificação para concluir tarefa: `ng test --watch=false` → `ng build` → `npx prettier --check .`.
 
+#IGNORE O TDD(vamos focar em code mais rápido)
+
 ## 2. Metodologia: TDD obrigatório
 
 Ciclo Red-Green-Refactor por tarefa:
@@ -127,6 +129,8 @@ Se achar que Stylelint (`color-no-hex`), axe-core ou Playwright com screenshots 
 
 ## 8. Testes (Vitest)
 
+#IGNORE O TDD(vamos focar em code mais rápido)
+
 - Runner é Vitest, não Jasmine: use `vi.fn()`, `vi.spyOn()`. Asserções booleanas são `toBe(true)` / `toBe(false)` — **`toBeTrue()`/`toBeFalse()` não existem** e quebram o build do teste.
 - Mock de state service: objeto comum com `signal(...)` nos getters e `vi.fn()` nos métodos, via `{ provide: X, useValue: mock }`.
 - Services de API: `HttpTestingController` com `provideHttpClientTesting()` — assertar URL exata (`environment.apiUrl` + path), método e body; `httpMock.verify()` no `afterEach`.
@@ -142,6 +146,8 @@ Formato: `<tipo>(<escopo>): <descrição curta em inglês, imperativo, minúscul
 - Escopos úteis: `auth`, `accounts`, `cards`, `categories`, `expenses`, `incomes`, `subscriptions`, `transfers`, `dashboard`, `core`, `shared`.
 
 ## 10. Definition of Done
+
+#IGNORE O TDD(vamos focar em code mais rápido)
 
 - [ ] TDD seguido (spec antes da implementação).
 - [ ] `ng test --watch=false` 100% verde.

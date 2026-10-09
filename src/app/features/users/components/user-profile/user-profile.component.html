@@ -1,0 +1,279 @@
+<div class="user-profile-page">
+  <!-- Top Navigation / Breadcrumb -->
+  <header class="page-header">
+    <div class="header-left">
+      <a routerLink="/dashboard" class="back-link" aria-label="Voltar para o painel principal">
+        <mat-icon aria-hidden="true">arrow_back</mat-icon>
+        <span>Voltar ao início</span>
+      </a>
+      <span class="m-eyebrow">MINHA CONTA</span>
+      <h1 class="page-title">Dados da Conta</h1>
+    </div>
+  </header>
+
+  <!-- Estado de Carregamento (Skeleton) -->
+  @if (isLoading() && !user()) {
+    <div class="profile-layout" aria-busy="true" aria-label="Carregando dados da conta">
+      <section class="profile-hero-card m-card">
+        <div class="hero-avatar-wrap">
+          <div class="m-skeleton skeleton-avatar"></div>
+        </div>
+        <div class="hero-info">
+          <div class="m-skeleton skeleton-title"></div>
+          <div class="m-skeleton skeleton-subtitle"></div>
+          <div class="m-skeleton skeleton-badge"></div>
+        </div>
+      </section>
+
+      <section class="profile-details-card m-card">
+        <div class="m-skeleton skeleton-section-title"></div>
+        <div class="details-grid">
+          <div class="m-skeleton skeleton-field"></div>
+          <div class="m-skeleton skeleton-field"></div>
+          <div class="m-skeleton skeleton-field"></div>
+          <div class="m-skeleton skeleton-field"></div>
+        </div>
+      </section>
+    </div>
+  } @else if (errorMessage() && !user()) {
+    <!-- Estado de Erro -->
+    <div class="m-empty-state" role="alert">
+      <div class="m-empty-icon" aria-hidden="true">
+        <mat-icon>error_outline</mat-icon>
+      </div>
+      <h2 class="m-empty-title">Não foi possível carregar os dados da conta</h2>
+      <p class="m-empty-desc">{{ errorMessage() }}</p>
+      <button mat-flat-button class="retry-button" (click)="loadUserData(userIdFromRoute())">
+        <mat-icon aria-hidden="true">refresh</mat-icon>
+        Tentar novamente
+      </button>
+    </div>
+  } @else if (user()) {
+    <!-- Estado de Conteúdo -->
+    <div class="profile-layout">
+      @if (successMessage()) {
+        <div class="success-banner" role="status">
+          <mat-icon aria-hidden="true">check_circle</mat-icon>
+          <span>{{ successMessage() }}</span>
+        </div>
+      }
+
+      <!-- Hero Card do Usuário -->
+      <section class="profile-hero-card m-card">
+        <div class="hero-avatar-wrap">
+          <div class="m-avatar hero-avatar" aria-hidden="true">
+            {{ userInitial() }}
+          </div>
+        </div>
+
+        <div class="hero-info">
+          <div class="hero-header-row">
+            <h2 class="hero-name">{{ fullName() || 'Usuário Monetis' }}</h2>
+            <div class="hero-tags">
+              <span class="m-tag">STONE FINTECH</span>
+              <span class="m-pill-badge badge-verified">
+                <mat-icon aria-hidden="true">verified</mat-icon>
+                Conta Ativa
+              </span>
+            </div>
+          </div>
+
+          <p class="hero-email">{{ user()?.email }}</p>
+
+          <div class="hero-id-row">
+            <span class="id-label">ID da Conta:</span>
+            <code class="id-code">{{ user()?.id }}</code>
+            <button
+              mat-icon-button
+              type="button"
+              class="copy-id-btn"
+              (click)="onCopyUserId()"
+              [attr.aria-label]="copyFeedback() ? 'ID copiado!' : 'Copiar ID da conta'"
+            >
+              <mat-icon aria-hidden="true">{{
+                copyFeedback() ? 'check' : 'content_copy'
+              }}</mat-icon>
+            </button>
+            @if (copyFeedback()) {
+              <span class="copy-hint" role="status">Copiado!</span>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Card de Informações Cadastrais / Edição -->
+      <section class="profile-details-card m-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <mat-icon class="section-icon" aria-hidden="true">badge</mat-icon>
+            <h3 class="section-title">Informações Cadastrais</h3>
+          </div>
+
+          @if (!isEditing()) {
+            <button
+              mat-stroked-button
+              type="button"
+              class="edit-action-btn"
+              (click)="onToggleEdit()"
+              aria-label="Editar dados da conta"
+            >
+              <mat-icon aria-hidden="true">edit</mat-icon>
+              <span>Editar Dados</span>
+            </button>
+          }
+        </div>
+
+        @if (!isEditing()) {
+          <!-- Visualização dos Dados -->
+          <dl class="m-detail-grid">
+            <div class="m-detail-item">
+              <dt class="m-detail-label">Primeiro Nome</dt>
+              <dd class="m-detail-value">{{ user()?.firstName || '—' }}</dd>
+            </div>
+
+            <div class="m-detail-item">
+              <dt class="m-detail-label">Sobrenome</dt>
+              <dd class="m-detail-value">{{ user()?.lastName || '—' }}</dd>
+            </div>
+
+            <div class="m-detail-item full-width">
+              <dt class="m-detail-label">Endereço de E-mail</dt>
+              <dd class="m-detail-value">{{ user()?.email || '—' }}</dd>
+            </div>
+
+            <div class="m-detail-item full-width">
+              <dt class="m-detail-label">Identificador do Registro</dt>
+              <dd class="m-detail-value code-font">{{ user()?.id }}</dd>
+            </div>
+          </dl>
+        } @else {
+          <!-- Formulário de Edição -->
+          <form [formGroup]="form" (ngSubmit)="onSaveProfile()" class="edit-profile-form">
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Primeiro Nome</mat-label>
+                <input matInput formControlName="firstName" autocomplete="given-name" />
+                @if (
+                  form.controls.firstName.hasError('required') && form.controls.firstName.touched
+                ) {
+                  <mat-error>Primeiro nome é obrigatório.</mat-error>
+                }
+                @if (
+                  form.controls.firstName.hasError('pattern') && form.controls.firstName.touched
+                ) {
+                  <mat-error>Nome inválido (apenas letras).</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Sobrenome</mat-label>
+                <input matInput formControlName="lastName" autocomplete="family-name" />
+                @if (
+                  form.controls.lastName.hasError('required') && form.controls.lastName.touched
+                ) {
+                  <mat-error>Sobrenome é obrigatório.</mat-error>
+                }
+                @if (form.controls.lastName.hasError('pattern') && form.controls.lastName.touched) {
+                  <mat-error>Sobrenome inválido (apenas letras).</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field full-width">
+                <mat-label>Endereço de E-mail</mat-label>
+                <input matInput type="email" formControlName="email" autocomplete="email" />
+                @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+                  <mat-error>E-mail é obrigatório.</mat-error>
+                }
+                @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+                  <mat-error>Informe um e-mail válido.</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button
+                mat-button
+                type="button"
+                class="cancel-btn"
+                (click)="onCancelEdit()"
+                [disabled]="isLoading()"
+              >
+                Cancelar
+              </button>
+              <button
+                mat-flat-button
+                type="submit"
+                class="save-btn"
+                [disabled]="isLoading() || form.invalid"
+              >
+                @if (isLoading()) {
+                  <span>Salvando...</span>
+                } @else {
+                  <span>Salvar Alterações</span>
+                }
+              </button>
+            </div>
+          </form>
+        }
+      </section>
+
+      <!-- Atalhos de Gestão e Segurança -->
+      <div class="secondary-cards-grid">
+        <section class="security-card m-card">
+          <div class="card-title-group">
+            <mat-icon class="section-icon" aria-hidden="true">security</mat-icon>
+            <h3 class="section-title">Segurança e Acesso</h3>
+          </div>
+          <p class="section-desc">
+            Sua conta está autenticada via token criptográfico com segurança de ponta a ponta.
+          </p>
+          <div class="security-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              class="logout-action-btn"
+              (click)="onLogout()"
+              aria-label="Desconectar e sair da conta"
+            >
+              <mat-icon aria-hidden="true">logout</mat-icon>
+              <span>Sair desta conta</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="quick-links-card m-card">
+          <div class="card-title-group">
+            <mat-icon class="section-icon" aria-hidden="true">account_balance</mat-icon>
+            <h3 class="section-title">Serviços Vinculados</h3>
+          </div>
+          <p class="section-desc">
+            Acesse rapidamente seus dados bancários e instrumentos de pagamento.
+          </p>
+          <div class="quick-links-list">
+            <a routerLink="/accounts" class="m-quick-link-item">
+              <div class="link-icon-wrap" aria-hidden="true">
+                <mat-icon>account_balance</mat-icon>
+              </div>
+              <div class="link-text-wrap">
+                <span class="link-title">Contas Bancárias</span>
+                <span class="link-subtitle">Gerenciar contas e saldos</span>
+              </div>
+              <mat-icon class="link-arrow" aria-hidden="true">chevron_right</mat-icon>
+            </a>
+
+            <a routerLink="/cards" class="m-quick-link-item">
+              <div class="link-icon-wrap" aria-hidden="true">
+                <mat-icon>credit_card</mat-icon>
+              </div>
+              <div class="link-text-wrap">
+                <span class="link-title">Cartões de Crédito</span>
+                <span class="link-subtitle">Faturas, limites e vencimentos</span>
+              </div>
+              <mat-icon class="link-arrow" aria-hidden="true">chevron_right</mat-icon>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  }
+</div>

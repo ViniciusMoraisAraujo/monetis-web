@@ -1,0 +1,23 @@
+@if (toastService.isVisible()) {
+  <aside class="error-toast" role="alert" aria-live="assertive">
+    <div class="toast-icon-wrap" aria-hidden="true">
+      <mat-icon>sync_problem</mat-icon>
+    </div>
+
+    <div class="toast-body">
+      <strong class="toast-title">{{ toastService.title() }}</strong>
+      <span class="toast-message">{{ toastService.message() }}</span>
+    </div>
+
+    <div class="toast-actions">
+      <button type="button" class="retry-btn" (click)="onRetry()">
+        <mat-icon aria-hidden="true">sync</mat-icon>
+        <span>Reconectar</span>
+      </button>
+
+      <button type="button" class="close-btn" (click)="onDismiss()" aria-label="Fechar notificação">
+        <mat-icon aria-hidden="true">close</mat-icon>
+      </button>
+    </div>
+  </aside>
+}

@@ -1,11 +1,13 @@
 @use '@angular/material' as mat;
 
-// Definição dos temas Material Design 3 com a cor violeta Nubank e tipografia Inter
+$stone-green-palette: mat.$green-palette;
+
+// Definição dos temas Material Design 3 com a identidade Stone Green e tipografia Inter
 $light-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
-      primary: mat.$violet-palette,
+      primary: $stone-green-palette,
       tertiary: mat.$chartreuse-palette,
     ),
     typography: (
@@ -22,7 +24,7 @@ $dark-theme: mat.define-theme(
   (
     color: (
       theme-type: dark,
-      primary: mat.$violet-palette,
+      primary: $stone-green-palette,
       tertiary: mat.$chartreuse-palette,
     ),
     typography: (
@@ -35,136 +37,133 @@ $dark-theme: mat.define-theme(
   )
 );
 
-// Aplica estilos essenciais e tema padrão (Dark-First Nubank Ultravioleta)
+// Aplica estilos essenciais e tokens da identidade Stone Green
 :root {
   @include mat.all-component-themes($dark-theme);
 
-  // Nubank Ultravioleta Design Tokens (Dark-First padrão)
-  --nu-primary: #a855f7;
-  --nu-primary-rgb: 168, 85, 247;
-  --nu-primary-glow: rgba(168, 85, 247, 0.22);
-  --nu-primary-hover: #b76eff;
-  --nu-primary-container: rgba(168, 85, 247, 0.14);
-  --nu-on-primary: #0b0b0f;
+  /* Brand Tokens - Stone Green */
+  --stone-green-900: #042618;
+  --stone-green-700: #008050;
+  --stone-green-500: #00a868;
+  --stone-green-400: #00d084;
+  --stone-green-100: #e6f8f0;
 
-  // 3 Níveis de elevação (Fundo #0B0B14 -> Cards #151522 -> Interativos #202034)
-  --nu-bg-canvas: #0b0b14;
-  --nu-surface-sidebar: #10101c;
-  --nu-surface-card: #151522;
-  --nu-surface-card-hover: #1c1c2e;
-  --nu-surface-raised: #1f1f33;
-  --nu-surface-subtle: #202034;
-  --nu-border: rgba(255, 255, 255, 0.06);
-  --nu-border-strong: rgba(255, 255, 255, 0.2);
-  --nu-border-focus: #a855f7;
+  /* Semantic UI Tokens */
+  --app-bg: light-dark(#f4f7f5, #0a0f0d);
+  --app-surface: light-dark(#ffffff, #121a16);
+  --app-surface-hover: light-dark(#eaefea, #1a2620);
+  --app-border: light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.07));
+  --app-border-focus: light-dark(#008050, #00d084);
 
-  --nu-text-primary: #f5f5f7;
-  --nu-text-secondary: #9e9ea8;
-  --nu-text-muted: #636372;
+  /* Typography */
+  --text-primary: light-dark(#0e1712, #f5faf7);
+  --text-secondary: light-dark(#5c6861, #8e9f96);
+  --text-accent: light-dark(#008050, #00d084);
 
-  // Cores semânticas de domínio - WCAG 2.2 AA / Seção 7 AGENTS.md
-  --app-income: #4ade80; /* Receita */
-  --app-expense: #f87171; /* Despesa */
-  --app-pending: #facc15; /* Pendente */
-  --app-overdue: #fca5a5; /* Vencido */
+  /* Cores semânticas de domínio - WCAG 2.2 AA */
+  --app-income: #00d084;
+  --app-expense: #ff5c5c;
+  --app-pending: #e5a800;
+  --app-overdue: #ff5c5c;
 
-  // Tokens de forma (DESIGN.md 3.1)
-  --nu-radius-control: 12px;
-  --nu-radius-card: 20px;
-  --nu-radius-dialog: 24px;
-  --nu-radius-pill: 9999px;
+  /* Monetis Brand & UI Tokens (--m-*) */
+  --m-primary: light-dark(#00a868, #00d084);
+  --m-primary-rgb: 0, 168, 104;
+  --m-primary-glow: light-dark(rgba(0, 168, 104, 0.15), rgba(0, 208, 132, 0.25));
+  --m-primary-hover: light-dark(#008050, #00e896);
+  --m-primary-container: light-dark(#e6f8f0, rgba(0, 208, 132, 0.12));
+  --m-on-primary: light-dark(#ffffff, #042618);
 
-  // Tokens de espaçamento (DESIGN.md 3.2)
-  --nu-space-1: 4px;
-  --nu-space-2: 8px;
-  --nu-space-3: 12px;
-  --nu-space-4: 16px;
-  --nu-space-5: 20px;
-  --nu-space-6: 24px;
-  --nu-space-8: 32px;
-  --nu-space-10: 40px;
+  --m-bg-canvas: light-dark(#f4f7f5, #0a0f0d);
+  --m-surface-sidebar: light-dark(#ffffff, #0d1411);
+  --m-surface-card: light-dark(#ffffff, #121a16);
+  --m-surface-card-hover: light-dark(#eaefea, #1a2620);
+  --m-surface-raised: light-dark(#ffffff, #1a2620);
+  --m-surface-subtle: light-dark(#e8ede9, #1a2620);
+  --m-border: light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.07));
+  --m-border-strong: light-dark(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.14));
+  --m-border-focus: light-dark(#008050, #00d084);
 
-  // Sombra e movimento (DESIGN.md 3.4)
-  --nu-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --nu-glow-primary: 0 0 32px var(--nu-primary-glow);
-  --nu-duration-fast: 150ms;
-  --nu-duration-base: 250ms;
-  --nu-ease: cubic-bezier(0.2, 0, 0, 1);
+  --m-text-primary: light-dark(#0e1712, #f5faf7);
+  --m-text-secondary: light-dark(#5c6861, #8e9f96);
+  --m-text-muted: light-dark(#6b7a70, #5a6b60);
+
+  // Tokens de forma
+  --m-radius-control: 10px;
+  --m-radius-card: 16px;
+  --m-radius-dialog: 20px;
+  --m-radius-pill: 9999px;
+
+  // Tokens de espaçamento
+  --m-space-1: 4px;
+  --m-space-2: 8px;
+  --m-space-3: 12px;
+  --m-space-4: 16px;
+  --m-space-5: 20px;
+  --m-space-6: 24px;
+  --m-space-8: 32px;
+  --m-space-10: 40px;
+
+  // Sombra e movimento
+  --m-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --m-glow-primary: 0 0 24px var(--m-primary-glow);
+  --m-duration-fast: 150ms;
+  --m-duration-base: 250ms;
+  --m-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Aliases para compatibilidade total de transição (--nu-*) */
+  --nu-primary: var(--m-primary);
+  --nu-primary-rgb: var(--m-primary-rgb);
+  --nu-primary-glow: var(--m-primary-glow);
+  --nu-primary-hover: var(--m-primary-hover);
+  --nu-primary-container: var(--m-primary-container);
+  --nu-on-primary: var(--m-on-primary);
+  --nu-bg-canvas: var(--m-bg-canvas);
+  --nu-surface-sidebar: var(--m-surface-sidebar);
+  --nu-surface-card: var(--m-surface-card);
+  --nu-surface-card-hover: var(--m-surface-card-hover);
+  --nu-surface-raised: var(--m-surface-raised);
+  --nu-surface-subtle: var(--m-surface-subtle);
+  --nu-border: var(--m-border);
+  --nu-border-strong: var(--m-border-strong);
+  --nu-border-focus: var(--m-border-focus);
+  --nu-text-primary: var(--m-text-primary);
+  --nu-text-secondary: var(--m-text-secondary);
+  --nu-text-muted: var(--m-text-muted);
+  --nu-radius-control: var(--m-radius-control);
+  --nu-radius-card: var(--m-radius-card);
+  --nu-radius-dialog: var(--m-radius-dialog);
+  --nu-radius-pill: var(--m-radius-pill);
+  --nu-space-1: var(--m-space-1);
+  --nu-space-2: var(--m-space-2);
+  --nu-space-3: var(--m-space-3);
+  --nu-space-4: var(--m-space-4);
+  --nu-space-5: var(--m-space-5);
+  --nu-space-6: var(--m-space-6);
+  --nu-space-8: var(--m-space-8);
+  --nu-space-10: var(--m-space-10);
+  --nu-shadow-hover: var(--m-shadow-hover);
+  --nu-glow-primary: var(--m-glow-primary);
+  --nu-duration-fast: var(--m-duration-fast);
+  --nu-duration-base: var(--m-duration-base);
+  --nu-ease: var(--m-ease);
 
   color-scheme: dark;
 }
 
-// Tema Claro refinado quando a classe .light estiver presente
+// Tema Claro explícito
 :root.light,
 html.light,
 body.light {
   @include mat.all-component-colors($light-theme);
-
-  --nu-primary: #820ad1;
-  --nu-primary-rgb: 130, 10, 209;
-  --nu-primary-glow: rgba(130, 10, 209, 0.15);
-  --nu-primary-hover: #6d08af;
-  --nu-primary-container: #f3e8ff;
-  --nu-on-primary: #ffffff;
-
-  --nu-bg-canvas: #f0f2f7;
-  --nu-surface-sidebar: #f8f9fc;
-  --nu-surface-card: #ffffff;
-  --nu-surface-card-hover: #f3f5f9;
-  --nu-surface-raised: #ffffff;
-  --nu-surface-subtle: #e6e9f0;
-  --nu-border: rgba(0, 0, 0, 0.06);
-  --nu-border-strong: rgba(0, 0, 0, 0.2);
-  --nu-border-focus: #820ad1;
-
-  --nu-text-primary: #111116;
-  --nu-text-secondary: #5a5d6b;
-  --nu-text-muted: #8f92a1;
-
-  --app-income: #107c41;
-  --app-expense: #c5221f;
-  --app-pending: #8c6b00;
-  --app-overdue: #ba1a1a;
-
-  --nu-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
-
   color-scheme: light;
 }
 
-// Tema Escuro explícito quando a classe .dark estiver presente
+// Tema Escuro explícito
 :root.dark,
 html.dark,
 body.dark {
   @include mat.all-component-colors($dark-theme);
-
-  --nu-primary: #a855f7;
-  --nu-primary-rgb: 168, 85, 247;
-  --nu-primary-glow: rgba(168, 85, 247, 0.22);
-  --nu-primary-hover: #b76eff;
-  --nu-primary-container: rgba(168, 85, 247, 0.14);
-  --nu-on-primary: #0b0b0f;
-
-  --nu-bg-canvas: #0b0b14;
-  --nu-surface-sidebar: #10101c;
-  --nu-surface-card: #151522;
-  --nu-surface-card-hover: #1c1c2e;
-  --nu-surface-raised: #1f1f33;
-  --nu-surface-subtle: #202034;
-  --nu-border: rgba(255, 255, 255, 0.06);
-  --nu-border-strong: rgba(255, 255, 255, 0.2);
-  --nu-border-focus: #a855f7;
-
-  --nu-text-primary: #f5f5f7;
-  --nu-text-secondary: #9e9ea8;
-  --nu-text-muted: #636372;
-
-  --app-income: #4ade80;
-  --app-expense: #f87171;
-  --app-pending: #facc15;
-  --app-overdue: #fca5a5;
-
-  --nu-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
-
   color-scheme: dark;
 }
 
@@ -240,64 +239,70 @@ textarea,
   }
 }
 
-// Componentes e utilitários compartilhados Nubank Ultravioleta
+// Componentes e utilitários compartilhados Monetis Stone Green
+.m-avatar,
 .nu-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: var(--nu-radius-pill);
-  background: linear-gradient(135deg, var(--nu-primary), var(--nu-primary-hover));
-  color: var(--nu-on-primary);
-  font-weight: 600;
+  border-radius: var(--m-radius-pill);
+  background: light-dark(var(--stone-green-100), var(--stone-green-900));
+  color: var(--text-accent);
+  border: 2px solid var(--text-accent);
+  font-weight: 700;
   font-size: 0.875rem;
   flex-shrink: 0;
 }
 
+.m-tag,
 .nu-tag {
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--nu-primary);
+  color: var(--m-primary);
 }
 
+.m-icon-circle,
 .nu-icon-circle {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 3.5rem;
   height: 3.5rem;
-  border-radius: var(--nu-radius-pill);
-  background-color: var(--nu-surface-subtle);
-  border: 1px solid var(--nu-border);
-  color: var(--nu-primary);
+  border-radius: var(--m-radius-pill);
+  background-color: var(--m-surface-subtle);
+  border: 1px solid var(--m-border);
+  color: var(--m-primary);
   transition:
-    background-color var(--nu-duration-fast) var(--nu-ease),
-    border-color var(--nu-duration-fast) var(--nu-ease);
+    background-color var(--m-duration-fast) var(--m-ease),
+    border-color var(--m-duration-fast) var(--m-ease);
 }
 
+.m-pill-badge,
 .nu-pill-badge {
   font-size: 0.625rem;
   font-weight: 600;
   padding: 0.15rem 0.5rem;
-  border-radius: var(--nu-radius-pill);
-  background-color: var(--nu-surface-subtle);
-  color: var(--nu-text-secondary);
+  border-radius: var(--m-radius-pill);
+  background-color: var(--m-surface-subtle);
+  color: var(--m-text-secondary);
 
   &.paid,
   &.active {
-    background-color: var(--nu-primary-container);
-    color: var(--nu-primary);
+    background-color: var(--m-primary-container);
+    color: var(--m-primary);
   }
 }
 
 // Skeleton loading animado com shimmer sutil
+.m-skeleton,
 .nu-skeleton {
   position: relative;
   overflow: hidden;
-  background-color: var(--nu-surface-subtle);
-  border-radius: var(--nu-radius-control);
+  background-color: var(--m-surface-subtle);
+  border-radius: var(--m-radius-control);
 
   &::after {
     content: '';
@@ -307,34 +312,37 @@ textarea,
     bottom: 0;
     left: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(var(--nu-primary-rgb), 0.08), transparent);
-    animation: nu-shimmer 1.5s infinite;
+    background: linear-gradient(90deg, transparent, rgba(var(--m-primary-rgb), 0.08), transparent);
+    animation: m-shimmer 1.5s infinite;
   }
 }
 
-@keyframes nu-shimmer {
+@keyframes m-shimmer {
   100% {
     transform: translateX(100%);
   }
 }
 
-// Barra de progresso padronizada Nubank
+// Barra de progresso padronizada
+.m-progress-track,
 .nu-progress-track {
   width: 100%;
   height: 0.375rem;
-  border-radius: var(--nu-radius-pill);
-  background-color: var(--nu-surface-subtle);
+  border-radius: var(--m-radius-pill);
+  background-color: var(--m-surface-subtle);
   overflow: hidden;
   position: relative;
 }
 
+.m-progress-fill,
 .nu-progress-fill {
   height: 100%;
-  border-radius: var(--nu-radius-pill);
-  background: linear-gradient(90deg, var(--nu-primary), var(--nu-primary-hover));
-  transition: width var(--nu-duration-base) var(--nu-ease);
+  border-radius: var(--m-radius-pill);
+  background: linear-gradient(90deg, var(--m-primary), var(--m-primary-hover));
+  transition: width var(--m-duration-base) var(--m-ease);
 }
 
+.m-empty-state,
 .nu-empty-state {
   display: flex;
   flex-direction: column;
@@ -343,15 +351,16 @@ textarea,
   text-align: center;
   gap: 0.5rem;
 
+  .m-empty-icon,
   .nu-empty-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 3.25rem;
     height: 3.25rem;
-    border-radius: var(--nu-radius-pill);
-    background-color: var(--nu-surface-subtle);
-    color: var(--nu-text-secondary);
+    border-radius: var(--m-radius-pill);
+    background-color: var(--m-surface-subtle);
+    color: var(--m-text-secondary);
     margin-bottom: 0.5rem;
 
     mat-icon {
@@ -362,47 +371,61 @@ textarea,
   }
 
   h3,
+  .m-empty-title,
   .nu-empty-title {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   p,
+  .m-empty-desc,
   .nu-empty-desc {
     margin: 0 0 1rem;
     font-size: 0.8125rem;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     max-width: 24rem;
   }
 }
 
-// Card base Nubank com padding responsivo e tokens
+// Card base Monetis Stone com padding responsivo e tokens
+.m-card,
 .nu-card {
-  padding: var(--nu-space-5);
-  border-radius: var(--nu-radius-card);
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  padding: var(--m-space-5);
+  border-radius: var(--m-radius-card);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
 
   @media (min-width: 768px) {
-    padding: var(--nu-space-6);
+    padding: var(--m-space-6);
   }
 }
 
-// Banner de erro padronizado para feedback resiliente
+.m-eyebrow,
+.nu-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-accent);
+}
+
+// Banner de sincronização fintech (Alerta sutil com botão Reconectar)
 .dashboard-error-state {
   display: flex;
   align-items: center;
-  gap: var(--nu-space-4);
-  padding: var(--nu-space-4);
-  border-radius: var(--nu-radius-card);
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--app-expense);
+  gap: var(--nu-space-3);
+  padding: 0.75rem 1rem;
+  border-radius: var(--nu-radius-control);
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   flex-wrap: wrap;
 
   .error-icon-wrap {
-    color: var(--app-expense);
+    color: var(--stone-green-400);
+    display: flex;
+    align-items: center;
   }
 
   .error-info {
@@ -413,20 +436,93 @@ textarea,
   }
 
   .error-title {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
-    color: var(--nu-text-primary);
+    color: var(--text-primary);
   }
 
   .error-message {
     font-size: 0.75rem;
-    color: var(--nu-text-secondary);
+    color: var(--text-secondary);
   }
 
   .retry-btn {
     border-radius: var(--nu-radius-pill);
-    background-color: var(--nu-primary);
-    color: var(--nu-on-primary);
+    background-color: var(--stone-green-500);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.875rem;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--nu-space-1);
+    transition: background-color var(--nu-duration-fast) var(--nu-ease);
+
+    &:hover {
+      background-color: var(--stone-green-700);
+    }
+  }
+}
+
+// Componentes Fintech Stone - Barras ultrafinas e indicadores
+.limit-track-ultra {
+  height: 3px;
+  width: 100%;
+  border-radius: var(--nu-radius-pill);
+  background-color: var(--nu-surface-subtle);
+  overflow: hidden;
+}
+
+.limit-fill-ultra {
+  height: 100%;
+  background-color: var(--stone-green-400);
+  border-radius: var(--nu-radius-pill);
+  transition: width var(--nu-duration-base) var(--nu-ease);
+}
+
+.flow-track-ultra {
+  display: flex;
+  height: 3px;
+  width: 100%;
+  border-radius: var(--nu-radius-pill);
+  overflow: hidden;
+  background-color: var(--nu-surface-subtle);
+}
+
+.flow-segment-ultra {
+  height: 100%;
+  transition: width var(--nu-duration-base) var(--nu-ease);
+
+  &.income {
+    background-color: var(--app-income);
+  }
+  &.expense {
+    background-color: var(--app-expense);
+  }
+}
+
+.balance-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nu-space-1);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--nu-radius-pill);
+  background-color: light-dark(rgba(0, 168, 104, 0.1), rgba(0, 208, 132, 0.12));
+  color: var(--stone-green-400);
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  mat-icon {
+    font-size: 0.9375rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
+  }
+
+  &.negative {
+    background-color: light-dark(rgba(255, 92, 92, 0.1), rgba(255, 92, 92, 0.15));
+    color: var(--app-expense);
   }
 }
 
@@ -504,16 +600,17 @@ textarea,
   }
 }
 
-// Quick Actions canônicos Nubank Ultravioleta (DESIGN.md 5.3)
+// Quick Actions no padrão Stone Fintech
 .actions-carousel {
   display: flex;
-  gap: var(--nu-space-4);
+  gap: var(--nu-space-3);
   overflow-x: auto;
   padding: var(--nu-space-1) 0;
 
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: var(--nu-space-4);
   }
 }
 
@@ -524,24 +621,65 @@ textarea,
   gap: var(--nu-space-2);
   text-decoration: none;
   min-width: 4.5rem;
+  color: var(--text-secondary);
+  transition:
+    color var(--nu-duration-fast) var(--nu-ease),
+    transform var(--nu-duration-fast) var(--nu-ease);
+
+  .action-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--nu-radius-pill);
+    background-color: light-dark(rgba(0, 168, 104, 0.08), rgba(0, 208, 132, 0.12));
+    color: var(--text-accent);
+    transition: all var(--nu-duration-fast) var(--nu-ease);
+
+    mat-icon {
+      font-size: 1.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      width: auto;
+      height: auto;
+      background-color: transparent;
+      border: none;
+      color: var(--text-secondary);
+      border-radius: 0;
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  .action-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: inherit;
+  }
 
   @media (prefers-reduced-motion: no-preference) {
-    &:hover .action-icon {
+    &:hover {
+      color: var(--text-accent);
       transform: translateY(-2px);
-      background-color: var(--nu-surface-card-hover);
+
+      .action-icon-wrap {
+        color: var(--text-accent);
+      }
     }
   }
 
   &:focus-visible {
-    outline: 2px solid var(--nu-border-focus);
+    outline: 2px solid var(--app-border-focus);
     outline-offset: 2px;
   }
-}
-
-.action-label {
-  color: var(--nu-text-secondary);
-  font-size: 0.75rem;
-  font-weight: 500;
 }
 
 // Mini gráfico de fluxo proporcional (Receitas vs Despesas)
@@ -757,4 +895,230 @@ textarea,
     height: 1.125rem;
     color: var(--nu-primary);
   }
+}
+
+// Layout do Shell (Brand Header, Footer e Mobile Bottom Nav)
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: var(--nu-space-3);
+  padding: var(--nu-space-2) var(--nu-space-2) var(--nu-space-5);
+}
+
+.brand-logo-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--nu-radius-control);
+  background-color: var(--nu-primary-container);
+  border: 1px solid var(--nu-border);
+  box-shadow: 0 0 12px var(--nu-primary-glow);
+  color: var(--nu-primary);
+}
+
+.brand-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--nu-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.desktop-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nu-space-1);
+  padding-top: var(--nu-space-3);
+  border-top: 1px solid var(--nu-border);
+}
+
+.footer-button {
+  min-height: 2.75rem;
+  justify-content: flex-start;
+  border-radius: var(--nu-radius-control);
+  gap: var(--nu-space-2);
+  color: var(--nu-text-secondary);
+
+  &:hover {
+    background-color: var(--nu-surface-subtle);
+    color: var(--nu-text-primary);
+  }
+
+  &.logout-button {
+    color: var(--app-expense);
+  }
+}
+
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: var(--nu-surface-card);
+  border-top: 1px solid var(--nu-border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  height: calc(3.75rem + env(safe-area-inset-bottom, 0px));
+  z-index: 100;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  text-decoration: none;
+  color: var(--nu-text-secondary);
+  gap: 0.125rem;
+}
+
+.bottom-icon-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.75rem;
+  border-radius: var(--nu-radius-pill);
+
+  mat-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.bottom-nav-label {
+  font-size: 0.625rem;
+  font-weight: 500;
+}
+
+.active-bottom-item {
+  color: var(--nu-text-primary);
+  font-weight: 600;
+
+  .bottom-icon-indicator {
+    background-color: var(--nu-primary-container);
+    color: var(--nu-primary);
+  }
+}
+
+// Utilitários de detalhes cadastrais e atalhos de navegação
+.m-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--m-space-3);
+  margin: 0;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.m-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m-space-1);
+  padding: var(--m-space-3);
+  background: var(--m-surface-subtle);
+  border-radius: var(--m-radius-control);
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.m-detail-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.m-detail-value {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  word-break: break-all;
+
+  &.code-font {
+    font-family: monospace;
+    font-size: 0.875rem;
+  }
+}
+
+.m-quick-link-item {
+  display: flex;
+  align-items: center;
+  gap: var(--m-space-3);
+  padding: var(--m-space-3);
+  border-radius: var(--m-radius-control);
+  background: var(--m-surface-subtle);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color var(--m-duration-fast) var(--m-ease);
+
+  &:hover {
+    background-color: var(--m-surface-card-hover);
+  }
+
+  .link-icon-wrap {
+    color: var(--text-accent);
+  }
+
+  .link-text-wrap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .link-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .link-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+  }
+
+  .link-arrow {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+}
+
+.skeleton-avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: var(--m-radius-pill);
+}
+.skeleton-title {
+  width: 12rem;
+  height: 1.5rem;
+}
+.skeleton-subtitle {
+  width: 16rem;
+  height: 1rem;
+}
+.skeleton-badge {
+  width: 8rem;
+  height: 1.25rem;
+}
+.skeleton-section-title {
+  width: 10rem;
+  height: 1.25rem;
+  margin-bottom: var(--m-space-4);
+}
+.skeleton-field {
+  height: 3.5rem;
+  border-radius: var(--m-radius-control);
 }

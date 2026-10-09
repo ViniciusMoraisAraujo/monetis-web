@@ -37,6 +37,25 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'Users',
+        loadChildren: () => import('./features/users/routes').then((m) => m.USERS_ROUTES),
+      },
+      {
+        path: 'users',
+        redirectTo: 'Users',
+        pathMatch: 'prefix',
+      },
+      {
+        path: 'profile',
+        redirectTo: 'Users',
+        pathMatch: 'full',
+      },
+      {
+        path: 'extrato',
+        redirectTo: 'expenses',
+        pathMatch: 'full',
+      },
+      {
         path: 'accounts',
         loadChildren: () => import('./features/accounts/routes').then((m) => m.ACCOUNTS_ROUTES),
       },

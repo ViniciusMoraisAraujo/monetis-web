@@ -9,6 +9,7 @@ import { IncomesStateService } from '../../../incomes/services/incomes-state.ser
 import { CardsStateService } from '../../../cards/services/cards-state.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { PrivacyService } from '../../../../core/services/privacy.service';
+import { ErrorToastService } from '../../../../core/services/error-toast.service';
 import '../../../../core/i18n';
 
 describe('DashboardHomeComponent', () => {
@@ -57,6 +58,13 @@ describe('DashboardHomeComponent', () => {
     ariaLabel: ReturnType<typeof signal<string>>;
     ariaPressed: ReturnType<typeof signal<boolean>>;
     maskValue: ReturnType<typeof vi.fn>;
+  };
+
+  let errorToastServiceMock: {
+    show: ReturnType<typeof vi.fn>;
+    dismiss: ReturnType<typeof vi.fn>;
+    retry: ReturnType<typeof vi.fn>;
+    isVisible: ReturnType<typeof signal<boolean>>;
   };
 
   beforeEach(() => {
@@ -127,6 +135,13 @@ describe('DashboardHomeComponent', () => {
       maskValue: vi.fn((val: string) => val),
     };
 
+    errorToastServiceMock = {
+      show: vi.fn(),
+      dismiss: vi.fn(),
+      retry: vi.fn(),
+      isVisible: signal(false),
+    };
+
     TestBed.configureTestingModule({
       imports: [DashboardHomeComponent],
       providers: [
@@ -137,6 +152,7 @@ describe('DashboardHomeComponent', () => {
         { provide: CardsStateService, useValue: cardsStateMock },
         { provide: AuthService, useValue: authServiceMock },
         { provide: PrivacyService, useValue: privacyServiceMock },
+        { provide: ErrorToastService, useValue: errorToastServiceMock },
       ],
     });
   });
@@ -213,25 +229,25 @@ describe('DashboardHomeComponent', () => {
     const fixture = TestBed.createComponent(DashboardHomeComponent);
     fixture.detectChanges();
 
-    const skeletons = fixture.debugElement.queryAll(By.css('.nu-skeleton'));
+    const skeletons = fixture.debugElement.queryAll(By.css('.m-skeleton'));
     expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it('should render error state with retry button when error occurs', () => {
-    accountsStateMock.errorMessage.set('Falha na conexão com o servidor');
+  it('should trigger error toast and log technical error to console.error when sync fails', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    accountsStateMock.errorMessage.set(
+      'Http failure response for http://localhost:5074/api/accounts: 0 Unknown Error',
+    );
     const fixture = TestBed.createComponent(DashboardHomeComponent);
-    const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    const errorEl = fixture.debugElement.query(By.css('.dashboard-error-state'));
-    expect(errorEl).toBeTruthy();
-    expect(errorEl.nativeElement.textContent).toContain('Falha na conexão com o servidor');
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Technical sync error details:',
+      'Http failure response for http://localhost:5074/api/accounts: 0 Unknown Error',
+    );
+    consoleErrorSpy.mockRestore();
 
-    const retryBtn = fixture.debugElement.query(By.css('.retry-btn'));
-    expect(retryBtn).toBeTruthy();
-    retryBtn.nativeElement.click();
-
-    expect(accountsStateMock.loadAccounts).toHaveBeenCalled();
+    expect(errorToastServiceMock.show).toHaveBeenCalled();
   });
 
   it('should render empty state with CTAs when no transactions exist', () => {
@@ -240,7 +256,7 @@ describe('DashboardHomeComponent', () => {
     const fixture = TestBed.createComponent(DashboardHomeComponent);
     fixture.detectChanges();
 
-    const emptyTitle = fixture.debugElement.query(By.css('.nu-empty-title'));
+    const emptyTitle = fixture.debugElement.query(By.css('.m-empty-title'));
     expect(emptyTitle).toBeTruthy();
     expect(emptyTitle.nativeElement.textContent).toContain('Nenhuma transação registrada');
 

@@ -7,37 +7,38 @@
         </div>
         <div class="brand-title-wrap">
           <span class="brand-name">Monetis</span>
-          <span class="nu-tag">ULTRAVIOLETA</span>
+          <span class="m-tag">STONE</span>
         </div>
       </div>
 
       @if (currentUser()) {
-        <div class="user-profile-card">
-          <div class="nu-avatar" aria-hidden="true">
+        <a
+          [routerLink]="userProfileRoute()"
+          class="user-profile-card"
+          aria-label="Minha Conta - Perfil do usuário"
+        >
+          <div class="m-avatar" aria-hidden="true">
             {{ userInitial() }}
           </div>
           <div class="user-details">
-            <span class="user-greeting">Olá, {{ userName() }}</span>
-            <span class="user-email" [title]="currentUser()?.email">{{
-              currentUser()?.email
-            }}</span>
+            <div class="user-name-row">
+              <span class="user-greeting">{{ userName() }}</span>
+              <span class="user-badge">Minha Conta</span>
+            </div>
+            <span class="user-email">{{ currentUser()?.email || 'Minha Conta' }}</span>
           </div>
-        </div>
+          <mat-icon class="user-chevron" aria-hidden="true">chevron_right</mat-icon>
+        </a>
       }
 
-      <mat-nav-list class="nav-list">
+      <nav class="nav-list" aria-label="Navegação principal">
         @for (item of navItems; track item.path) {
-          <a
-            mat-list-item
-            [routerLink]="item.path"
-            routerLinkActive="active-nav-item"
-            class="nav-link"
-          >
-            <mat-icon matListItemIcon aria-hidden="true">{{ item.icon }}</mat-icon>
-            <span matListItemTitle>{{ item.label }}</span>
+          <a [routerLink]="item.path" routerLinkActive="active-nav-item" class="nav-link">
+            <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
           </a>
         }
-      </mat-nav-list>
+      </nav>
 
       <div class="desktop-footer">
         <button
@@ -73,15 +74,19 @@
 } @else {
   <div class="mobile-layout">
     <header class="mobile-header">
-      <div class="mobile-profile-info">
-        <div class="nu-avatar" aria-hidden="true">
+      <a
+        [routerLink]="userProfileRoute()"
+        class="mobile-profile-info"
+        aria-label="Minha Conta - Perfil do usuário"
+      >
+        <div class="m-avatar" aria-hidden="true">
           {{ userInitial() }}
         </div>
         <div class="mobile-greeting-wrap">
           <span class="mobile-greeting">Olá, {{ userName() }}</span>
-          <span class="nu-tag">MONETIS</span>
+          <span class="m-tag">MONETIS</span>
         </div>
-      </div>
+      </a>
 
       <div class="mobile-header-actions">
         <button
@@ -127,3 +132,5 @@
     </nav>
   </div>
 }
+
+<app-error-toast />

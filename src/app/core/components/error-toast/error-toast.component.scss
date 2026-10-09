@@ -1,0 +1,141 @@
+.error-toast {
+  position: fixed;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  left: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: var(--m-space-3);
+  padding: 0.75rem 1rem;
+  border-radius: var(--m-radius-card);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: slideInDown var(--m-duration-base) var(--m-ease);
+
+  @media (min-width: 768px) {
+    top: auto;
+    left: auto;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    max-width: 28rem;
+    animation: slideInUp var(--m-duration-base) var(--m-ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.toast-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--stone-green-400);
+
+  mat-icon {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.toast-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.toast-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--m-text-primary);
+}
+
+.toast-message {
+  font-size: 0.75rem;
+  color: var(--m-text-secondary);
+  line-height: 1.35;
+}
+
+.toast-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--m-space-2);
+  flex-shrink: 0;
+}
+
+.retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--m-space-1);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--m-radius-pill);
+  border: none;
+  background-color: var(--m-primary);
+  color: var(--m-on-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--m-duration-fast) var(--m-ease);
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  mat-icon {
+    font-size: 0.875rem;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border-radius: var(--m-radius-pill);
+  border: none;
+  background: transparent;
+  color: var(--m-text-secondary);
+  cursor: pointer;
+  transition: color var(--m-duration-fast) var(--m-ease);
+
+  &:hover {
+    color: var(--m-text-primary);
+  }
+
+  mat-icon {
+    font-size: 1.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

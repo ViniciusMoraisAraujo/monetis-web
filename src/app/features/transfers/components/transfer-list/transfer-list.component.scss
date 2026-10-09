@@ -21,12 +21,12 @@
     margin: 0;
     font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 700;
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   .subtitle {
     margin: 0.25rem 0 0;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     font-size: 0.875rem;
   }
 }
@@ -34,7 +34,7 @@
 .add-button {
   min-height: 48px;
   border-radius: 9999px;
-  background-color: var(--nu-primary);
+  background-color: var(--m-primary);
   color: #fff;
   font-weight: 600;
   align-self: flex-start;
@@ -56,19 +56,19 @@
 
 .summary-card {
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
 
   .summary-label {
     font-size: 0.875rem;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
   }
 
   .summary-value {
     font-size: clamp(1.25rem, 3vw, 1.75rem);
     font-weight: 700;
     margin-top: 0.25rem;
-    color: var(--nu-primary);
+    color: var(--m-primary);
     font-variant-numeric: tabular-nums;
   }
 }
@@ -101,8 +101,8 @@
   padding: 2.5rem 1rem;
   text-align: center;
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
 }
 
 .empty-content {
@@ -115,19 +115,19 @@
     font-size: 3rem;
     width: 3rem;
     height: 3rem;
-    color: var(--nu-text-muted);
+    color: var(--m-text-muted);
   }
 
   .empty-title {
     margin: 0;
     font-weight: 600;
     font-size: 1.125rem;
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   .empty-text {
     margin: 0;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     max-width: 25rem;
     font-size: 0.875rem;
   }
@@ -142,14 +142,14 @@
 .transfer-card {
   border-radius: 1.25rem;
   padding: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
 
   &:hover {
-    border-color: var(--nu-primary-glow);
+    border-color: var(--m-primary-glow);
     transform: translateY(-2px);
   }
 }
@@ -181,26 +181,26 @@
   font-size: 1rem;
 
   .arrow-icon {
-    color: var(--nu-primary);
+    color: var(--m-primary);
   }
 
   .origin {
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   .dest {
-    color: var(--nu-primary);
+    color: var(--m-primary);
   }
 }
 
 .transfer-description {
   font-size: 0.875rem;
-  color: var(--nu-text-secondary);
+  color: var(--m-text-secondary);
 }
 
 .transfer-date {
   font-size: 0.8125rem;
-  color: var(--nu-text-muted);
+  color: var(--m-text-muted);
 }
 
 .transfer-amount-section {
@@ -211,19 +211,19 @@
 .transfer-amount {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--nu-text-primary);
+  color: var(--m-text-primary);
   font-variant-numeric: tabular-nums;
 }
 
 .transfer-actions {
   padding-top: 0.75rem;
-  border-top: 1px solid var(--nu-border);
+  border-top: 1px solid var(--m-border);
 
   button {
     min-height: 48px;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     &:hover {
-      color: var(--nu-text-primary);
+      color: var(--m-text-primary);
     }
   }
 }

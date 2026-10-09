@@ -11,6 +11,7 @@ import { map } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { PrivacyService } from '../../services/privacy.service';
+import { ErrorToastComponent } from '../error-toast/error-toast.component';
 
 export interface NavItem {
   path: string;
@@ -30,6 +31,7 @@ export interface NavItem {
     MatIconModule,
     MatSidenavModule,
     MatListModule,
+    ErrorToastComponent,
   ],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
@@ -60,6 +62,11 @@ export class ShellComponent {
 
   readonly userInitial = computed(() => {
     return this.userName().charAt(0).toUpperCase();
+  });
+
+  readonly userProfileRoute = computed(() => {
+    const id = this.currentUser()?.id;
+    return id ? `/Users/${id}` : '/Users';
   });
 
   readonly navItems: NavItem[] = [

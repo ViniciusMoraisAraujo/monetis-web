@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  computed,
+  effect,
+  inject,
+} from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +19,7 @@ import { IncomesStateService } from '../../../incomes/services/incomes-state.ser
 import { CardsStateService } from '../../../cards/services/cards-state.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { PrivacyService } from '../../../../core/services/privacy.service';
+import { ErrorToastService } from '../../../../core/services/error-toast.service';
 
 export interface RecentTransactionItem {
   id: string;
@@ -46,6 +54,7 @@ export class DashboardHomeComponent implements OnInit {
   readonly cardsState = inject(CardsStateService);
   private readonly authService = inject(AuthService);
   readonly privacy = inject(PrivacyService);
+  private readonly errorToast = inject(ErrorToastService);
 
   readonly isBalanceVisible = this.privacy.isValuesVisible;
 
@@ -65,6 +74,16 @@ export class DashboardHomeComponent implements OnInit {
       this.incomesState.error() ||
       this.cardsState.error()
     );
+  });
+
+  private readonly logSyncErrorEffect = effect(() => {
+    const err = this.errorMessage();
+    if (err) {
+      console.error('Technical sync error details:', err);
+      this.errorToast.show({
+        retryAction: () => this.loadAll(),
+      });
+    }
   });
 
   readonly greeting = computed(() => {

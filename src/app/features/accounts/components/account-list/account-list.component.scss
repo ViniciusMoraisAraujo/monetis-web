@@ -21,19 +21,19 @@
   margin: 0;
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
-  color: var(--nu-text-primary);
+  color: var(--m-text-primary);
 }
 
 .page-subtitle {
   margin: 0.25rem 0 0;
-  color: var(--nu-text-secondary);
+  color: var(--m-text-secondary);
   font-size: 0.9375rem;
 }
 
 .add-button {
   min-height: 3rem;
   border-radius: 9999px;
-  background-color: var(--nu-primary);
+  background-color: var(--m-primary);
   color: #fff;
   font-weight: 600;
   display: inline-flex;
@@ -49,12 +49,12 @@
 // Card de Saldo Total
 .total-balance-card {
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
   &:hover {
-    border-color: var(--nu-primary-glow);
+    border-color: var(--m-primary-glow);
   }
 }
 
@@ -73,7 +73,7 @@
 
 .balance-label {
   font-size: 0.875rem;
-  color: var(--nu-text-secondary);
+  color: var(--m-text-secondary);
 }
 
 .balance-value {
@@ -95,7 +95,7 @@
   font-size: 2.5rem;
   width: 2.5rem;
   height: 2.5rem;
-  color: var(--nu-primary);
+  color: var(--m-primary);
 }
 
 // Grid de Contas
@@ -115,21 +115,21 @@
 
 .account-card {
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
 
   &:hover {
-    border-color: var(--nu-primary-glow);
+    border-color: var(--m-primary-glow);
     transform: translateY(-2px);
   }
 }
 
 .account-avatar-icon {
-  color: var(--nu-primary);
-  background-color: var(--nu-primary-container);
+  color: var(--m-primary);
+  background-color: var(--m-primary-container);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -141,7 +141,7 @@
 .account-name {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--nu-text-primary);
+  color: var(--m-text-primary);
 }
 
 .account-body {
@@ -153,7 +153,7 @@
 
 .body-label {
   font-size: 0.75rem;
-  color: var(--nu-text-secondary);
+  color: var(--m-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -178,14 +178,14 @@
 
 .account-actions {
   padding: 0.5rem 1rem;
-  border-top: 1px solid var(--nu-border);
+  border-top: 1px solid var(--m-border);
 
   button {
     min-height: 3rem;
     min-width: 3rem;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     &:hover {
-      color: var(--nu-text-primary);
+      color: var(--m-text-primary);
     }
   }
 }
@@ -197,7 +197,7 @@
   justify-content: center;
   padding: 3rem 1rem;
   gap: 1rem;
-  color: var(--nu-text-secondary);
+  color: var(--m-text-secondary);
 }
 
 .error-banner {
@@ -218,33 +218,33 @@
   padding: 3rem 1rem;
   text-align: center;
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px dashed var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px dashed var(--m-border);
 
   .empty-icon {
     font-size: 3.5rem;
     width: 3.5rem;
     height: 3.5rem;
-    color: var(--nu-text-muted);
+    color: var(--m-text-muted);
     margin-bottom: 1rem;
   }
 
   h2 {
     margin: 0;
     font-size: 1.25rem;
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   p {
     margin: 0.5rem 0 1.5rem;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     max-width: 24rem;
   }
 
   .empty-action-btn {
     min-height: 3rem;
     border-radius: 9999px;
-    background-color: var(--nu-primary);
+    background-color: var(--m-primary);
     color: #fff;
   }
 }

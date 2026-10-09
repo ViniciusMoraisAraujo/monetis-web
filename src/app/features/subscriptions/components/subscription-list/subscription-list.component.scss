@@ -21,12 +21,12 @@
     margin: 0;
     font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 700;
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   .subtitle {
     margin: 0.25rem 0 0;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     font-size: 0.875rem;
   }
 }
@@ -34,7 +34,7 @@
 .add-button {
   min-height: 48px;
   border-radius: 9999px;
-  background-color: var(--nu-primary);
+  background-color: var(--m-primary);
   color: #fff;
   font-weight: 600;
   align-self: flex-start;
@@ -56,12 +56,12 @@
 
 .summary-card {
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
 
   .summary-label {
     font-size: 0.875rem;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
   }
 
   .summary-value {
@@ -71,7 +71,7 @@
     font-variant-numeric: tabular-nums;
 
     &.count {
-      color: var(--nu-primary);
+      color: var(--m-primary);
     }
 
     &.amount {
@@ -94,8 +94,8 @@
   padding: 2.5rem 1rem;
   text-align: center;
   border-radius: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
 }
 
 .empty-content {
@@ -108,19 +108,19 @@
     font-size: 3rem;
     width: 3rem;
     height: 3rem;
-    color: var(--nu-text-muted);
+    color: var(--m-text-muted);
   }
 
   .empty-title {
     margin: 0;
     font-weight: 600;
     font-size: 1.125rem;
-    color: var(--nu-text-primary);
+    color: var(--m-text-primary);
   }
 
   .empty-text {
     margin: 0;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     max-width: 25rem;
     font-size: 0.875rem;
   }
@@ -135,14 +135,14 @@
 .subscription-card {
   border-radius: 1.25rem;
   padding: 1.25rem;
-  background-color: var(--nu-surface-card);
-  border: 1px solid var(--nu-border);
+  background-color: var(--m-surface-card);
+  border: 1px solid var(--m-border);
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
 
   &:hover {
-    border-color: var(--nu-primary-glow);
+    border-color: var(--m-primary-glow);
     transform: translateY(-2px);
   }
 
@@ -181,8 +181,8 @@
   font-weight: 600;
   padding: 0.2rem 0.625rem;
   border-radius: 9999px;
-  background-color: var(--nu-surface-subtle);
-  color: var(--nu-text-secondary);
+  background-color: var(--m-surface-subtle);
+  color: var(--m-text-secondary);
 }
 
 .status-badge {
@@ -201,25 +201,25 @@
   }
 
   &.active {
-    background-color: var(--nu-primary-container);
-    color: var(--nu-primary);
+    background-color: var(--m-primary-container);
+    color: var(--m-primary);
   }
 
   &.inactive-badge {
-    background-color: var(--nu-surface-subtle);
-    color: var(--nu-text-muted);
+    background-color: var(--m-surface-subtle);
+    color: var(--m-text-muted);
   }
 }
 
 .subscription-description {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--nu-text-primary);
+  color: var(--m-text-primary);
 }
 
 .subscription-due {
   font-size: 0.8125rem;
-  color: var(--nu-text-secondary);
+  color: var(--m-text-secondary);
 }
 
 .subscription-amount-section {
@@ -236,13 +236,13 @@
 
 .subscription-actions {
   padding-top: 0.75rem;
-  border-top: 1px solid var(--nu-border);
+  border-top: 1px solid var(--m-border);
 
   button {
     min-height: 48px;
-    color: var(--nu-text-secondary);
+    color: var(--m-text-secondary);
     &:hover {
-      color: var(--nu-text-primary);
+      color: var(--m-text-primary);
     }
   }
 }

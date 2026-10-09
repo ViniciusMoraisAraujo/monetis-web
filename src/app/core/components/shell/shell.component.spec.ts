@@ -1,7 +1,8 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { provideRouter, Router, RouterLink } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
@@ -99,5 +100,21 @@ describe('ShellComponent', () => {
     breakpointSubject.next({ matches: true, breakpoints: {} });
     fixture.detectChanges();
     expect(component.isDesktop()).toBe(true);
+  });
+
+  it('should render user profile card with routerLink to /Users/:id and Minha Conta label in desktop mode', () => {
+    breakpointSubject.next({ matches: true, breakpoints: {} });
+    fixture.detectChanges();
+
+    const userProfileEl = fixture.debugElement.query(By.css('.user-profile-card'));
+    expect(userProfileEl).toBeTruthy();
+    expect(component.userProfileRoute()).toBe('/Users/user-1');
+    const routerLink = userProfileEl.injector.get(RouterLink);
+    expect(routerLink).toBeTruthy();
+    expect(userProfileEl.nativeElement.textContent).toContain('Minha Conta');
+
+    const brandTagEl = fixture.debugElement.query(By.css('.brand-title-wrap .m-tag'));
+    expect(brandTagEl).toBeTruthy();
+    expect(brandTagEl.nativeElement.textContent).toContain('STONE');
   });
 });
